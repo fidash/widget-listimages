@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="openstack-proto-widget" version="0.0.1">
+  <details>
+    <title>OpenStack Prototype Widget</title>
+    <email>bgrana@conwet.com</email>
+    <image>images/catalogue.png</image>
+    <smartphoneimage>images/catalogueSmartphone.png</smartphoneimage>
+    <description>Prototype widget that shows a table with openStack images data</description>
+    <authors>bgrana</authors>
+  </details>
+  <wiring>
+  </wiring>
+  <contents src="index.html"/>
+  <rendering height="8" width="30"/>
+</widget>

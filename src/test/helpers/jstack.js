@@ -1,0 +1,1 @@
+var jstack = jasmine.createSpyObj("jstack", ["getImageList"]);
