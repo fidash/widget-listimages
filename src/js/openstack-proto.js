@@ -1,19 +1,18 @@
 var OpenStackProto = (function (jstack) {
 	"use strict";
 
-	var myTable = null;
 
 	function getImageList (table) {
 		
-		myTable = table;
-		jstack.getImageList(true, callbackImageList, onError, null);
+		jstack.getImageList(true, callbackImageList.bind(null, table), onError, null);
 	}
 
-	function callbackImageList (result) {
+	function callbackImageList (table, result) {
 
 		for (var imageKey in result.images) {
+
 			var image = result.images[imageKey];
-			myTable.row.add([image.name, image.status, image.updated]).draw();
+			table.row.add([image.name, image.status, image.updated]).draw();
 		}
 
 	}

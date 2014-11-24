@@ -1,11 +1,23 @@
 describe('Test Image Table', function () {
 
 	var openStack = null;
+	var respObj;
 
 	beforeEach(function() {
 
+
+		jasmine.getFixtures().set('<table id="example" class="display" cellspacing="0" width="100%">' +
+									'<thead>' +
+										'<tr>' +
+											'<th>Instance</th>' +
+											'<th>Owner</th>' +
+											'<th>Data</th>' +
+										'</tr>' +
+									'</thead>' +
+								'</table>');
+
 		openstack = new OpenStackProto();
-		var respObj = {
+		respObj = {
 			"images": [
 			{
 				"OS-DCF:diskConfig": "AUTO", 
@@ -55,33 +67,22 @@ describe('Test Image Table', function () {
 			}
 			]
 		};
+
 		jstack.getImageList.and.returnValue(respObj);
-		createTable();
 	});
-
-	afterEach(function () {
-		$('#example').remove();
-	});
-
-	function createTable() {
-		jasmine.getFixtures().set('<table id="example" class="display" cellspacing="0" width="100%">' +
-		'<thead>' +
-		'<tr><th>Instance</th><th>Owner</th><th>Data</th></tr>' +
-		'</thead>' +
-		'</table>');
-	}
 
 	function callListImage() {
-		var myTable = $('#example').DataTable();
 
+		var myTable = $('#example').DataTable();
 		openstack.listImage(myTable);
+		var callback = jstack.getImageList.calls.mostRecent().args[1];
+		callback(respObj);
 	}
 
 	function checkRow(tdIndex, expectedText) {
 
 		callListImage();
 		var row = $('#example > tbody > tr > td');
-
 		expect(row[tdIndex]).toContainText(expectedText);
 	}
 
