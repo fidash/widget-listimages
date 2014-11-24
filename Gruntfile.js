@@ -59,7 +59,7 @@ module.exports = function(grunt) {
     clean: ['build'],
 
     jshint: {
-      all: ['src/js/**/*', 'src/test/**/*', 'Gruntfile.js']
+      all: ['src/js/**/*', 'src/test/**/*', 'Gruntfile.js', '!src/test/fixtures/']
     }
 
   });
@@ -74,12 +74,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-contrib-jshint');
 
-  grunt.registerTask('js', ['concat:dist', 'uglify:dist']);
-  grunt.registerTask('jsConcat', 'concat:dist');
-  grunt.registerTask('css', ['less:dist', 'cssmin:dist']);
   grunt.registerTask('zip', 'compress:widget');
   grunt.registerTask('version', ['replace:version']);
 
-  // grunt.registerTask('default', ['jshint', 'js', 'css', 'version', 'jasmine', 'zip']);
-  grunt.registerTask('default', ['jshint', 'jsConcat', 'css', 'version', 'jasmine', 'zip']);
+  grunt.registerTask('default', ['jshint', 'version', 'jasmine', 'zip']);
 };
