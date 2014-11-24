@@ -1,10 +1,10 @@
-var OpenStackProto = (function (jstack) {
+var OpenStackProto = (function (Nova) {
 	"use strict";
 
 
-	function getImageList (table) {
+	function getimagelist (table) {
 		
-		jstack.getImageList(true, callbackImageList.bind(null, table), onError, null);
+		Nova.getimagelist(true, callbackImageList.bind(null, table), onError, null);
 	}
 
 	function callbackImageList (table, result) {
@@ -23,8 +23,8 @@ var OpenStackProto = (function (jstack) {
 
 	function OpenStackProto () {
 
-		this.listImage = getImageList;
+		this.listImage = getimagelist;
 	}
 
 	return OpenStackProto;
-})(jstack);
+})(JSTACK.Nova);

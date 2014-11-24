@@ -5,7 +5,6 @@ describe('Test Image Table', function () {
 
 	beforeEach(function() {
 
-
 		jasmine.getFixtures().set('<table id="example" class="display" cellspacing="0" width="100%">' +
 									'<thead>' +
 										'<tr>' +
@@ -67,15 +66,13 @@ describe('Test Image Table', function () {
 			}
 			]
 		};
-
-		jstack.getImageList.and.returnValue(respObj);
 	});
 
 	function callListImage() {
 
 		var myTable = $('#example').DataTable();
 		openstack.listImage(myTable);
-		var callback = jstack.getImageList.calls.mostRecent().args[1];
+		var callback = JSTACK.Nova.getimagelist.calls.mostRecent().args[1];
 		callback(respObj);
 	}
 
