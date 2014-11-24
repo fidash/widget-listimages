@@ -1,16 +1,16 @@
 {
   "name": "OpenStack-Prototype",
-  "homepage": "https://github.com/wirecloud-fiware/room-viewer-widget",
+  "homepage": "https://repo.conwet.fi.upm.es/wirecloud/openstack-proto-widget",
   "version": "0.0.1",
   "vendor": "CoNWeT",
   "author": "CoNWeT Lab., Universidad Politecnica de Madrid",
   "description": "A widget for managing chat rooms compatible with WireCloud.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wirecloud-fiware/room-viewer-widget.git"
+    "url": "https://repo.conwet.fi.upm.es/wirecloud/openstack-proto-widget"
   },
   "bugs": {
-    "url": "https://github.com/wirecloud-fiware/room-viewer-widget/issues"
+    "url": "https://repo.conwet.fi.upm.es/wirecloud/openstack-proto-widget/issues"
   },
   "keywords": [
     "wirecloud",
