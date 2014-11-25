@@ -2519,6 +2519,7 @@ JSTACK.Glance = (function(JS, undefined) {
     getimagelist = function(detailed, callback, error) {
         var url, onOK, onError;
         if (!check()) {
+            // FIXME with exception
             return;
         }
         url = params.url + '/images';
