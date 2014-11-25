@@ -870,7 +870,8 @@ JSTACK.Nova = (function (JS, undefined) {
         if (JS.Keystone !== undefined &&
                 JS.Keystone.params.currentstate === JS.Keystone.STATES.AUTHENTICATED) {
             var service = JS.Keystone.getservice(params.service);
-            params.url = service.endpoints[0][params.endpointType];
+            var privateUrl = service.endpoints[0][params.endpointType];
+            params.url = privateUrl.replace(/192.168.[0-9]+.[0-9]+/, "arcturus.ls.fi.upm.es");
             return true;
         }
         return false;
