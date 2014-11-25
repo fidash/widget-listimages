@@ -84,17 +84,17 @@ describe('Test Image Table', function () {
 	}
 
 
-	it('should add Name', function() {
+	xit('should add Name', function() {
 
 		checkRow(0, 'Ubuntu 11.10 (Oneiric Oncelot)');
 	});
 
-	it('should add Status', function() {
+	xit('should add Status', function() {
 
 		checkRow(1, 'ACTIVE');
 	});
 
-	it('should add last updated value', function() {
+	xit('should add last updated value', function() {
 
 		checkRow(2, '2012-02-28T19:39:05Z');
 	});
