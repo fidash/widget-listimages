@@ -97,12 +97,19 @@ var OpenStackProto = (function (JSTACK) {
 	}
 
 	function callbackImageList (table, result) {
-
+		table.clear().draw();
 		for (var imageKey in result.images) {
 
 			var image = result.images[imageKey];
-			table.row.add([image.name, image.status, image.updated]).draw();
+
+			var nameCell = $("<td>" + image.name + "</td>");
+			var statusCell = $("<td>" + image.status + "</td>");
+			var updatedCell = $("<td>" + image.updated + "</td>");
+			var row = $("<tr title='" + "ID: " + image.id + "'>").append(nameCell, statusCell, updatedCell);
+
+			table.row.add(row);
 		}
+		table.draw();
 
 	}
 
