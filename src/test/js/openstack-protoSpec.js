@@ -1,5 +1,5 @@
 describe('Test Image Table', function () {
-
+	"use strict";
 	var openStack = null;
 	var respObj;
 
@@ -15,7 +15,7 @@ describe('Test Image Table', function () {
 									'</thead>' +
 								'</table>');
 
-		openstack = new OpenStackProto();
+		openStack = new OpenStackProto();
 		respObj = {
 			"images": [
 			{
@@ -71,7 +71,7 @@ describe('Test Image Table', function () {
 	function callListImage() {
 
 		var myTable = $('#example').DataTable();
-		openstack.listImage(myTable);
+		openStack.listImage(myTable);
 		var callback = JSTACK.Nova.getimagelist.calls.mostRecent().args[1];
 		callback(respObj);
 	}
@@ -82,6 +82,16 @@ describe('Test Image Table', function () {
 		var row = $('#example > tbody > tr > td');
 		expect(row[tdIndex]).toContainText(expectedText);
 	}
+
+	it('should initialize Keystone with URL', function() {
+
+		var url = "http://arcturus.ls.fi.upm.es:5000/v2.0/";
+
+		openStack.init();
+
+		expect(JSTACK.Keystone.init).toHaveBeenCalledWith(url);
+		//expect(url).toMatch(/^http.+\/$/);
+	});
 
 
 	xit('should add Name', function() {
