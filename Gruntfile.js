@@ -27,8 +27,7 @@ module.exports = function(grunt) {
           archive: 'build/<%= pkg.vendor %>_<%= pkg.name %>_<%= pkg.version %>-dev.wgt'
         },
         files: [
-          {expand: true, src: ['lib/**/*', 'config.xml', 'index.html'], cwd: 'src'},
-          {expand: true, src: ['js/**/*', 'css/**/*'], cwd: 'build'},
+          {expand: true, src: ['lib/**/*', 'config.xml', 'index.html', 'js/**/*', 'css/**/*'], cwd: 'src'},
           {expand: true, src: ['jquery.min.map', 'jquery.min.js'], dest: 'lib/js', cwd: 'node_modules/jquery/dist'}
         ]
       }
