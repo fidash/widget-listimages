@@ -1,9 +1,6 @@
-/**
- * @file Gruntfile.js
- * @version 0.0.1
- * 
+/* 
  * @copyright 2014 CoNWeT Lab., Universidad Politécnica de Madrid
- * @license Apache v2 (https://github.com/Wirecloud/room-manager-src/blob/master/LICENSE)
+ * @license Apache v2 (http://www.apache.org/licenses/)
  */
 
 module.exports = function(grunt) {
