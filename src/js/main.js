@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    "use strict";
+
 	var openStackProto = new OpenStackProto();
     var myTable = $('#example').DataTable();
 

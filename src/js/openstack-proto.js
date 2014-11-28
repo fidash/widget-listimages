@@ -65,7 +65,7 @@ var OpenStackProto = (function (JSTACK) {
 		var tenantId = result.tenants[0].id;
 		var username, password;
 
-		JSTACK.Keystone.authenticate(username,password, tokenId, tenantId, handleServiceToken, onError);
+		JSTACK.Keystone.authenticate(username, password, tokenId, tenantId, handleServiceToken, onError);
 	}
 
 
@@ -76,7 +76,7 @@ var OpenStackProto = (function (JSTACK) {
 		doWork();
 	}
 
-	function getimagelist (table) {
+	function getImageList (table) {
 		
 		myTable = table;
 		console.log("Setting table");
@@ -120,7 +120,7 @@ var OpenStackProto = (function (JSTACK) {
 	function OpenStackProto () {
 
 		this.init = authenticate;
-		this.listImage = getimagelist;
+		this.listImage = getImageList;
 	}
 
 	return OpenStackProto;
