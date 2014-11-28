@@ -76,7 +76,7 @@ module.exports = function(grunt) {
     clean: ['build'],
 
     jshint: {
-      all: ['src/js/**/*', 'src/test/**/*', 'Gruntfile.js', '!src/test/fixtures/']
+      files: ['src/js/**/*', 'src/test/**/*', 'Gruntfile.js']
     }
 
   });
