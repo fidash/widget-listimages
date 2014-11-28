@@ -47,7 +47,7 @@ module.exports = function(grunt) {
         src: ['src/config.xml'],
         overwrite: true,
         replacements: [{
-          from: /version=\"[0-9]+\.[0-9]+\.[0-9]+(-dev)?\"/g,
+          from: /version="[0-9]+\.[0-9]+\.[0-9]+(-dev)?"/g,
           to: 'version="<%= pkg.version %>"'
         }]
       }
