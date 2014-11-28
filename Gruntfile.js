@@ -33,13 +33,32 @@ module.exports = function(grunt) {
     },
     
     jasmine: {
-      src: ['src/js/*.js'],
-      options: {
-        specs: 'src/test/js/*Spec.js',
-        helpers: ['src/test/helpers/*.js'],
-        vendor: ['node_modules/jquery/dist/jquery.js',
-                'src/lib/js/jquery.dataTables.js',
-                'node_modules/jasmine-jquery/lib/jasmine-jquery.js']
+      test: {
+        src: ['src/js/*.js'],
+        options: {
+          specs: 'src/test/js/*Spec.js',
+          helpers: ['src/test/helpers/*.js'],
+          vendor: ['node_modules/jquery/dist/jquery.js',
+            'src/lib/js/jquery.dataTables.js',
+            'node_modules/jasmine-jquery/lib/jasmine-jquery.js']
+        }
+      },
+
+      istanbul: {
+        src: '<%= jasmine.test.src %>',
+        options: {
+          helpers: '<%= jasmine.test.options.helpers %>',
+          specs: '<%= jasmine.test.options.specs %>',
+          vendor: '<%= jasmine.test.options.vendor %>',
+          template: require('grunt-template-jasmine-istanbul'),
+          templateOptions : {
+            coverage: 'build/coverage/json/coverage.json',
+            report: [
+              {type: 'html', options: {dir: 'build/coverage/html'}},
+              {type: 'text-summary'}
+            ]
+          }
+        }
       }
     },
 
