@@ -21,6 +21,7 @@ module.exports = function(grunt) {
       widget: {
         options: {
           mode: 'zip',
+          level: 9,
           archive: 'build/<%= pkg.vendor %>_<%= pkg.name %>_<%= pkg.version %>-dev.wgt'
         },
         files: [
