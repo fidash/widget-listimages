@@ -69,17 +69,15 @@ var OpenStackProto = (function (JSTACK) {
 	}
 
 
-	function handleServiceToken (result) {
+	function handleServiceToken () {
 
 		isAuthenticated = true;
-		console.log("Authenticated");
 		doWork();
 	}
 
 	function getImageList (table) {
 		
 		myTable = table;
-		console.log("Setting table");
 		doWork();
 	}
 

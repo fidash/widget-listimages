@@ -10,7 +10,7 @@ var MockMP = {};
     var NullStrategy = function NullStrategy() {
     };
 
-    NullStrategy.prototype.getImplementation = function getImplementation(method, obj) {
+    NullStrategy.prototype.getImplementation = function getImplementation() {
         return function () {
             return null;
         };
@@ -19,7 +19,7 @@ var MockMP = {};
     var ExceptionStrategy = function ExceptionStrategy() {
     };
 
-    ExceptionStrategy.prototype.getImplementation = function getImplementation(method, obj) {
+    ExceptionStrategy.prototype.getImplementation = function getImplementation(method) {
         return function () {
             throw {
                 name: "StrategyException",

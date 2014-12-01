@@ -76,9 +76,11 @@ module.exports = function(grunt) {
     clean: ['build'],
 
     jshint: {
-      files: ['src/js/**/*', 'src/test/**/*', 'Gruntfile.js']
+      files: ['src/js/**/*', 'src/test/**/*'],
+      options: {
+        jshintrc: '.jshintrc'
+      }
     }
-
   });
 
   grunt.loadNpmTasks('grunt-contrib-clean');

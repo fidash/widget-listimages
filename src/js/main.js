@@ -1,3 +1,5 @@
+/* global OpenStackProto */
+
 $(document).ready(function() {
     "use strict";
 

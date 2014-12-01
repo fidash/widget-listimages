@@ -1,0 +1,39 @@
+{
+  "bitwise":  true,
+  "curly":    true,
+  "eqeqeq":   true,
+  "immed":    true,
+  "latedef":  "nofunc",
+  "newcap":   true,
+  "noarg":    true,
+  "noempty":  true,
+  "nonew":    true,
+  "strict":   true,
+  "trailing": true,
+  "undef":    true,
+  //"unused":true,
+
+  // Environment
+  "browser": true,
+  "jquery":  true,
+  "devel":   true,
+
+  "globals" : {
+	// MashupPlatform
+	"MashupPlatform": true,
+	"MockMP":         true,
+
+	// JStack
+	"JSTACK": true,
+
+	// Jasmine
+	"describe":   true,
+	"xdescribe":  true,
+	"it":         true,
+	"xit":        true,
+	"expect":     true,
+	"beforeEach": true,
+	"afterEach":  true,
+	"jasmine":    true
+  }
+}

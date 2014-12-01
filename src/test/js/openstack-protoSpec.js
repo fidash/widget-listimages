@@ -1,3 +1,5 @@
+/* global OpenStackProto */
+
 describe('Test Image Table', function () {
 	"use strict";
 	var openStack = null;
@@ -14,7 +16,6 @@ describe('Test Image Table', function () {
 										'</tr>' +
 									'</thead>' +
 								'</table>');
-
 		openStack = new OpenStackProto();
 		respObj = {
 			"images": [
