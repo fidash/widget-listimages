@@ -44,7 +44,7 @@ module.exports = function(grunt) {
         }
       },
 
-      istanbul: {
+      coverage: {
         src: '<%= jasmine.test.src %>',
         options: {
           helpers: '<%= jasmine.test.options.helpers %>',
@@ -97,5 +97,5 @@ module.exports = function(grunt) {
   grunt.registerTask('zip', 'compress:widget');
   grunt.registerTask('version', ['replace:version']);
 
-  grunt.registerTask('default', ['jshint', 'version', 'jasmine', 'zip']);
+  grunt.registerTask('default', ['jshint', 'version', 'jasmine:coverage', 'zip']);
 };
