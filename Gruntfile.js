@@ -26,8 +26,16 @@ module.exports = function(grunt) {
           pretty: true
         },
         files: [
-          {expand: true, src: ['lib/**/*', 'config.xml', 'index.html', 'js/**/*', 'css/**/*'], cwd: 'src'},
-          {expand: true, src: ['jquery.min.map', 'jquery.min.js'], dest: 'lib/js', cwd: 'node_modules/jquery/dist'}
+          {expand: true, src: ['**/*'], cwd: 'build/wgt'}
+        ]
+      }
+    },
+
+    copy: {
+      main: {
+        files: [
+          {expand: true, src: ['**/*', '!test/**'], dest: 'build/wgt', cwd: 'src'},
+          {expand: true, src: ['jquery.min.map', 'jquery.min.js'], dest: 'build/wgt/lib/js', cwd: 'node_modules/jquery/dist'}
         ]
       }
     },
@@ -87,6 +95,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -97,5 +106,5 @@ module.exports = function(grunt) {
   grunt.registerTask('zip', 'compress:widget');
   grunt.registerTask('version', ['replace:version']);
 
-  grunt.registerTask('default', ['jshint', 'version', 'jasmine:coverage', 'zip']);
+  grunt.registerTask('default', ['jshint', 'version', 'jasmine:coverage', 'copy', 'zip']);
 };
