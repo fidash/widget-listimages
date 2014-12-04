@@ -101,10 +101,23 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-gitinfo');
   grunt.loadNpmTasks('grunt-text-replace');
 
-  grunt.registerTask('zip', 'compress:widget');
-  grunt.registerTask('version', ['replace:version']);
+  grunt.registerTask('manifest', 'Creates a manifest.json file', function() {
 
-  grunt.registerTask('default', ['jshint', 'version', 'jasmine:coverage', 'copy', 'zip']);
+    this.requiresConfig('gitinfo');
+    var current = grunt.config(['gitinfo', 'local', 'branch', 'current']);
+    var content = JSON.stringify({
+      'Branch': current.name,
+      'SHA': current.SHA,
+      'User': current.currentUser,
+      'Build-Timestamp': grunt.template.today('UTC:yyyy-mm-dd HH:MM:ss Z'),
+      'Build-By' : 'Grunt ' + grunt.version
+    }, null, '\t');
+    grunt.file.write('build/wgt/manifest.json', content);
+  });
+  grunt.registerTask('package', ['gitinfo', 'manifest', 'copy', 'compress:widget']);
+
+  grunt.registerTask('default', ['jshint', 'replace:version', 'jasmine:coverage', 'package']);
 };
