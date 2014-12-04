@@ -10,6 +10,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
 
     pkg: grunt.file.readJSON('package.json'),
+    isDev: grunt.option('target') === 'release' ? '' : '-dev',
 
     banner: ' * @version <%= pkg.version %>\n' +
             ' * \n' +
@@ -20,7 +21,7 @@ module.exports = function(grunt) {
     compress: {
       widget: {
         options: {
-          archive: 'build/<%= pkg.vendor %>_<%= pkg.name %>_<%= pkg.version %>-dev.wgt',
+          archive: 'build/<%= pkg.vendor %>_<%= pkg.name %>_<%= pkg.version %><%= isDev %>.wgt',
           mode: 'zip',
           level: 9,
           pretty: true
