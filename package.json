@@ -1,7 +1,7 @@
 {
   "name": "OpenStack-Prototype",
   "homepage": "https://repo.conwet.fi.upm.es/wirecloud/openstack-proto-widget",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "vendor": "CoNWeT",
   "author": "CoNWeT Lab., Universidad Politecnica de Madrid",
   "description": "A prototype widget for an openstack dashboard.",
@@ -40,7 +40,6 @@
     "grunt-template-jasmine-istanbul": "^0.3.0",
     "grunt-text-replace": "^0.3.12",
     "jasmine-jquery": "^2.0.5",
-    "jquery": "^2.1.1",
-    "jstack-client": "^0.1.5"
+    "jquery": "^2.1.1"
   }
 }

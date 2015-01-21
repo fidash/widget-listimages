@@ -2,16 +2,46 @@ var OpenStackProto = (function (JSTACK) {
 	"use strict";
 
 	var isAuthenticated = false;
-	var myTable = null;
+	var dataViewer = null;
+	var url = 'https://cloud.lab.fiware.org/keystone/v2.0/tokens';
 
 
 	function authenticate () {
 		// curl -s http://arcturus.ls.fi.upm.es:5000/v2.0/tokens -X 'POST' -d '{"auth":{"passwordCredentials":{"username":"braulio", "password":"braulio"}}}' -H "Content-Type: application/json" | python -m json.tool
 		var tokenId, tenantId;
-		var USERNAME = 'braulio';
-		var PASSWORD = 'braulio';
-		JSTACK.Keystone.init("http://arcturus.ls.fi.upm.es:5000/v2.0/");
-		JSTACK.Keystone.authenticate(USERNAME, PASSWORD, tokenId, tenantId, handleTempToken, onError);
+		var postBody, headers;
+
+        var options;
+            
+
+        headers = {
+            "Accept": "application/json"
+        };
+
+        postBody = {
+            "auth": {}
+        };
+
+        /*MashupPlatform.http.makeRequest(this.url + this.TOKENS_ENDPOINT, {
+            requestHeaders: headers,
+            contentType: "application/json",
+            postBody: JSON.stringify(postBody),
+            onSuccess: function (transport) {
+                JSTACK.Keystone.init(url);
+                JSTACK.setAuthToken(transport);
+                handleTempToken();
+            },
+            onFailure: function (response) {
+                var reason;
+
+                if (typeof options.onFailure === 'function') {
+                    reason = process_failure.call(this, response);
+                    options.onFailure(reason);
+                }
+            }.bind(this)
+        });*/
+		
+		// JSTACK.Keystone.authenticate(USERNAME, PASSWORD, tokenId, tenantId, handleTempToken, onError);
 	}
 
 
@@ -77,7 +107,7 @@ var OpenStackProto = (function (JSTACK) {
 
 	function getImageList (table) {
 		
-		myTable = table;
+		dataViewer = table;
 		doWork();
 	}
 
@@ -85,34 +115,31 @@ var OpenStackProto = (function (JSTACK) {
 
 		if (isReady()) {
 
-			JSTACK.Nova.getimagelist(true, callbackImageList.bind(null, myTable), onError, null);
+			JSTACK.Nova.getimagelist(true, callbackImageList.bind(null, dataViewer), onError, null);
 		}
 	}
 
 	function isReady() {
 
-		return (isAuthenticated === true && myTable);	
+		return (isAuthenticated === true && dataViewer);	
 	}
 
 	function callbackImageList (table, result) {
-		table.clear().draw();
+		
+		var structure = [ {'id': 'name'}, {'id': 'status'}, {'id': 'updated'} ];
+		var data = [];
+		var dataset = {'structure': structure, 'data': data};
+
 		for (var imageKey in result.images) {
-
 			var image = result.images[imageKey];
-
-			var nameCell = $("<td>" + image.name + "</td>");
-			var statusCell = $("<td>" + image.status + "</td>");
-			var updatedCell = $("<td>" + image.updated + "</td>");
-			var row = $("<tr title='" + "ID: " + image.id + "'>").append(nameCell, statusCell, updatedCell);
-
-			table.row.add(row);
+			data.push({'name': image.name, 'status': image.status, 'updated': image.updated});
 		}
-		table.draw();
+		table.setModel(dataset);
 
 	}
 
 	function onError (error) {
-		console.log('Error: ' + JSON.stringify(error));
+		console.log('Error: ' + JSON.tableringify(error));
 	}
 
 	function OpenStackProto () {

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="openstack-proto-widget" version="0.1.0">
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="openstack-proto-widget" version="0.1.1">
   <details>
     <title>OpenStack Prototype Widget</title>
     <email>bgrana@conwet.com</email>
@@ -8,8 +8,11 @@
     <description>Prototype widget that shows a table with openStack images data</description>
     <authors>bgrana</authors>
   </details>
+  <requirements>
+    <feature name="StyledElements" />
+  </requirements>
   <wiring>
   </wiring>
-  <contents src="index.html"/>
+  <contents src="index.html" useplatformstyle="true"/>
   <rendering height="8" width="30"/>
 </widget>

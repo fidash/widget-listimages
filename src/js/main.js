@@ -4,9 +4,11 @@ $(document).ready(function() {
     "use strict";
 
 	var openStackProto = new OpenStackProto();
-    var myTable = $('#example').DataTable();
+    var myTable = new DataViewer();
+    /*var refresh = $('<button>');
+    var filter = $("#example_filter");
 
-    var refresh = $('<button>');
+
     refresh.text('Refresh');
     refresh.css({
     	float: 'left',
@@ -15,9 +17,15 @@ $(document).ready(function() {
     refresh.click(function () {
     	openStackProto.listImage(myTable);
     });
-    var filter = $("#example_filter");
-    refresh.insertBefore(filter);
+    refresh.insertBefore(filter);*/
 
-    openStackProto.init();
-    openStackProto.listImage(myTable);
+    myTable.init();
+    var structure = [ {'id': 'name'}, {'id': 'status'}, {'id': 'updated'} ];
+    var data = [{'name': 'name1', 'status': 'OK', 'updated': 'NOW'},
+                {'name': 'name2', 'status': 'NOT_OK', 'updated': 'NOT_NOW'},
+                {'name': 'name3', 'status': 'FAIL', 'updated': 'NEVER'}];
+    var model = {'structure': structure, 'data': data};
+    myTable.setModel(model);
+    //openStackProto.init();
+    //openStackProto.listImage(myTable);
 });

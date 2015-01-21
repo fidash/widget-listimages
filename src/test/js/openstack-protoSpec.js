@@ -11,15 +11,6 @@ describe('Test Image Table', function () {
 
 	beforeEach(function() {
 
-		jasmine.getFixtures().set('<table id="example" class="display" cellspacing="0" width="100%">' +
-									'<thead>' +
-										'<tr>' +
-											'<th>Instance</th>' +
-											'<th>Status</th>' +
-											'<th>Last Update</th>' +
-										'</tr>' +
-									'</thead>' +
-								'</table>');
 		jasmine.getJSONFixtures().fixturesPath = 'src/test/fixtures/json';
 		respImageList = getJSONFixture('respImageList.json');
 		respAuthenticate = getJSONFixture('respAuthenticate.json');
@@ -54,7 +45,7 @@ describe('Test Image Table', function () {
 		expect(row[tdIndex]).toContainText(expectedText);
 	}
 
-	it('should initialize Keystone with URL', function() {
+	xit('should initialize Keystone with URL', function() {
 
 		var url = "http://arcturus.ls.fi.upm.es:5000/v2.0/";
 
