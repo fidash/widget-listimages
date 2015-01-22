@@ -10,11 +10,11 @@ var DataViewer = (function () {
     var DataViewer = function() {
 
         /* Context */
-        /*MashupPlatform.widget.context.registerCallback(function (newValues) {
+        MashupPlatform.widget.context.registerCallback(function (newValues) {
             if (this.layout && ("heightInPixels" in newValues || "widthInPixels" in newValues)) {
                 this.layout.repaint();
             }
-        }.bind(this));*/
+        }.bind(this));
 
         this.layout = null;
         this.table = null;
