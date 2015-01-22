@@ -22,6 +22,8 @@
 	// MashupPlatform
 	"MashupPlatform": true,
 	"MockMP":         true,
+  "StyledElements": true,
+  "DataViewer":     true,
 
 	// JStack
 	"JSTACK": true,
