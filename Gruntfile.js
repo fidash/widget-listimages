@@ -35,7 +35,7 @@ module.exports = function(grunt) {
     concat: {
       dist: {
         src: grunt.file.readJSON("src/test/fixtures/html/wirecloudStyleDependencies.html"),
-        dest: "src/test/helpers/StyledElements.js"
+        dest: "build/helpers/StyledElements.js"
       }
     },
 
@@ -53,7 +53,7 @@ module.exports = function(grunt) {
         src: ['src/js/*.js'],
         options: {
           specs: 'src/test/js/*Spec.js',
-          helpers: ['src/test/helpers/*.js'],
+          helpers: ['src/test/helpers/*.js', 'build/helpers/*.js'],
           vendor: ['node_modules/jquery/dist/jquery.js',
             'src/lib/js/jquery.dataTables.js',
             'node_modules/jasmine-jquery/lib/jasmine-jquery.js']
