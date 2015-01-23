@@ -32,6 +32,13 @@ module.exports = function(grunt) {
       }
     },
 
+    concat: {
+      dist: {
+        src: grunt.file.readJSON("src/test/fixtures/html/wirecloudStyleDependencies.html"),
+        dest: "src/test/helpers/StyledElements.js"
+      }
+    },
+
     copy: {
       main: {
         files: [
@@ -43,7 +50,7 @@ module.exports = function(grunt) {
     
     jasmine: {
       test: {
-        src: ['src/js/*.js', '!src/js/dataViewer.js'],
+        src: ['src/js/*.js'],
         options: {
           specs: 'src/test/js/*Spec.js',
           helpers: ['src/test/helpers/*.js'],
@@ -132,6 +139,6 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('package', ['gitinfo', 'manifest', 'copy', 'compress:widget']);
-  grunt.registerTask('test', ['replace:style', 'jasmine']);
+  grunt.registerTask('test', ['concat', 'jasmine:coverage']);
   grunt.registerTask('default', [/*'jshint',*/ 'replace:version', 'package']);
 };

@@ -20,12 +20,6 @@ $(document).ready(function() {
     refresh.insertBefore(filter);*/
 
     myTable.init();
-    var structure = [ {'id': 'name'}, {'id': 'status'}, {'id': 'updated'} ];
-    var data = [{'name': 'name1', 'status': 'OK', 'updated': 'NOW'},
-                {'name': 'name2', 'status': 'NOT_OK', 'updated': 'NOT_NOW'},
-                {'name': 'name3', 'status': 'FAIL', 'updated': 'NEVER'}];
-    var model = {'structure': structure, 'data': data};
-    myTable.setModel(model);
-    //openStackProto.init();
-    //openStackProto.listImage(myTable);
+    openStackProto.init();
+    openStackProto.listImage(myTable);
 });

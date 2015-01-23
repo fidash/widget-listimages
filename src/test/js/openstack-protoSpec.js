@@ -46,15 +46,13 @@ describe('Test Image Table', function () {
 		myTable.init();
 
 	    var structure = [ {'id': 'name'}, {'id': 'status'}, {'id': 'updated'} ];
-	    var data = [{'name': 'name1', 'status': 'OK', 'updated': 'NOW'}];
+	    var data = [{'name': 'Ubuntu 11.10 (Oneiric Oncelot)', 'status': 'ACTIVE', 'updated': '2012-02-28T19:39:05Z'}];
 	    var model = {'structure': structure, 'data': data};
-	    var cell = $('.cell')[tdIndex];
-
 
 	    myTable.setModel(model);
-	    //expect(cell.toContainText(expectedText)).toBeTruly();
+	    var cell = $('.cell')[tdIndex+3];
 
-	    // TODO expect(cell).toContainText(expectedText);
+	    expect(cell).toContainText(expectedText);
 	}
 
 	xit('should initialize Keystone with URL', function() {
@@ -68,17 +66,17 @@ describe('Test Image Table', function () {
 	});
 
 
-	xit('should add Name', function() {
+	it('should add Name', function() {
 
 		checkRow(0, 'Ubuntu 11.10 (Oneiric Oncelot)');
 	});
 
-	xit('should add Status', function() {
+	it('should add Status', function() {
 
 		checkRow(1, 'ACTIVE');
 	});
 
-	xit('should add last updated value', function() {
+	it('should add last updated value', function() {
 
 		checkRow(2, '2012-02-28T19:39:05Z');
 	});
