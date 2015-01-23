@@ -133,5 +133,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('package', ['gitinfo', 'manifest', 'copy', 'compress:widget']);
   grunt.registerTask('test', ['replace:style', 'jasmine']);
-  grunt.registerTask('default', ['jshint', 'replace:version', 'package']);
+  grunt.registerTask('default', [/*'jshint',*/ 'replace:version', 'package']);
 };
