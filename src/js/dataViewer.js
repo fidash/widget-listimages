@@ -3,6 +3,8 @@
  *
  */
 
+/* global StyledElements */
+
 var DataViewer = (function () {
  
     "use strict";
@@ -34,7 +36,7 @@ var DataViewer = (function () {
     // data: [ {"pk":"2", "name":"test", ...}, {"pk":"3", "name": "test2", ...}, ...]
 
     DataViewer.prototype.setModel = function (model) {
-        /*  dataset = {
+        /*  model = {
          *      "structure": [ {"id": "pk", "type": "number"}, ... ],
          *      "data": [ {"pk": "", ...}, ...]
          *  }

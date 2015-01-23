@@ -133,4 +133,4 @@ var MockMP = {};
 
 })(MockMP);
 
-// MashupPlatform = new MockMP.MockMP();
+MashupPlatform = new MockMP.MockMP();
