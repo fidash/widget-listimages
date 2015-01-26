@@ -3,8 +3,25 @@ var OpenStackProto = (function (JSTACK) {
 
 	var isAuthenticated = false;
 	var dataViewer = null;
-	var url = 'https://cloud.lab.fiware.org/keystone/v2.0/tokens';
+	var url = 'http://cloud.testbed.fi-ware.org/keystone/v2.0/';
+	const TOKENS_ENDPOINT = 'tokens';
+	const TENNANTS_ENDPOINT = 'tennants';
 
+
+	function initHeaders(options) {
+        var headers = {};
+
+        if (options.use_user_fiware_token) {
+            headers['X-FI-WARE-OAuth-Token'] = 'true';
+            headers['X-FI-WARE-OAuth-Header-Name'] = 'X-Auth-Token';
+        } else if ('token' in options) {
+            headers['X-Auth-Token'] = options.token;
+        } else {
+            throw new TypeError();
+        }
+
+        return headers;
+    };
 
 	function authenticate () {
 		// curl -s http://arcturus.ls.fi.upm.es:5000/v2.0/tokens -X 'POST' -d '{"auth":{"passwordCredentials":{"username":"braulio", "password":"braulio"}}}' -H "Content-Type: application/json" | python -m json.tool
@@ -12,7 +29,11 @@ var OpenStackProto = (function (JSTACK) {
 		var postBody, headers;
 
         var options;
-            
+        
+        options = merge({
+            token: null,
+            use_user_fiware_token: true,
+        }, options);
 
         headers = {
             "Accept": "application/json"
@@ -22,14 +43,42 @@ var OpenStackProto = (function (JSTACK) {
             "auth": {}
         };
 
-        /*MashupPlatform.http.makeRequest(this.url + this.TOKENS_ENDPOINT, {
+        if (typeof options === 'string') {  // options.project ??
+            postBody.auth.project = options.project;
+        } else if (typeof options.tenantId === 'string') {
+            postBody.auth.tenantId = options.tenantId;
+        } else {
+            throw new TypeError();
+        }
+
+        if (options.passwordCredentials != null) {
+            postBody.auth.passwordCredentials = {
+                "username": options.user,
+                "password": options.pass
+            };
+        } else if (typeof options.token === 'string') {
+            postBody.auth.token = {
+                "id": options.token
+            };
+        } else if (options.use_user_fiware_token === true) {
+            postBody.auth.token = {
+                "id": "%fiware_token%"
+            };
+            headers['X-FI-WARE-OAuth-Token'] = 'true';
+            headers['X-FI-WARE-OAuth-Token-Body-Pattern'] = '%fiware_token%';
+        } else {
+            throw new Error();
+        }
+
+        MashupPlatform.http.makeRequest(url + TOKENS_ENDPOINT, {
             requestHeaders: headers,
             contentType: "application/json",
             postBody: JSON.stringify(postBody),
             onSuccess: function (transport) {
-                JSTACK.Keystone.init(url);
-                JSTACK.setAuthToken(transport);
-                handleTempToken();
+                if (typeof options.onSuccess === 'function') {
+                    var response = JSON.parse(transport.responseText);
+                    options.onSuccess(response.access.token.id, response);
+                }
             },
             onFailure: function (response) {
                 var reason;
@@ -38,8 +87,13 @@ var OpenStackProto = (function (JSTACK) {
                     reason = process_failure.call(this, response);
                     options.onFailure(reason);
                 }
-            }.bind(this)
-        });*/
+            }.bind(this),
+            onComplete: function (transport) {
+                if (typeof options.onComplete === 'function') {
+                    options.onComplete();
+                }
+            }
+        });
 		
 		// JSTACK.Keystone.authenticate(USERNAME, PASSWORD, tokenId, tenantId, handleTempToken, onError);
 	}
