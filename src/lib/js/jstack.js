@@ -871,7 +871,9 @@ JSTACK.Nova = (function (JS, undefined) {
                 JS.Keystone.params.currentstate === JS.Keystone.STATES.AUTHENTICATED) {
             var service = JS.Keystone.getservice(params.service);
             var privateUrl = service.endpoints[0][params.endpointType];
-            params.url = privateUrl.replace(/192.168.[0-9]+.[0-9]+/, "arcturus.ls.fi.upm.es");
+            //TODO Let the user choose the URL so it is not hardcoded 
+            //params.url = privateUrl.replace(/192.168.[0-9]+.[0-9]+/, "https://cloud.lab.fiware.org/Spain/image/v1");
+            params.url = "https://cloud.lab.fiware.org/Spain/image/v1";
             return true;
         }
         return false;

@@ -44,16 +44,19 @@ var OpenStackProto = (function (JSTACK) {
             requestHeaders: headersTenants,
             onSuccess: function (response) {
 
-                var res = JSON.parse(response.responseText);
-                postBody.auth.tenantId = res.tenants[0].id;
+                response = JSON.parse(response.responseText);
+                postBody.auth.tenantId = response.tenants[0].id;
                 MashupPlatform.http.makeRequest(url + 'tokens', {
                     requestHeaders: headersAuth,
                     contentType: "application/json",
                     postBody: JSON.stringify(postBody),
-                    onSuccess: function (result) {
-                        result = JSON.parse(result.responseText);
-                        JSTACK.Keystone.params.token = result.access.token.id;
-                        handleTempToken(result);
+                    onSuccess: function (response) {
+                        response = JSON.parse(response.responseText);
+                        JSTACK.Keystone.params.token = response.access.token.id;
+                        JSTACK.Keystone.params.access = response.access;
+                        JSTACK.Keystone.params.currentstate = 2;
+                        //handleTempToken(response);
+                        handleServiceToken();
                     },
                     onFailure: function (response) {
                         console.log('Call failed with status: ' + response.status);
@@ -96,12 +99,12 @@ var OpenStackProto = (function (JSTACK) {
 //         }
 //     }
 // }
-    function handleTempToken (result) {
-        // curl -s http://arcturus.ls.fi.upm.es:5000/v2.0/tenants -X 'GET' -H "X-Auth-Token: $token" "Content-Type: application/json" | python -m json.tool
-        var isAdmin = false;
-        var tokenId = result.access.token.id;
-        JSTACK.Keystone.gettenants(handleTenants.bind(null, tokenId), isAdmin, onError);
-    }
+    // function handleTempToken (result) {
+    //     // curl -s http://arcturus.ls.fi.upm.es:5000/v2.0/tenants -X 'GET' -H "X-Auth-Token: $token" "Content-Type: application/json" | python -m json.tool
+    //     var isAdmin = false;
+    //     var tokenId = result.access.token.id;
+    //     JSTACK.Keystone.gettenants(handleTenants.bind(null, tokenId), isAdmin, onError);
+    // }
 
 // RESULT
 // {
@@ -115,13 +118,13 @@ var OpenStackProto = (function (JSTACK) {
 //     ], 
 //     "tenants_links": []
 // }
-    function handleTenants (tokenId, result) {
-        // curl -s http://arcturus.ls.fi.upm.es:5000/v2.0/tenants -X 'GET' -H "X-Auth-Token: $token" "Content-Type: application/json" | python -m json.tool
-        var tenantId = result.tenants[0].id;
-        var username, password;
+    // function handleTenants (tokenId, result) {
+    //     // curl -s http://arcturus.ls.fi.upm.es:5000/v2.0/tenants -X 'GET' -H "X-Auth-Token: $token" "Content-Type: application/json" | python -m json.tool
+    //     var tenantId = result.tenants[0].id;
+    //     var username, password;
 
-        JSTACK.Keystone.authenticate(username, password, tokenId, tenantId, handleServiceToken, onError);
-    }
+    //     JSTACK.Keystone.authenticate(username, password, tokenId, tenantId, handleServiceToken, onError);
+    // }
 
 
     function handleServiceToken () {
