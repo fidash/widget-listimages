@@ -1,52 +1,74 @@
 var OpenStackProto = (function (JSTACK) {
-	"use strict";
+    "use strict";
 
-	var isAuthenticated = false;
-	var dataViewer = null;
-	//var url = 'http://cloud.testbed.fi-ware.org/keystone/v2.0/';
-	var url = 'https://cloud.lab.fiware.org/keystone/v2.0/';
+    var isAuthenticated = false;
+    var dataViewer = null;
+    //var url = 'http://cloud.testbed.fi-ware.org/keystone/v2.0/';
+    var url = 'https://cloud.lab.fiware.org/keystone/v2.0/';
 
-	function authenticate () {
-		// curl -s http://arcturus.ls.fi.upm.es:5000/v2.0/tokens -X 'POST' -d '{"auth":{"passwordCredentials":{"username":"braulio", "password":"braulio"}}}' -H "Content-Type: application/json" | python -m json.tool
-		var tokenId, tenantId;
-		var postBody, headers;
-		var options;
-		var USERNAME, PASSWORD;
+    function authenticate () {
+        // curl -s http://arcturus.ls.fi.upm.es:5000/v2.0/tokens -X 'POST' -d '{"auth":{"passwordCredentials":{"username":"braulio", "password":"braulio"}}}' -H "Content-Type: application/json" | python -m json.tool
+        var tokenId, tenantId;
+        var postBody, headersAuth;
+        var options;
+        var USERNAME, PASSWORD;
+        var headersTenants = {};
 
-		//tokenId = MashupPlatform.context.get('fiware_user_token');
+        //tokenId = MashupPlatform.context.get('fiware_user_token');
+        //tokenId = "Sd27fIXLknxG4krOveBu9rHOQYl3BCu8Wghuy3va0PP3V8pEEp-6LBWBWds5NtVWtIBPlZVFjW9GTiJhhRGeZA";
+        //tenantId = "00000000000000000000000000002312";
 
-        headers = {
+        headersAuth = {
             "Accept": "application/json",
-            'X-FI-WARE-OAuth-Token': 'true',
-            'X-FI-WARE-OAuth-Token-Body-Pattern': '%fiware_token%'
+            "X-FI-WARE-OAuth-Token": "true",
+            "X-FI-WARE-OAuth-Token-Body-Pattern": "%fiware_token%"
         };
+
+        headersTenants['X-FI-WARE-OAuth-Token'] = 'true';
+        headersTenants['X-FI-WARE-OAuth-Header-Name'] = 'X-Auth-Token';
 
         postBody = {
             "auth": {}
         };
 
         postBody.auth.token = {
-            "id": '%fiware_token%'
+            "id": "%fiware_token%"
+            //"id": "Sd27fIXLknxG4krOveBu9rHOQYl3BCu8Wghuy3va0PP3V8pEEp-6LBWBWds5NtVWtIBPlZVFjW9GTiJhhRGeZA",
+            //"tenantId":"00000000000000000000000000002312"
         };
 
 
         JSTACK.Keystone.init(url);
-        MashupPlatform.http.makeRequest(url + 'tokens', {
-            requestHeaders: headers,
-            contentType: "application/json",
-            postBody: JSON.stringify(postBody),
-            onSuccess: function (transport) {
-            	JSTACK.Keystone.setToken(transport.access.token.id);
-                handleTempToken(transport);
+        MashupPlatform.http.makeRequest(url + 'tenants', {
+            method: 'GET',
+            requestHeaders: headersTenants,
+            onSuccess: function (response) {
+
+                var res = JSON.parse(response.responseText);
+                postBody.auth.tenantId = res.tenants[0].id;
+                MashupPlatform.http.makeRequest(url + 'tokens', {
+                    requestHeaders: headersAuth,
+                    contentType: "application/json",
+                    postBody: JSON.stringify(postBody),
+                    onSuccess: function (result) {
+                        result = JSON.parse(result.responseText);
+                        JSTACK.Keystone.params.token = result.access.token.id;
+                        handleTempToken(result);
+                    },
+                    onFailure: function (response) {
+                        console.log('Call failed with status: ' + response.status);
+                    }
+                });
+
             },
             onFailure: function (response) {
                 console.log('Call failed with status: ' + response.status);
             }
         });
-		
-		//JSTACK.Keystone.authenticate(USERNAME, PASSWORD, tokenId, tenantId, handleTempToken, onError);
-	}
-
+        
+        
+        //JSTACK.Keystone.authenticate(USERNAME, PASSWORD, tokenId, tenantId, handleTempToken, onError);
+    }
 
 
 // RESULT
@@ -74,12 +96,12 @@ var OpenStackProto = (function (JSTACK) {
 //         }
 //     }
 // }
-	function handleTempToken (result) {
-		// curl -s http://arcturus.ls.fi.upm.es:5000/v2.0/tenants -X 'GET' -H "X-Auth-Token: $token" "Content-Type: application/json" | python -m json.tool
-		var isAdmin = false;
-		var tokenId = result.access.token.id;
-		JSTACK.Keystone.gettenants(handleTenants.bind(null, tokenId), isAdmin, onError);
-	}
+    function handleTempToken (result) {
+        // curl -s http://arcturus.ls.fi.upm.es:5000/v2.0/tenants -X 'GET' -H "X-Auth-Token: $token" "Content-Type: application/json" | python -m json.tool
+        var isAdmin = false;
+        var tokenId = result.access.token.id;
+        JSTACK.Keystone.gettenants(handleTenants.bind(null, tokenId), isAdmin, onError);
+    }
 
 // RESULT
 // {
@@ -93,63 +115,63 @@ var OpenStackProto = (function (JSTACK) {
 //     ], 
 //     "tenants_links": []
 // }
-	function handleTenants (tokenId, result) {
-		// curl -s http://arcturus.ls.fi.upm.es:5000/v2.0/tenants -X 'GET' -H "X-Auth-Token: $token" "Content-Type: application/json" | python -m json.tool
-		var tenantId = result.tenants[0].id;
-		var username, password;
+    function handleTenants (tokenId, result) {
+        // curl -s http://arcturus.ls.fi.upm.es:5000/v2.0/tenants -X 'GET' -H "X-Auth-Token: $token" "Content-Type: application/json" | python -m json.tool
+        var tenantId = result.tenants[0].id;
+        var username, password;
 
-		JSTACK.Keystone.authenticate(username, password, tokenId, tenantId, handleServiceToken, onError);
-	}
+        JSTACK.Keystone.authenticate(username, password, tokenId, tenantId, handleServiceToken, onError);
+    }
 
 
-	function handleServiceToken () {
+    function handleServiceToken () {
 
-		isAuthenticated = true;
-		doWork();
-	}
+        isAuthenticated = true;
+        doWork();
+    }
 
-	function getImageList (table) {
-		
-		dataViewer = table;
-		doWork();
-	}
+    function getImageList (table) {
+        
+        dataViewer = table;
+        doWork();
+    }
 
-	function doWork() {
+    function doWork() {
 
-		if (isReady()) {
+        if (isReady()) {
 
-			JSTACK.Nova.getimagelist(true, callbackImageList.bind(null, dataViewer), onError, null);
-		}
-	}
+            JSTACK.Nova.getimagelist(true, callbackImageList.bind(null, dataViewer), onError, null);
+        }
+    }
 
-	function isReady() {
+    function isReady() {
 
-		return (isAuthenticated === true && dataViewer);	
-	}
+        return (isAuthenticated === true && dataViewer);    
+    }
 
-	function callbackImageList (table, result) {
-		
-		var structure = [ {'id': 'name'}, {'id': 'status'}, {'id': 'updated'} ];
-		var data = [];
-		var dataset = {'structure': structure, 'data': data};
+    function callbackImageList (table, result) {
+        
+        var structure = [ {'id': 'name'}, {'id': 'status'}, {'id': 'updated'} ];
+        var data = [];
+        var dataset = {'structure': structure, 'data': data};
 
-		for (var imageKey in result.images) {
-			var image = result.images[imageKey];
-			data.push({'name': image.name, 'status': image.status, 'updated': image.updated});
-		}
-		table.setModel(dataset);
+        for (var imageKey in result.images) {
+            var image = result.images[imageKey];
+            data.push({'name': image.name, 'status': image.status, 'updated': image.updated});
+        }
+        table.setModel(dataset);
 
-	}
+    }
 
-	function onError (error) {
-		console.log('Error: ' + JSON.tableringify(error));
-	}
+    function onError (error) {
+        console.log('Error: ' + JSON.tableringify(error));
+    }
 
-	function OpenStackProto () {
+    function OpenStackProto () {
 
-		this.init = authenticate;
-		this.listImage = getImageList;
-	}
+        this.init = authenticate;
+        this.listImage = getImageList;
+    }
 
-	return OpenStackProto;
+    return OpenStackProto;
 })(JSTACK);

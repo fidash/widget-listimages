@@ -427,7 +427,7 @@ JSTACK.Keystone = (function (JS, undefined) {
 
     "use strict";
 
-    var params, STATES, init, authenticate, gettenants, getservicelist, getservice, createuser, edituser, getusers, getusersfortenant, getuser, deleteuser, getroles, getuserroles, adduserrole, removeuserrole, createtenant, edittenant, deletetenant, setToken;
+    var params, STATES, init, authenticate, gettenants, getservicelist, getservice, createuser, edituser, getusers, getusersfortenant, getuser, deleteuser, getroles, getuserroles, adduserrole, removeuserrole, createtenant, edittenant, deletetenant;
 
     // `STATES` defines different authentication states. This
     // can be useful for applications to know when they can
@@ -782,10 +782,6 @@ JSTACK.Keystone = (function (JS, undefined) {
         }
     };
 
-    setToken = function(tokenId) {
-        params.token = tokenId;
-    }
-
     // Public Functions and Variables
     // ---------------------------
     // This is the list of available public functions and variables
@@ -811,8 +807,7 @@ JSTACK.Keystone = (function (JS, undefined) {
         removeuserrole : removeuserrole,
         createtenant : createtenant,
         edittenant: edittenant,
-        deletetenant : deletetenant,
-        setToken : setToken
+        deletetenant : deletetenant
     };
 }(JSTACK));/*
 The MIT License
