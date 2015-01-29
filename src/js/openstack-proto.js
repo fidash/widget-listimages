@@ -119,8 +119,8 @@ var OpenStackProto = (function (JSTACK) {
             text: 'Refresh'
         });
         refresh.addEventListener('click', doWork);
-        var pagination = document.querySelector("div.container.pagination");
-        refresh.insertInto(pagination);
+        var south_container = document.querySelector("div.container.south_container.statusrow");
+        refresh.insertInto(south_container);
         table.layout.repaint();
     }
 
