@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="openstack-proto-widget" version="0.1.2">
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="openstack-proto-widget" version="0.1.3">
   <details>
     <title>OpenStack Prototype Widget</title>
     <email>bgrana@conwet.com</email>
@@ -12,6 +12,7 @@
     <feature name="StyledElements" />
   </requirements>
   <wiring>
+    <outputendpoint name="image_details" type="text" label="Image ID" description="Sends image ID and OpenStack service token." friendcode="image_details"/>
   </wiring>
   <contents src="index.html" useplatformstyle="true"/>
   <rendering height="8" width="30"/>

@@ -64,6 +64,10 @@ var DataViewer = (function () {
         this.layout.repaint();
     };
 
+    DataViewer.prototype.addEventListener = function addEventListener(event, listener) {
+        this.table.addEventListener(event, listener);
+    };
+
 /**************************************************************************/
 /****************************** AUXILIAR **********************************/
 /**************************************************************************/

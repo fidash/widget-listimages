@@ -98,9 +98,18 @@ var OpenStackProto = (function (JSTACK) {
         return (isAuthenticated === true && dataViewer);    
     }
 
+    function rowClickCallback(row) {
+        var data = {
+            "id": row.id,
+            "token": JSTACK.Keystone.params.token
+        };
+
+        MashupPlatform.wiring.pushEvent('image_details', JSON.stringify(data));
+    }
+
     function callbackImageList (table, result) {
         
-        var structure = [ {'id': 'name'}, {'id': 'status'}, {'id': 'updated'} ];
+        var structure = [{'id': 'id'}, {'id': 'name'}, {'id': 'status'}, {'id': 'updated'} ];
         var data = [];
         var dataset = {'structure': structure, 'data': data};
         var refresh;
@@ -108,11 +117,14 @@ var OpenStackProto = (function (JSTACK) {
         // Gather data from GET response
         for (var imageKey in result.images) {
             var image = result.images[imageKey];
-            data.push({'name': image.name, 'status': image.status, 'updated': image.updated_at});
+            data.push({'id': image.id, 'name': image.name, 'status': image.status, 'updated': image.updated_at});
         }
 
         // Create table with the given dataset
         table.setModel(dataset);
+
+        // Set rows events
+        table.addEventListener('click', rowClickCallback);
 
         // Set refresh button
         refresh = new StyledElements.StyledButton({
