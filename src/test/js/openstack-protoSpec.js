@@ -20,23 +20,17 @@ describe('Test Image Table', function () {
 		openStack = new OpenStackProto();
 	});
 
-	function callListImage() {
+	function callListImage(myTable) {
 
+		var handleServiceTokenCallback, callback;
 		
 		openStack.init();
-
-		var handleTempTokenCallback = JSTACK.Keystone.authenticate.calls.mostRecent().args[4];
-		handleTempTokenCallback(respAuthenticate);
-
-		var gettenantsCallback = JSTACK.Keystone.gettenants.calls.mostRecent().args[0];
-		gettenantsCallback(respTenants);
-
-		var handleServiceTokenCallback = JSTACK.Keystone.authenticate.calls.mostRecent().args[4];
-		handleServiceTokenCallback(respServices);
-
+		console.log(JSON.stringify(MashupPlatform.http.makeRequest.calls.mostRecent()));
+		handleServiceTokenCallback = MashupPlatform.http.makeRequest.calls.mostRecent().args[2];
+		handleServiceTokenCallback();
 		openStack.listImage(myTable);
-		var callback = JSTACK.Nova.getimagelist.calls.mostRecent().args[1];
-		callback(respImageList);
+		callback = JSTACK.Nova.getimagelist.calls.mostRecent().args[1];
+		callback(myTable, respImageList);
 	}
 
 	function checkRow(tdIndex, expectedText) {
@@ -55,16 +49,15 @@ describe('Test Image Table', function () {
 	    expect(cell).toContainText(expectedText);
 	}
 
-	xit('should initialize Keystone with URL', function() {
+	it('should authenticate through wirecloud proxy', function() {
 
 		var url = "http://arcturus.ls.fi.upm.es:5000/v2.0/";
 
 		openStack.init();
 
-		expect(JSTACK.Keystone.init).toHaveBeenCalledWith(url);
+		expect(MashupPlatform.http.makeRequest).toHaveBeenCalled();
 
 	});
-
 
 	it('should add Name', function() {
 
