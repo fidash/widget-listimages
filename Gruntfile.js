@@ -50,7 +50,7 @@ module.exports = function(grunt) {
     
     jasmine: {
       test: {
-        src: ['src/js/*.js'],
+        src: ['src/js/*.js', '!src/js/main.js'],
         options: {
           specs: 'src/test/js/*Spec.js',
           helpers: ['src/test/helpers/*.js', 'build/helpers/*.js'],
@@ -104,11 +104,32 @@ module.exports = function(grunt) {
 
     clean: ['build'],
 
+
     jshint: {
-      files: ['src/js/**/*', 'src/test/**/*.js'],
-      options: {
-        jshintrc: '.jshintrc'
-      }
+        options: {
+            jshintrc: true
+        },
+        all: {
+            files: {
+                src: ['src/js/**/*.js']
+            }
+        },
+        grunt: {
+            options: {
+                jshintrc: '.jshintrc-node'
+            },
+            files: {
+                src: ['Gruntfile.js']
+            }
+        },
+        test: {
+            options: {
+                jshintrc: '.jshintrc-jasmine'
+            },
+            files: {
+                src: ['src/test/**/*.js', '!src/test/fixtures/', '!src/test/StyledElements/*']
+            }
+        }
     }
   });
 
@@ -137,5 +158,11 @@ module.exports = function(grunt) {
 
   grunt.registerTask('package', ['gitinfo', 'manifest', 'copy', 'compress:widget']);
   grunt.registerTask('test', ['concat', 'jasmine:coverage']);
-  grunt.registerTask('default', [/*'jshint',*/ 'replace:version', 'package']);
+  grunt.registerTask('default',
+    [
+    'jshint',
+    'test',
+    'replace:version',
+    'package'
+    ]);
 };

@@ -1,5 +1,7 @@
 {
+    "jasmine": true,
     "browser": true,
+    "jquery": true,
     "debug": false,
     "devel": false,
     "eqnull": true,
@@ -9,7 +11,6 @@
     "prototypejs": false,
     "globalstrict": false,
     "strict": true,
-    "jquery": true,
     "white": false,
     "quotmark": false,
     "globals": {
@@ -17,8 +18,6 @@
         "MashupPlatform": true,
         "DataViewer": true,
         "JSTACK": true,
-        "StyledElements": true,
-        "console": true,
-        "OpenStackProto": true
+        "getJSONFixture": true
     }
 }

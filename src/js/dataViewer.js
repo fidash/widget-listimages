@@ -82,6 +82,7 @@ var DataViewer = (function () {
 
         // Function to be call when the user clicks on "search" or types "enter"
         function filter() {
+            /*jshint validthis:true */
             this.table.source.changeOptions({'keywords': textInput.getValue()});
         }
 
