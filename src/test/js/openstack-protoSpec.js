@@ -16,18 +16,30 @@ describe('Test Image Table', function () {
 		respAuthenticate = getJSONFixture('respAuthenticate.json');
 		respTenants = getJSONFixture('respTenants.json');
 		respServices = getJSONFixture('respServices.json');
-
+		$('.border_layout').remove();
 		openStack = new OpenStackProto();
 	});
 
-	function callListImage(myTable) {
+	function callListImage() {
 
-		var handleServiceTokenCallback, callback;
-		
+		var handleServiceTokenCallback, callback, getTenantsOnSuccess;
+		var myTable = new DataViewer();
+
+		myTable.init();
 		openStack.init();
-		console.log(JSON.stringify(MashupPlatform.http.makeRequest.calls.mostRecent()));
-		handleServiceTokenCallback = MashupPlatform.http.makeRequest.calls.mostRecent().args[2];
-		handleServiceTokenCallback();
+
+		getTenantsOnSuccess = MashupPlatform.http.makeRequest.calls.mostRecent().args[1].onSuccess;
+		respTenants = {
+			responseText: JSON.stringify(respTenants)
+		};
+		getTenantsOnSuccess(respTenants);
+		
+		handleServiceTokenCallback = MashupPlatform.http.makeRequest.calls.mostRecent().args[1].onSuccess;
+		respServices = {
+			responseText: JSON.stringify(respServices)
+		};
+		handleServiceTokenCallback(respServices);
+
 		openStack.listImage(myTable);
 		callback = JSTACK.Nova.getimagelist.calls.mostRecent().args[1];
 		callback(myTable, respImageList);
@@ -35,7 +47,6 @@ describe('Test Image Table', function () {
 
 	function checkRow(tdIndex, expectedText) {
 
-		// callListImage();
 		var myTable = new DataViewer();
 		myTable.init();
 
@@ -51,11 +62,10 @@ describe('Test Image Table', function () {
 
 	it('should authenticate through wirecloud proxy', function() {
 
-		var url = "http://arcturus.ls.fi.upm.es:5000/v2.0/";
+		callListImage();
 
-		openStack.init();
-
-		expect(MashupPlatform.http.makeRequest).toHaveBeenCalled();
+		expect(MashupPlatform.http.makeRequest.calls.count()).toBe(2);
+		expect(JSTACK.Keystone.params.currentstate).toBe(2);
 
 	});
 
