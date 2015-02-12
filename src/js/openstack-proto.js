@@ -4,6 +4,7 @@ var OpenStackProto = (function (JSTACK) {
     var isAuthenticated = false;
     var dataViewer = null;
     var url = 'https://cloud.lab.fiware.org/keystone/v2.0/';
+    var imageList;
 
     function authenticate () {
         // curl -s http://arcturus.ls.fi.upm.es:5000/v2.0/tokens -X 'POST' -d '{"auth":{"passwordCredentials":{"username":"braulio", "password":"braulio"}}}' -H "Content-Type: application/json" | python -m json.tool
@@ -54,7 +55,7 @@ var OpenStackProto = (function (JSTACK) {
                         // Mimic JSTACK.Keystone.authenticate behavior on success
                         JSTACK.Keystone.params.token = response.access.token.id;
                         JSTACK.Keystone.params.access = response.access;
-                        JSTACK.Keystone.params.currentstate = 2;                      
+                        JSTACK.Keystone.params.currentstate = 2;
 
                         handleServiceToken();
                     },
@@ -100,11 +101,10 @@ var OpenStackProto = (function (JSTACK) {
 
     function rowClickCallback(row) {
         var data = {
-            "id": row.id,
-            "token": JSTACK.Keystone.params.token
+            'id': row.id,
+            'access': JSTACK.Keystone.params.access
         };
-
-        MashupPlatform.wiring.pushEvent('image_details', JSON.stringify(data));
+        MashupPlatform.wiring.pushEvent('image_id', JSON.stringify(data));
     }
 
     function callbackImageList (table, result) {

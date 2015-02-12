@@ -12,7 +12,7 @@
     <feature name="StyledElements" />
   </requirements>
   <wiring>
-    <outputendpoint name="image_details" type="text" label="Image ID" description="Sends image ID and OpenStack service token." friendcode="image_details"/>
+    <outputendpoint name="image_id" type="text" label="Image ID" description="Sends image ID and OpenStack access." friendcode="image_id"/>
   </wiring>
   <contents src="index.html" useplatformstyle="true"/>
   <rendering height="8" width="30"/>
