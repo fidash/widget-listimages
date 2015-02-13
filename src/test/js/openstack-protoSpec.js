@@ -22,7 +22,7 @@ describe('Test Image Table', function () {
 
 	function callListImage() {
 
-		var handleServiceTokenCallback, callback, getTenantsOnSuccess;
+		var handleServiceTokenCallback, getTenantsOnSuccess;
 		var myTable = new DataViewer();
 
 		myTable.init();
@@ -41,8 +41,15 @@ describe('Test Image Table', function () {
 		handleServiceTokenCallback(respServices);
 
 		openStack.listImage(myTable);
-		callback = JSTACK.Nova.getimagelist.calls.mostRecent().args[1];
-		callback(myTable, respImageList);
+
+	}
+
+	function callListImageSuccessCallback () {
+
+		var callback = JSTACK.Nova.getimagelist.calls.mostRecent().args[1];
+		
+		callback(respImageList);
+
 	}
 
 	function checkRow(tdIndex, expectedText) {
@@ -67,6 +74,16 @@ describe('Test Image Table', function () {
 		expect(MashupPlatform.http.makeRequest.calls.count()).toBe(2);
 		expect(JSTACK.Keystone.params.currentstate).toBe(2);
 
+	});
+
+	it('should have created a table with the received images', function () {
+
+		callListImage();
+		callListImageSuccessCallback();
+
+		var rows = document.querySelectorAll('.tbody > .row');
+
+		expect(rows.length).toBeGreaterThan(0);
 	});
 
 	it('should add Name', function() {
