@@ -90,7 +90,7 @@ var OpenStackProto = (function (JSTACK) {
 
         if (isReady()) {
 
-            JSTACK.Nova.getimagelist(true, callbackImageList.bind(null, dataViewer), onError, null);
+            JSTACK.Nova.getimagelist(true, callbackImageList, onError, null);
         }
     }
 
@@ -107,24 +107,24 @@ var OpenStackProto = (function (JSTACK) {
         MashupPlatform.wiring.pushEvent('image_id', JSON.stringify(data));
     }
 
-    function callbackImageList (table, result) {
-        
+    function callbackImageList (result) {
+
         var structure = [{'id': 'id'}, {'id': 'name'}, {'id': 'status'}, {'id': 'updated'} ];
         var data = [];
         var dataset = {'structure': structure, 'data': data};
         var refresh;
 
         // Gather data from GET response
-        for (var imageKey in result.images) {
-            var image = result.images[imageKey];
+        for (var i=0; i<result.images.length; i++) {
+            var image = result.images[i];
             data.push({'id': image.id, 'name': image.name, 'status': image.status, 'updated': image.updated_at});
         }
 
         // Create table with the given dataset
-        table.setModel(dataset);
+        dataViewer.setModel(dataset);
 
         // Set rows events
-        table.addEventListener('click', rowClickCallback);
+        dataViewer.addEventListener('click', rowClickCallback);
 
         // Set refresh button
         refresh = new StyledElements.StyledButton({
@@ -133,7 +133,7 @@ var OpenStackProto = (function (JSTACK) {
         refresh.addEventListener('click', doWork);
         var south_container = document.querySelector("div.container.south_container.statusrow");
         refresh.insertInto(south_container);
-        table.layout.repaint();
+        dataViewer.layout.repaint();
     }
 
     function onError (error) {
