@@ -2,9 +2,9 @@ var OpenStackProto = (function (JSTACK) {
     "use strict";
 
     var isAuthenticated = false;
-    var dataViewer = null;
     var url = 'https://cloud.lab.fiware.org/keystone/v2.0/';
     var imageList;
+    var dataTable;
 
     function authenticate () {
         // curl -s http://arcturus.ls.fi.upm.es:5000/v2.0/tokens -X 'POST' -d '{"auth":{"passwordCredentials":{"username":"braulio", "password":"braulio"}}}' -H "Content-Type: application/json" | python -m json.tool
@@ -60,84 +60,112 @@ var OpenStackProto = (function (JSTACK) {
                         handleServiceToken();
                     },
                     onFailure: function (response) {
-                        console.log('Call failed with status: ' + response.status);
+                        onError(response);
                     }
                 });
 
             },
             onFailure: function (response) {
-                console.log('Call failed with status: ' + response.status);
+                onError(response);
             }
         });
         
-        
-        //JSTACK.Keystone.authenticate(USERNAME, PASSWORD, tokenId, tenantId, handleTempToken, onError);
     }
 
     function handleServiceToken () {
 
-        isAuthenticated = true;
-        doWork();
+        var refresh, createButton, modalCreateButton;
+
+        // TODO let the user choose the content of columns as a preference
+        var columns = [
+            {'title': 'ID'},
+            {'title': 'Name'},
+            {'title': 'Status'},
+            {'title': 'Updated'}
+        ];
+
+        dataTable = $('#images_table').DataTable({
+            'columns': columns,
+            'binfo': false,
+            responsive: true,
+            'pagingType': 'full_numbers',
+            'info': false
+        });
+
+        // Set refresh button
+        refresh = $('<button>');
+        refresh.text('Refresh');
+        refresh.addClass('btn btn-default action-button pull-left');
+        refresh.click(getImageList);
+        refresh.insertBefore($('#images_table_paginate'));
+
+        // Set upload button
+        createButton = $('<button>');
+        createButton.text('Create Image');
+        createButton.addClass('btn btn-default action-button pull-left');
+        createButton.attr('data-toggle', 'modal');
+        createButton.attr('data-target', '#uploadImageModal');
+        createButton.insertBefore($('#images_table_paginate'));
+
+        // Set modal create image button click
+        modalCreateButton = $('#create-image');
+        //modalCreateButton.on('click', createImage);
+
+        getImageList();
     }
 
-    function getImageList (table) {
-        
-        dataViewer = table;
-        doWork();
+    function getImageList() {
+
+        JSTACK.Nova.getimagelist(true, callbackImageList, onError, null);
+
     }
 
-    function doWork() {
-
-        if (isReady()) {
-
-            JSTACK.Nova.getimagelist(true, callbackImageList, onError, null);
-        }
-    }
-
-    function isReady() {
-
-        return (isAuthenticated === true && dataViewer);    
-    }
-
-    function rowClickCallback(row) {
+    function rowClickCallback(id) {
         var data = {
-            'id': row.id,
+            'id': id,
             'access': JSTACK.Keystone.params.access
         };
         MashupPlatform.wiring.pushEvent('image_id', JSON.stringify(data));
     }
 
+
+
+
+
+
     function callbackImageList (result) {
+        
+        var image;
+        var dataSet = [];
 
-        var structure = [{'id': 'id'}, {'id': 'name'}, {'id': 'status'}, {'id': 'updated'} ];
-        var data = [];
-        var dataset = {'structure': structure, 'data': data};
-        var refresh;
+        // Clear previous elements
+        dataTable.clear();
 
-        // Gather data from GET response
-        for (var i=0; i<result.images.length; i++) {
-            var image = result.images[i];
-            data.push({'id': image.id, 'name': image.name, 'status': image.status, 'updated': image.updated_at});
+        // Build table body
+        for (var j=0; j<result.images.length; j++) {
+            image = result.images[j];
+            dataTable.row.add([
+                image.id,
+                image.name,
+                image.status,
+                image.updated_at
+            ]).draw();
         }
 
-        // Create table with the given dataset
-        dataViewer.setModel(dataset);
-
-        // Set rows events
-        dataViewer.addEventListener('click', rowClickCallback);
-
-        // Set refresh button
-        refresh = new StyledElements.StyledButton({
-            text: 'Refresh'
+        // Row events
+        $('#images_table tbody').on('click', 'tr', function () {
+            var id = $(this).children()[0].textContent;
+            $('#images_table tbody tr').removeClass('selected');
+            $(this).addClass('selected');
+            rowClickCallback(id);
         });
-        refresh.addEventListener('click', doWork);
-        var south_container = document.querySelector("div.container.south_container.statusrow");
-        refresh.insertInto(south_container);
-        dataViewer.layout.repaint();
+
+        dataTable.columns.adjust().draw();
+
     }
 
     function onError (error) {
-        console.log('Error: ' + JSON.tableringify(error));
+        console.log('Error: ' + JSON.stringify(error));
     }
 
     function OpenStackProto () {

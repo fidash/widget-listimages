@@ -3,31 +3,24 @@
     padding: 0;
 }
 
-.cell.severity > .label {
-    width:100%;
-    text-align:center;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+td {
+    cursor: pointer;
 }
 
-.cell.photo {
-    text-align: center;
+h3 {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-.cell.technician .styled_select {
-    width:100%;
-    margin:0;
-}
-
-#messageContainer{
-    margin-top:36px;
-    position:absolute;
+button.action-button {
+    margin-top: 7px;
+    margin-left: 7px;
 }
 
 .pagination {
     margin: 3px;
 }
 
-.row {
-    cursor: pointer;
+.modal-footer {
+    padding: 9px;
 }
