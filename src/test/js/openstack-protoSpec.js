@@ -10,22 +10,18 @@ describe('Test Image Table', function () {
 	var respServices = null;
 
 	beforeEach(function() {
-
+		setFixtures('<table id="images_table"></table>');
 		jasmine.getJSONFixtures().fixturesPath = 'src/test/fixtures/json';
 		respImageList = getJSONFixture('respImageList.json');
 		respAuthenticate = getJSONFixture('respAuthenticate.json');
 		respTenants = getJSONFixture('respTenants.json');
 		respServices = getJSONFixture('respServices.json');
-		$('.border_layout').remove();
 		openStack = new OpenStackProto();
 	});
 
 	function callListImage() {
 
 		var handleServiceTokenCallback, getTenantsOnSuccess;
-		var myTable = new DataViewer();
-
-		myTable.init();
 		openStack.init();
 
 		getTenantsOnSuccess = MashupPlatform.http.makeRequest.calls.mostRecent().args[1].onSuccess;
@@ -40,8 +36,31 @@ describe('Test Image Table', function () {
 		};
 		handleServiceTokenCallback(respServices);
 
-		openStack.listImage(myTable);
+		openStack.listImage();
 
+	}
+
+	function callgetTenantsWithError () {
+		
+		var getTenantsOnError;
+
+		openStack.init();
+		getTenantsOnError = MashupPlatform.http.makeRequest.calls.mostRecent().args[1].onFailure;
+		getTenantsOnError('Test successful');
+	}
+
+	function callAuthenticateWithError () {
+		
+		var authenticateError, getTenantsOnSuccess;
+
+		getTenantsOnSuccess = MashupPlatform.http.makeRequest.calls.mostRecent().args[1].onSuccess;
+		respTenants = {
+			responseText: JSON.stringify(respTenants)
+		};
+		getTenantsOnSuccess(respTenants);
+
+		authenticateError = MashupPlatform.http.makeRequest.calls.mostRecent().args[1].onFailure;
+		authenticateError('Test successful');
 	}
 
 	function callListImageSuccessCallback () {
@@ -52,19 +71,25 @@ describe('Test Image Table', function () {
 
 	}
 
-	function checkRow(tdIndex, expectedText) {
+	function checkRow(expectedTextList) {
 
-		var myTable = new DataViewer();
-		myTable.init();
+		var dataTable, cell;
 
-	    var structure = [ {'id': 'name'}, {'id': 'status'}, {'id': 'updated'} ];
-	    var data = [{'name': 'Ubuntu 11.10 (Oneiric Oncelot)', 'status': 'ACTIVE', 'updated': '2012-02-28T19:39:05Z'}];
-	    var model = {'structure': structure, 'data': data};
+		dataTable = $('#images_table').DataTable({
+			"columns": [
+				{'title': 'Name'},
+				{'title': 'Status'},
+				{'title': 'Updated'}
+			]
+		});
 
-	    myTable.setModel(model);
-	    var cell = $('.cell')[tdIndex+3];
+	    dataTable.row.add(expectedTextList).draw();
 
-	    expect(cell).toContainText(expectedText);
+	    for (var i=0; i<expectedTextList.length; i++) {
+	    	
+	    	cell = $('tbody > tr > td')[i];
+	    	expect(cell).toContainText(expectedTextList[i]);
+	    }
 	}
 
 	it('should authenticate through wirecloud proxy', function() {
@@ -81,23 +106,49 @@ describe('Test Image Table', function () {
 		callListImage();
 		callListImageSuccessCallback();
 
-		var rows = document.querySelectorAll('.tbody > .row');
+		var rows = document.querySelectorAll('tbody > tr');
 
 		expect(rows.length).toBeGreaterThan(0);
 	});
 
-	it('should add Name', function() {
+	it('should call error callback for getTenants correctly',function () {
 
-		checkRow(0, 'Ubuntu 11.10 (Oneiric Oncelot)');
+		var output;
+
+		console.log = jasmine.createSpy("log").and.callFake(function (error) {
+			output = error;
+		});
+
+		callgetTenantsWithError();
+		expect(output).toBe('Error: "Test successful"');
 	});
 
-	it('should add Status', function() {
+	it('should call error callback for authenticate correctly', function () {
+		
+		var output;
 
-		checkRow(1, 'ACTIVE');
+		console.log = jasmine.createSpy("log").and.callFake(function (error) {
+			output = error;
+		});
+
+		callAuthenticateWithError();
+		expect(output).toBe('Error: "Test successful"');
 	});
 
-	it('should add last updated value', function() {
+	it('should have called MashupPlatform.wiring.pushEvent when click event triggered on a row', function () {
 
-		checkRow(2, '2012-02-28T19:39:05Z');
+		var spyEvent = spyOnEvent('tbody > tr', 'click');
+
+		callListImage();
+		callListImageSuccessCallback();
+
+		$('tbody > tr').trigger('click');
+
+		expect(MashupPlatform.wiring.pushEvent).toHaveBeenCalled();
+	});
+
+	it('should add the given row', function() {
+
+		checkRow(['Ubuntu 11.10 (Oneiric Oncelot)', 'ACTIVE', '2012-02-28T19:39:05Z']);
 	});
 });

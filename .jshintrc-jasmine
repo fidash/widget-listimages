@@ -18,6 +18,9 @@
         "MashupPlatform": true,
         "DataViewer": true,
         "JSTACK": true,
-        "getJSONFixture": true
+        "getJSONFixture": true,
+        "setFixtures": true,
+        "console": true,
+        "spyOnEvent": true
     }
 }
