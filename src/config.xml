@@ -15,5 +15,5 @@
     <outputendpoint name="image_id" type="text" label="Image ID" description="Sends image ID and OpenStack access." friendcode="image_id"/>
   </wiring>
   <contents src="index.html" useplatformstyle="true"/>
-  <rendering height="8" width="30"/>
+  <rendering height="46" width="12"/>
 </widget>
