@@ -58,7 +58,8 @@ module.exports = function(grunt) {
         options: {
           specs: 'src/test/js/*Spec.js',
           helpers: ['src/test/helpers/*.js', 'build/helpers/*.js'],
-          vendor: ['node_modules/jquery/dist/jquery.js',
+          vendor: ['src/test/vendor/*.js',
+            'node_modules/jquery/dist/jquery.js',
             'node_modules/datatables/media/js/jquery.dataTables.js',
             'node_modules/jasmine-jquery/lib/jasmine-jquery.js']
         }

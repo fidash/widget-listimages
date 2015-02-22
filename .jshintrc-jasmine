@@ -21,6 +21,7 @@
         "getJSONFixture": true,
         "setFixtures": true,
         "console": true,
-        "spyOnEvent": true
+        "spyOnEvent": true,
+        "MyStrategy": true
     }
 }

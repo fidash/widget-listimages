@@ -8,16 +8,51 @@ describe('Test Image Table', function () {
 	var respAuthenticate = null;
 	var respTenants = null;
 	var respServices = null;
+	var imageListSingleImage = null;
+	var prefsValues;
 
 	beforeEach(function() {
+
+		// Set/Reset prefs values
+		prefsValues = {
+	    	"MashupPlatform.prefs.get": {
+		        "id": true,
+		        "name": true,
+		        "status": true,
+		        "visibility": false,
+		        "checksum": false,
+		        "created": false,
+		        "updated": true,
+		        "size": false,
+		        "container_format": false,
+		        "disk_format": false,
+		    }
+		};
+
+		// Set/Reset strategy
+		MashupPlatform.setStrategy(new MyStrategy(), prefsValues);
+
+		// Set/Reset fixtures
 		setFixtures('<table id="images_table"></table>');
 		jasmine.getJSONFixtures().fixturesPath = 'src/test/fixtures/json';
 		respImageList = getJSONFixture('respImageList.json');
 		respAuthenticate = getJSONFixture('respAuthenticate.json');
 		respTenants = getJSONFixture('respTenants.json');
 		respServices = getJSONFixture('respServices.json');
+		imageListSingleImage = getJSONFixture('imageListSingleImage.json');
+
+		// Create new instance
 		openStack = new OpenStackProto();
 	});
+
+	afterEach(function () {
+		$('#images_table').empty();
+	});
+
+
+	/**************************************************************************/
+	/*****************************AUXILIAR FUNCTIONS***************************/
+	/**************************************************************************/
 
 	function callListImage() {
 
@@ -63,34 +98,18 @@ describe('Test Image Table', function () {
 		authenticateError('Test successful');
 	}
 
-	function callListImageSuccessCallback () {
+	function callListImageSuccessCallback (imageList) {
 
 		var callback = JSTACK.Nova.getimagelist.calls.mostRecent().args[1];
 		
-		callback(respImageList);
+		callback(imageList);
 
 	}
 
-	function checkRow(expectedTextList) {
 
-		var dataTable, cell;
-
-		dataTable = $('#images_table').DataTable({
-			"columns": [
-				{'title': 'Name'},
-				{'title': 'Status'},
-				{'title': 'Updated'}
-			]
-		});
-
-	    dataTable.row.add(expectedTextList).draw();
-
-	    for (var i=0; i<expectedTextList.length; i++) {
-	    	
-	    	cell = $('tbody > tr > td')[i];
-	    	expect(cell).toContainText(expectedTextList[i]);
-	    }
-	}
+	/**************************************************************************/
+	/****************************FUNCTIONALITY TESTS***************************/
+	/**************************************************************************/
 
 	it('should authenticate through wirecloud proxy', function() {
 
@@ -104,7 +123,7 @@ describe('Test Image Table', function () {
 	it('should have created a table with the received images', function () {
 
 		callListImage();
-		callListImageSuccessCallback();
+		callListImageSuccessCallback(respImageList);
 
 		var rows = document.querySelectorAll('tbody > tr');
 
@@ -113,34 +132,32 @@ describe('Test Image Table', function () {
 
 	it('should call error callback for getTenants correctly',function () {
 
-		var output;
-
-		console.log = jasmine.createSpy("log").and.callFake(function (error) {
-			output = error;
-		});
+		console.log = jasmine.createSpy("log").and.callThrough();	// REFACTOR
 
 		callgetTenantsWithError();
-		expect(output).toBe('Error: "Test successful"');
+		expect(console.log.calls.mostRecent().args[0]).toBe('Error: "Test successful"');
 	});
 
 	it('should call error callback for authenticate correctly', function () {
 		
-		var output;
+		console.log = jasmine.createSpy("log").and.callThrough();	// REFACTOR
 
-		console.log = jasmine.createSpy("log").and.callFake(function (error) {
-			output = error;
-		});
-
+		callgetTenantsWithError();
 		callAuthenticateWithError();
-		expect(output).toBe('Error: "Test successful"');
+		expect(console.log.calls.mostRecent().args[0]).toBe('Error: "Test successful"');
 	});
+
+
+	/**************************************************************************/
+	/*****************************INTERFACE TESTS******************************/
+	/**************************************************************************/
 
 	it('should have called MashupPlatform.wiring.pushEvent when click event triggered on a row', function () {
 
 		var spyEvent = spyOnEvent('tbody > tr', 'click');
 
 		callListImage();
-		callListImageSuccessCallback();
+		callListImageSuccessCallback(respImageList);
 
 		$('tbody > tr').trigger('click');
 
@@ -149,6 +166,71 @@ describe('Test Image Table', function () {
 
 	it('should add the given row', function() {
 
-		checkRow(['Ubuntu 11.10 (Oneiric Oncelot)', 'ACTIVE', '2012-02-28T19:39:05Z']);
+		var image = imageListSingleImage.images[0];
+		var expectedTextList = [image.id, image.name, image.status, image.updated_at];
+		var cell;
+
+		callListImage();
+		callListImageSuccessCallback(imageListSingleImage);
+
+	    for (var i=0; i<expectedTextList.length; i++) {
+	    	
+	    	cell = $('tbody > tr > td')[i];
+	    	expect(cell).toContainText(expectedTextList[i]);
+	    }
+	});
+
+	it('should make the columns given in the preferences visible', function () {
+
+		var columns;
+		var expectedColumns = [
+			'ID',
+			'Name',
+			'Status',
+			'Updated'
+		];
+
+		callListImage();
+		callListImageSuccessCallback(respImageList);
+		columns = $('thead > tr > th');
+
+		for (var i=0; i<columns.length; i++) {
+
+			expect(columns[i].textContent).toEqual(expectedColumns[i]);
+		}
+
+	});
+
+	it('should dynamically change the displayed columns when preferences change', function () {
+
+		var columns, handlePreferences;
+		var expectedColumns = [
+			'Created',
+			'Size',
+			'Container format',
+			'Disk format'
+		];
+
+		// Change preferences
+		prefsValues["MashupPlatform.prefs.get"].id = false;
+		prefsValues["MashupPlatform.prefs.get"].name = false;
+		prefsValues["MashupPlatform.prefs.get"].status = false;
+		prefsValues["MashupPlatform.prefs.get"].updated = false;
+		prefsValues["MashupPlatform.prefs.get"].created = true;
+		prefsValues["MashupPlatform.prefs.get"].size = true;
+		prefsValues["MashupPlatform.prefs.get"].container_format = true;
+		prefsValues["MashupPlatform.prefs.get"].disk_format = true;
+
+
+		callListImage();
+		callListImageSuccessCallback(respImageList);
+		handlePreferences = MashupPlatform.prefs.registerCallback.calls.mostRecent().args[0];
+		handlePreferences();
+		columns = $('thead > tr > th');
+
+		for (var i=0; i<columns.length; i++) {
+			console.log(columns[i].textContent);
+			expect(columns[i].textContent).toEqual(expectedColumns[i]);
+		}
 	});
 });

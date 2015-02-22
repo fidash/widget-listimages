@@ -11,6 +11,18 @@
   <requirements>
     <feature name="StyledElements" />
   </requirements>
+  <preferences>
+    <preference name="id" type="boolean" description="Activate to display the id column" label="ID" default="false" />
+    <preference name="name" type="boolean" description="Activate to display the name column" label="Name" default="true" />
+    <preference name="status" type="boolean" description="Activate to display the status column" label="Status" default="true" />
+    <preference name="visibility" type="boolean" description="Activate to display the visibility column" label="Visibility" default="true" />
+    <preference name="checksum" type="boolean" description="Activate to display the checksum column" label="Checksum" default="false" />
+    <preference name="created" type="boolean" description="Activate to display the created column" label="Created" default="true" />
+    <preference name="updated" type="boolean" description="Activate to display the updated column" label="Updated" default="false" />
+    <preference name="size" type="boolean" description="Activate to display the size column" label="Size" default="false" />
+    <preference name="container_format" type="boolean" description="Activate to display the container format column" label="Container format" default="false" />
+    <preference name="disk_format" type="boolean" description="Activate to display the disk format column" label="Disk format" default="false" />
+  </preferences>
   <wiring>
     <outputendpoint name="image_id" type="text" label="Image ID" description="Sends image ID and OpenStack access." friendcode="image_id"/>
   </wiring>

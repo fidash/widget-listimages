@@ -1,13 +1,11 @@
 var OpenStackProto = (function (JSTACK) {
     "use strict";
 
-    var isAuthenticated = false;
     var url = 'https://cloud.lab.fiware.org/keystone/v2.0/';
-    var imageList;
-    var dataTable;
+    var imageList, dataTable, hiddenColumns;
 
     function authenticate () {
-        // curl -s http://arcturus.ls.fi.upm.es:5000/v2.0/tokens -X 'POST' -d '{"auth":{"passwordCredentials":{"username":"braulio", "password":"braulio"}}}' -H "Content-Type: application/json" | python -m json.tool
+        
         var tokenId, tenantId;
         var postBody, headersAuth;
         var options;
@@ -57,7 +55,8 @@ var OpenStackProto = (function (JSTACK) {
                         JSTACK.Keystone.params.access = response.access;
                         JSTACK.Keystone.params.currentstate = 2;
 
-                        handleServiceToken();
+                        createTable();
+                        getImageList();
                     },
                     onFailure: function (response) {
                         onError(response);
@@ -72,7 +71,7 @@ var OpenStackProto = (function (JSTACK) {
         
     }
 
-    function handleServiceToken () {
+    function createTable () {
 
         var refresh, createButton, modalCreateButton;
 
@@ -81,13 +80,25 @@ var OpenStackProto = (function (JSTACK) {
             {'title': 'ID'},
             {'title': 'Name'},
             {'title': 'Status'},
-            {'title': 'Updated'}
+            {'title': 'Visibility'},
+            {'title': 'Checksum'},
+            {'title': 'Created'},
+            {'title': 'Updated'},
+            {'title': 'Size'},
+            {'title': 'Container format'},
+            {'title': 'Disk format'},
         ];
 
         dataTable = $('#images_table').DataTable({
             'columns': columns,
+            "columnDefs": [
+                {
+                    "targets": hiddenColumns,
+                    "visible": false
+                }
+            ],
             'binfo': false,
-            responsive: true,
+            //responsive: true,
             'pagingType': 'full_numbers',
             'info': false
         });
@@ -111,16 +122,15 @@ var OpenStackProto = (function (JSTACK) {
         modalCreateButton = $('#create-image');
         //modalCreateButton.on('click', createImage);
 
-        getImageList();
     }
 
-    function getImageList() {
+    function getImageList () {
 
         JSTACK.Nova.getimagelist(true, callbackImageList, onError, null);
 
     }
 
-    function rowClickCallback(id) {
+    function rowClickCallback (id) {
         var data = {
             'id': id,
             'access': JSTACK.Keystone.params.access
@@ -128,10 +138,42 @@ var OpenStackProto = (function (JSTACK) {
         MashupPlatform.wiring.pushEvent('image_id', JSON.stringify(data));
     }
 
+    function handlePreferences () {
 
+        var display;
+        var preferenceList = [
+            'id',
+            'name',
+            'status',
+            'visibility',
+            'checksum',
+            'created',
+            'updated',
+            'size',
+            'container_format',
+            'disk_format'
+        ];
+        
+        for (var i=0; i<preferenceList.length; i++) {
 
+            display = MashupPlatform.prefs.get(preferenceList[i]);
+            
+            if (!display) {
+                hiddenColumns.push(i);
+            }
 
+            if (dataTable) {
+                dataTable.column(i).visible(display, false);
+            }
 
+        }
+
+        // Recalculate all columns size at once
+        if (dataTable) {
+            dataTable.columns.adjust().draw(false);
+        }
+
+    }
 
     function callbackImageList (result) {
         
@@ -142,13 +184,22 @@ var OpenStackProto = (function (JSTACK) {
         dataTable.clear();
 
         // Build table body
-        for (var j=0; j<result.images.length; j++) {
-            image = result.images[j];
+        for (var i=0; i<result.images.length; i++) {
+            image = result.images[i];
+
+            image.is_public = image.is_public ? 'Public' : 'Private';
+
             dataTable.row.add([
                 image.id,
                 image.name,
                 image.status,
-                image.updated_at
+                image.is_public,
+                image.checksum,
+                image.created_at,
+                image.updated_at,
+                image.size,
+                image.container_format,
+                image.disk_format
             ]).draw();
         }
 
@@ -170,8 +221,19 @@ var OpenStackProto = (function (JSTACK) {
 
     function OpenStackProto () {
 
+        // Initialize parameters
+        dataTable = null;
+        hiddenColumns = [];
+
         this.init = authenticate;
         this.listImage = getImageList;
+
+        // Initialize preferences
+        handlePreferences();
+
+        // Preferences handler
+        MashupPlatform.prefs.registerCallback(handlePreferences);
+
     }
 
     return OpenStackProto;

@@ -43,7 +43,7 @@ var MockMP = {};
         DEFAULT: new DefaultStrategy()
     });
 
-    namespace.MockMP = function MockMP() {
+    namespace.MockMP = function MockMP(methodValues) {
         this.strategy = namespace.Strategy.NULL;
         this.spySet = [];
         this.map = {
@@ -55,7 +55,7 @@ var MockMP = {};
             mashup: [""]
         };
 
-        createDefaultValues.call(this);
+        mergeDefault.call(this, methodValues);
         createMocks.call(this);
     };
 
@@ -70,8 +70,9 @@ var MockMP = {};
         });
     };
 
-    namespace.MockMP.prototype.setStrategy = function setStrategy(strategy) {
+    namespace.MockMP.prototype.setStrategy = function setStrategy(strategy, methodValues) {
         this.strategy = strategy;
+        mergeDefault.call(this, methodValues);
         createMocks.call(this);
     };
 
@@ -79,6 +80,34 @@ var MockMP = {};
 /*****************************************************************************/
 /********************************** Private **********************************/
 /*****************************************************************************/
+
+    var mergeDefault = function mergeDefault (methodValues) {
+        
+        var defaultValues = {
+            "MashupPlatform.context.get" : "not set yet",
+            "MashupPlatform.http.buildProxyURL": null,
+            "MashupPlatform.http.makeRequest": null,
+            "MashupPlatform.mashup.context.get" : "not set yet",
+            "MashupPlatform.prefs.get": "value",
+            "MashupPlatform.prefs.set": null,
+            "MashupPlatform.prefs.registerCallback": null,
+            "MashupPlatform.widget.getVariable": "value",
+            "MashupPlatform.widget.drawAttention": null,
+            "MashupPlatform.widget.id": "id33",
+            "MashupPlatform.widget.log": "something",
+            "MashupPlatform.widget.context.registerCallback": null,
+            "MashupPlatform.wiring.pushEvent": null,
+            "MashupPlatform.wiring.registerCallback": null
+        };
+
+        if (methodValues) {
+            for (var value in methodValues) {
+                defaultValues[value] = methodValues[value];
+            }
+        }
+
+        this.methodValues = defaultValues;
+    };
 
     var createMocks = function createMocks() {
         var spy = {};
@@ -98,39 +127,19 @@ var MockMP = {};
                 methodTemp = method + spyName;
                 spy = this[attr][spyName];
                 this.spySet.push(spy);
-                spy.and.callFake(this.strategy.getImplementation(methodTemp, this.defaultValues[methodTemp]));
+                spy.and.callFake(this.strategy.getImplementation(methodTemp, this.methodValues[methodTemp]));
             }
         }
         spy = jasmine.createSpyObj("context", ["registerCallback"]);
         method = "MashupPlatform.widget.context.registerCallback";
-        spy.registerCallback.and.callFake(this.strategy.getImplementation(method, this.defaultValues[method]));
+        spy.registerCallback.and.callFake(this.strategy.getImplementation(method, this.methodValues[method]));
         this.widget.context = spy;
 
         spy = jasmine.createSpyObj("context", ["get"]);
         method = "MashupPlatform.mashup.context.get";
-        spy.get.and.callFake(this.strategy.getImplementation(method, this.defaultValues[method]));
+        spy.get.and.callFake(this.strategy.getImplementation(method, this.methodValues[method]));
         this.mashup.context = spy;
     };
-
-    var createDefaultValues = function createDefaultValues() {
-        this.defaultValues = {
-            "MashupPlatform.context.get" : "not set yet",
-            "MashupPlatform.http.buildProxyURL": null,
-            "MashupPlatform.http.makeRequest": null,
-            "MashupPlatform.mashup.context.get" : "not set yet",
-            "MashupPlatform.prefs.get": "value",
-            "MashupPlatform.prefs.set": null,
-            "MashupPlatform.prefs.registerCallback": null,
-            "MashupPlatform.widget.getVariable": "value",
-            "MashupPlatform.widget.drawAttention": null,
-            "MashupPlatform.widget.id": "id33",
-            "MashupPlatform.widget.log": "something",
-            "MashupPlatform.widget.context.registerCallback": null,
-            "MashupPlatform.wiring.pushEvent": null,
-            "MashupPlatform.wiring.registerCallback": null
-        };
-    };
-
 })(MockMP);
 
-MashupPlatform = new MockMP.MockMP();
+var MashupPlatform = new MockMP.MockMP();
