@@ -155,13 +155,21 @@ describe('Test Image Table', function () {
 	it('should have called MashupPlatform.wiring.pushEvent when click event triggered on a row', function () {
 
 		var spyEvent = spyOnEvent('tbody > tr', 'click');
+		var imageId;
 
 		callListImage();
 		callListImageSuccessCallback(respImageList);
-
 		$('tbody > tr').trigger('click');
 
+		for (var i=0; i<respImageList.images.length; i++) {
+
+			if (respImageList.images[i].id === JSON.parse(MashupPlatform.wiring.pushEvent.calls.mostRecent().args[1]).id) {
+				imageId = respImageList.images[i].id;
+			}
+		}
+
 		expect(MashupPlatform.wiring.pushEvent).toHaveBeenCalled();
+		expect(imageId).toBeDefined();
 	});
 
 	it('should add the given row', function() {
@@ -229,7 +237,6 @@ describe('Test Image Table', function () {
 		columns = $('thead > tr > th');
 
 		for (var i=0; i<columns.length; i++) {
-			console.log(columns[i].textContent);
 			expect(columns[i].textContent).toEqual(expectedColumns[i]);
 		}
 	});
