@@ -866,6 +866,9 @@ JSTACK.Nova = (function (JS, undefined) {
 
     // Function `_check` internally confirms that Keystone module is
     // authenticated and it has the URL of the Nova service.
+    // TODO replace true/false with exception throwing and change
+    // all if(!check()) calls.
+    // create Keystone.isAuthenticated() to be used inside check()
     check = function () {
         if (JS.Keystone !== undefined &&
                 JS.Keystone.params.currentstate === JS.Keystone.STATES.AUTHENTICATED) {
@@ -2158,6 +2161,8 @@ JSTACK.Nova.Volume = (function (JS, undefined) {
 
     // Function `check` internally confirms that Keystone module is
     // authenticated and it has the URL of the Volume service.
+    // TODO replace true/false with exception throwing and change
+    // all if(!check()) calls.
     check = function () {
         if (JS.Keystone !== undefined && JS.Keystone.params.currentstate === JS.Keystone.STATES.AUTHENTICATED) {
             var service = JS.Keystone.getservice("volume");
@@ -2491,7 +2496,8 @@ JSTACK.Glance = (function(JS, undefined) {
     check = function() {
         if (JS.Keystone !== undefined && JS.Keystone.params.currentstate === JS.Keystone.STATES.AUTHENTICATED) {
             var service = JS.Keystone.getservice("image");
-            params.url = service.endpoints[0][params.endpointType];
+            //params.url = service.endpoints[0][params.endpointType];
+            params.url = 'https://cloud.lab.fiware.org/Spain/image/v1';
             return true;
         }
         return false;
