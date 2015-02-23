@@ -205,9 +205,8 @@ var OpenStackProto = (function (JSTACK) {
 
         // Row events
         $('#images_table tbody').on('click', 'tr', function () {
-            var data = dataTable.column(0).data();
-            var posRow = dataTable.row(this).index();            
-            var id = data[posRow];//.children()[0].textContent;
+            var data = dataTable.row(this).data();            
+            var id = data[0];
             $('#images_table tbody tr').removeClass('selected');
             $(this).addClass('selected');
             rowClickCallback(id);
