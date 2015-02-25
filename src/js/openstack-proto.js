@@ -87,6 +87,7 @@ var OpenStackProto = (function (JSTACK) {
             {'title': 'Size'},
             {'title': 'Container format'},
             {'title': 'Disk format'},
+            {'title': 'Actions'}
         ];
 
         dataTable = $('#images_table').DataTable({
@@ -153,6 +154,8 @@ var OpenStackProto = (function (JSTACK) {
             'container_format',
             'disk_format'
         ];
+
+        hiddenColumns = [];
         
         for (var i=0; i<preferenceList.length; i++) {
 
@@ -175,10 +178,21 @@ var OpenStackProto = (function (JSTACK) {
 
     }
 
+    function launchInstanceCallback () {
+        MashupPlatform.wiring.pushEvent('instance_update', '');
+    }
+
     function callbackImageList (result) {
         
         var image;
         var dataSet = [];
+
+        // Launch button
+        var wrapper = $('<div>');
+        var launchButton = $('<button>')
+            .addClass('btn btn-primary')
+            .text('Launch')
+            .appendTo(wrapper);
 
         // Clear previous elements
         dataTable.clear();
@@ -187,7 +201,7 @@ var OpenStackProto = (function (JSTACK) {
         for (var i=0; i<result.images.length; i++) {
             image = result.images[i];
 
-            image.is_public = image.is_public ? 'Public' : 'Private';
+            image.is_public = image.is_public ? 'Public' : 'Private';  
 
             dataTable.row.add([
                 image.id,
@@ -199,13 +213,31 @@ var OpenStackProto = (function (JSTACK) {
                 image.updated_at,
                 image.size,
                 image.container_format,
-                image.disk_format
+                image.disk_format,
+                wrapper.html()
             ]).draw();
         }
 
+        // Launch button events
+        $('#images_table tbody tr td').on('click', 'button', function () {
+            
+            // Undefined parameters
+            var key_name,
+                user_data,
+                security_groups,
+                min_count,
+                max_count,
+                availability_zone;
+
+            var row = $(this).parent().parent();
+            var data = dataTable.row(row).data();
+
+            JSTACK.Nova.createserver(data[1] + '__instance', data[0], 1, key_name, user_data, security_groups, min_count, max_count, availability_zone, launchInstanceCallback, onerror);
+        });
+
         // Row events
         $('#images_table tbody').on('click', 'tr', function () {
-            var data = dataTable.row(this).data();            
+            var data = dataTable.row(this).data();
             var id = data[0];
             $('#images_table tbody tr').removeClass('selected');
             $(this).addClass('selected');

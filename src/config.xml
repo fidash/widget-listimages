@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="openstack-listimage-widget" version="0.2.0">
   <details>
-    <title>OpenStack Prototype Widget</title>
+    <title>OpenStack List Image Widget</title>
     <email>bgrana@conwet.com</email>
     <image>images/catalogue.png</image>
     <smartphoneimage>images/catalogueSmartphone.png</smartphoneimage>
@@ -25,6 +25,7 @@
   </preferences>
   <wiring>
     <outputendpoint name="image_id" type="text" label="Image ID" description="Sends image ID and OpenStack access." friendcode="image_id"/>
+    <outputendpoint name="instance_update" type="text" label="Instance update" description="Sends an instance update event when a new instance is created." friendcode="instance_update"/>
   </wiring>
   <contents src="index.html" useplatformstyle="true"/>
   <rendering height="44" width="11"/>

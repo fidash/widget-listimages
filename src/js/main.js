@@ -1,4 +1,4 @@
-/* global OpenStackProto DataViewer */
+/* global OpenStackProto */
 
 $(document).ready(function() {
     "use strict";

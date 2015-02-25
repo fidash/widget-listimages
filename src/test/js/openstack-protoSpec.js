@@ -152,7 +152,7 @@ describe('Test Image Table', function () {
 	/*****************************INTERFACE TESTS******************************/
 	/**************************************************************************/
 
-	it('should have called MashupPlatform.wiring.pushEvent when click event triggered on a row', function () {
+	it('should call MashupPlatform.wiring.pushEvent when click event triggered on a row', function () {
 
 		var spyEvent = spyOnEvent('tbody > tr', 'click');
 		var imageId;
@@ -195,7 +195,8 @@ describe('Test Image Table', function () {
 			'ID',
 			'Name',
 			'Status',
-			'Updated'
+			'Updated',
+			'Actions'
 		];
 
 		callListImage();
@@ -216,7 +217,8 @@ describe('Test Image Table', function () {
 			'Created',
 			'Size',
 			'Container format',
-			'Disk format'
+			'Disk format',
+			'Actions'
 		];
 
 		// Change preferences
@@ -239,5 +241,32 @@ describe('Test Image Table', function () {
 		for (var i=0; i<columns.length; i++) {
 			expect(columns[i].textContent).toEqual(expectedColumns[i]);
 		}
+	});
+
+	it('should call JSTACK.Nova.createserver with the given arguments when click event is triggered on a launch button', function () {
+
+		var spyEvent;
+
+		callListImage();
+		callListImageSuccessCallback(respImageList);
+		spyEvent = spyOnEvent('tbody > tr > td > button', 'click');
+		$('tbody > tr > td > button').trigger('click');
+
+		expect(JSTACK.Nova.createserver).toHaveBeenCalled();
+		expect(spyEvent).toHaveBeenTriggered();
+	});
+
+	it('should push a wiring event with an instance update when a new instance is created', function () {
+
+		var callback;
+
+		callListImage();
+		callListImageSuccessCallback(respImageList);
+		$('tbody > tr > td > button').trigger('click');
+		callback = JSTACK.Nova.createserver.calls.mostRecent().args[9];
+
+		callback();
+
+		expect(MashupPlatform.wiring.pushEvent).toHaveBeenCalledWith('instance_update', '');
 	});
 });
