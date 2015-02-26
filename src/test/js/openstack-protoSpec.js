@@ -174,8 +174,33 @@ describe('Test Image Table', function () {
 
 	it('should add the given row', function() {
 
+		prefsValues["MashupPlatform.prefs.get"].id = true;
+		prefsValues["MashupPlatform.prefs.get"].name = true;
+		prefsValues["MashupPlatform.prefs.get"].status = true;
+		prefsValues["MashupPlatform.prefs.get"].visibility = true;
+		prefsValues["MashupPlatform.prefs.get"].checksum = true;
+		prefsValues["MashupPlatform.prefs.get"].updated = true;
+		prefsValues["MashupPlatform.prefs.get"].created = true;
+		prefsValues["MashupPlatform.prefs.get"].size = true;
+		prefsValues["MashupPlatform.prefs.get"].container_format = true;
+		prefsValues["MashupPlatform.prefs.get"].disk_format = true;
+
+		var handlePreferences = MashupPlatform.prefs.registerCallback.calls.mostRecent().args[0];
+		handlePreferences();
+
 		var image = imageListSingleImage.images[0];
-		var expectedTextList = [image.id, image.name, image.status, image.updated_at];
+		var expectedTextList = [
+			image.id,
+			image.name,
+			image.status,
+			'Public',
+			image.checksum,
+			image.created_at,
+			image.updated_at,
+			parseFloat(image.size/1024/1024/1024).toFixed(2) + "GB",
+			image.container_format,
+			image.disk_format
+		];
 		var cell;
 
 		callListImage();

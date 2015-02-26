@@ -182,9 +182,35 @@ var OpenStackProto = (function (JSTACK) {
         MashupPlatform.wiring.pushEvent('instance_update', '');
     }
 
+    function getDisplayableSize (size) {
+        
+        var units = [
+            "B",
+            "KB",
+            "MB",
+            "GB",
+            "TB"
+        ];
+        size = parseFloat(size);
+        var displayableSize = size;
+        var unit = 0;
+
+        if (size <= 1024) {
+            return size + units[0];
+        }
+
+        while (parseFloat(displayableSize/1024) > parseFloat(1) && unit < 5) {
+            displayableSize /= 1024;
+            unit += 1;
+        }
+
+        return displayableSize.toFixed(2) + units[unit];
+    
+    }
+
     function callbackImageList (result) {
         
-        var image;
+        var image, displayableSize;
         var dataSet = [];
 
         // Launch button
@@ -202,6 +228,7 @@ var OpenStackProto = (function (JSTACK) {
             image = result.images[i];
 
             image.is_public = image.is_public ? 'Public' : 'Private';  
+            displayableSize = getDisplayableSize(image.size);
 
             dataTable.row.add([
                 image.id,
@@ -211,7 +238,7 @@ var OpenStackProto = (function (JSTACK) {
                 image.checksum,
                 image.created_at,
                 image.updated_at,
-                image.size,
+                displayableSize,
                 image.container_format,
                 image.disk_format,
                 wrapper.html()
