@@ -197,7 +197,7 @@ describe('Test Image Table', function () {
 			image.checksum,
 			image.created_at,
 			image.updated_at,
-			parseFloat(image.size/1024/1024/1024).toFixed(2) + "GB",
+			parseFloat(image.size/1024/1024/1024).toFixed(2) + " GB",
 			image.container_format,
 			image.disk_format
 		];

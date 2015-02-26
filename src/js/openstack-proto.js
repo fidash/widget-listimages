@@ -204,7 +204,7 @@ var OpenStackProto = (function (JSTACK) {
             unit += 1;
         }
 
-        return displayableSize.toFixed(2) + units[unit];
+        return displayableSize.toFixed(2) + ' ' + units[unit];
     
     }
 
