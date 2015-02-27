@@ -188,10 +188,14 @@ var OpenStackProto = (function (JSTACK) {
         
         var units = [
             "B",
-            "KB",
-            "MB",
-            "GB",
-            "TB"
+            "kiB",
+            "MiB",
+            "GiB",
+            "TiB",
+            "PiB",
+            "EiB",
+            "ZiB",
+            "YiB",
         ];
         size = parseFloat(size);
         var displayableSize = size;
@@ -201,7 +205,7 @@ var OpenStackProto = (function (JSTACK) {
             return size + units[0];
         }
 
-        while (parseFloat(displayableSize/1024) > parseFloat(1) && unit < 5) {
+        while (parseFloat(displayableSize/1024) > parseFloat(1) && unit < 9) {
             displayableSize /= 1024;
             unit += 1;
         }
