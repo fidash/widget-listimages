@@ -178,8 +178,10 @@ var OpenStackProto = (function (JSTACK) {
 
     }
 
-    function launchInstanceCallback () {
-        MashupPlatform.wiring.pushEvent('instance_update', '');
+    function launchInstanceCallback (response) {
+
+        // Show instance created message
+        console.log("New instance created");
     }
 
     function getDisplayableSize (size) {
@@ -272,6 +274,10 @@ var OpenStackProto = (function (JSTACK) {
         });
 
         dataTable.columns.adjust().draw();
+
+        setTimeout(function () {
+            getImageList();
+        }, 2000);
 
     }
 

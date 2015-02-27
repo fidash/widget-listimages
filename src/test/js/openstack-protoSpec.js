@@ -147,6 +147,21 @@ describe('Test Image Table', function () {
 		expect(console.log.calls.mostRecent().args[0]).toBe('Error: "Test successful"');
 	});
 
+	it('should call getserverlist 2 seconds after receiving the last update', function () {
+
+		var expectedCount, callback;
+		var setTimeoutSpy = spyOn(window, 'setTimeout');
+
+		callListImage();
+		expectedCount = JSTACK.Nova.getimagelist.calls.count() + 1;
+		callListImageSuccessCallback(imageListSingleImage);
+		callback = setTimeout.calls.mostRecent().args[0];
+		callback();
+
+		expect(JSTACK.Nova.getimagelist.calls.count()).toEqual(expectedCount);
+		expect(setTimeoutSpy).toHaveBeenCalledWith(jasmine.any(Function), 2000);
+	});
+
 
 	/**************************************************************************/
 	/*****************************INTERFACE TESTS******************************/
@@ -279,19 +294,5 @@ describe('Test Image Table', function () {
 
 		expect(JSTACK.Nova.createserver).toHaveBeenCalled();
 		expect(spyEvent).toHaveBeenTriggered();
-	});
-
-	it('should push a wiring event with an instance update when a new instance is created', function () {
-
-		var callback;
-
-		callListImage();
-		callListImageSuccessCallback(respImageList);
-		$('tbody > tr > td > button').trigger('click');
-		callback = JSTACK.Nova.createserver.calls.mostRecent().args[9];
-
-		callback();
-
-		expect(MashupPlatform.wiring.pushEvent).toHaveBeenCalledWith('instance_update', '');
 	});
 });
