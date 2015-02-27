@@ -6,5 +6,4 @@ $(document).ready(function() {
 	var openStackProto = new OpenStackProto();
 
     openStackProto.init();
-    openStackProto.listImage();
 });

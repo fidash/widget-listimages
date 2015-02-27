@@ -13,6 +13,10 @@ describe('Test Image Table', function () {
 
 	beforeEach(function() {
 
+		JSTACK.Keystone = jasmine.createSpyObj("Keystone", ["init", "authenticate", "gettenants", "params"]);
+		JSTACK.Nova = jasmine.createSpyObj("Nova", ["getimagelist", "createimage", "createserver"]);
+
+
 		// Set/Reset prefs values
 		prefsValues = {
 	    	"MashupPlatform.prefs.get": {
@@ -70,9 +74,6 @@ describe('Test Image Table', function () {
 			responseText: JSON.stringify(respServices)
 		};
 		handleServiceTokenCallback(respServices);
-
-		openStack.listImage();
-
 	}
 
 	function callgetTenantsWithError () {
