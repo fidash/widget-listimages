@@ -160,7 +160,7 @@ describe('Test Image Table', function () {
 		callback();
 
 		expect(JSTACK.Nova.getimagelist.calls.count()).toEqual(expectedCount);
-		expect(setTimeoutSpy).toHaveBeenCalledWith(jasmine.any(Function), 2000);
+		expect(setTimeoutSpy).toHaveBeenCalledWith(jasmine.any(Function), 4000);
 	});
 
 

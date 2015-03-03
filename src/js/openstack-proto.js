@@ -268,6 +268,9 @@ var OpenStackProto = (function (JSTACK) {
             JSTACK.Nova.createserver(data[1] + '__instance', data[0], 1, key_name, user_data, security_groups, min_count, max_count, availability_zone, launchInstanceCallback, onerror);
         });
 
+        // Remove previous row click events
+        $('#images_table tbody').off('click', '**');
+
         // Row events
         $('#images_table tbody').on('click', 'tr', function () {
             var data = dataTable.row(this).data();
@@ -281,7 +284,7 @@ var OpenStackProto = (function (JSTACK) {
 
         setTimeout(function () {
             getImageList();
-        }, 2000);
+        }, 4000);
 
     }
 
