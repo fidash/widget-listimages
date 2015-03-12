@@ -51,6 +51,7 @@ describe('Test Image Table', function () {
 
 	afterEach(function () {
 		$('#images_table').empty();
+		$('.FixedHeader_Cloned.fixedHeader.FixedHeader_Header > table').empty();
 	});
 
 
@@ -133,19 +134,19 @@ describe('Test Image Table', function () {
 
 	it('should call error callback for getTenants correctly',function () {
 
-		console.log = jasmine.createSpy("log").and.callThrough();	// REFACTOR
+		var consoleSpy = spyOn(console, "log");	// REFACTOR
 
 		callgetTenantsWithError();
-		expect(console.log.calls.mostRecent().args[0]).toBe('Error: "Test successful"');
+		expect(consoleSpy.calls.mostRecent().args[0]).toBe('Error: "Test successful"');
 	});
 
 	it('should call error callback for authenticate correctly', function () {
 		
-		console.log = jasmine.createSpy("log").and.callThrough();	// REFACTOR
+		var consoleSpy = spyOn(console, "log");	// REFACTOR
 
 		callgetTenantsWithError();
 		callAuthenticateWithError();
-		expect(console.log.calls.mostRecent().args[0]).toBe('Error: "Test successful"');
+		expect(consoleSpy.calls.mostRecent().args[0]).toBe('Error: "Test successful"');
 	});
 
 	it('should call getserverlist 2 seconds after receiving the last update', function () {
@@ -242,7 +243,7 @@ describe('Test Image Table', function () {
 
 		callListImage();
 		callListImageSuccessCallback(respImageList);
-		columns = $('thead > tr > th');
+		columns = $('.fixedHeader th');
 
 		for (var i=0; i<columns.length; i++) {
 
@@ -277,7 +278,7 @@ describe('Test Image Table', function () {
 		callListImageSuccessCallback(respImageList);
 		handlePreferences = MashupPlatform.prefs.registerCallback.calls.mostRecent().args[0];
 		handlePreferences();
-		columns = $('thead > tr > th');
+		columns = $('.fixedHeader th');
 
 		for (var i=0; i<columns.length; i++) {
 			expect(columns[i].textContent).toEqual(expectedColumns[i]);

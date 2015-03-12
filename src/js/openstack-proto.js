@@ -2,7 +2,7 @@ var OpenStackProto = (function (JSTACK) {
     "use strict";
 
     var url = 'https://cloud.lab.fiware.org/keystone/v2.0/';
-    var imageList, dataTable, hiddenColumns;
+    var imageList, dataTable, hiddenColumns, fixedHeader;
 
     function authenticate () {
         
@@ -98,11 +98,23 @@ var OpenStackProto = (function (JSTACK) {
                     "visible": false
                 }
             ],
+            'dom': 't<"navbar navbar-default navbar-fixed-bottom"p>',
             'binfo': false,
-            //responsive: true,
             'pagingType': 'full_numbers',
             'info': false
         });
+
+        $('#images_table_wrapper').attr('style', 'padding-bottom: 49px;');
+
+        fixedHeader = new $.fn.dataTable.FixedHeader(dataTable);
+
+        $(window).resize(function () {
+            fixedHeader._fnUpdateClones(true); // force redraw
+            fixedHeader._fnUpdatePositions();
+        });
+
+        // Put pagination in footer nav bar
+        //$('#images_table_paginate').addClass('pull-right').detach().appendTo('#footer-bar');
 
         // Set refresh button
         refresh = $('<button>');
@@ -285,7 +297,9 @@ var OpenStackProto = (function (JSTACK) {
         setTimeout(function () {
             getImageList();
         }, 4000);
-
+        
+        fixedHeader._fnUpdateClones(true); // force redraw
+        fixedHeader._fnUpdatePositions();
     }
 
     function onError (error) {
