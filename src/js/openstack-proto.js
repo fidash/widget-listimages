@@ -228,7 +228,7 @@ var OpenStackProto = (function (JSTACK) {
 
     function callbackImageList (result) {
         
-        var image, displayableSize;
+        var image, displayableSize, scroll, page;
         var dataSet = [];
 
         // Launch button
@@ -237,6 +237,11 @@ var OpenStackProto = (function (JSTACK) {
             .addClass('btn btn-primary')
             .text('Launch')
             .appendTo(wrapper);
+
+
+        // Save previous scroll and page
+        scroll = $(window).scrollTop();
+        page = dataTable.page();
 
         // Clear previous elements
         dataTable.clear();
@@ -294,6 +299,10 @@ var OpenStackProto = (function (JSTACK) {
 
         dataTable.columns.adjust().draw();
 
+        // Restore previous scroll and page
+        $(window).scrollTop(scroll);
+        dataTable.page(page).draw(false);
+        
         setTimeout(function () {
             getImageList();
         }, 4000);
