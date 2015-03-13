@@ -73,7 +73,9 @@ var OpenStackProto = (function (JSTACK) {
 
     function createTable () {
 
-        var refresh, createButton, modalCreateButton;
+        var refresh, createButton, modalCreateButton, search, searchButton,
+            searchInput;
+        var focusState = false;
 
         // TODO let the user choose the content of columns as a preference
         var columns = [
@@ -113,23 +115,43 @@ var OpenStackProto = (function (JSTACK) {
             fixedHeader._fnUpdatePositions();
         });
 
-        // Put pagination in footer nav bar
-        //$('#images_table_paginate').addClass('pull-right').detach().appendTo('#footer-bar');
+        // Set Search field
+        search = $('<div>').addClass('input-group search-container').insertBefore($('#images_table_paginate'));
+        searchButton = $('<button>').addClass('btn btn-default').html('<i class="fa fa-search"></i>');
+        $('<span>').addClass('input-group-btn').append(searchButton).appendTo(search);
+        searchInput = $('<input>').attr('type', 'text').attr('placeholder', 'Search for...').addClass('search form-control').appendTo(search);
+
+        searchButton.on('click', function () {
+            focusState = !focusState;
+            
+            searchInput.toggleClass('slideRight');
+            searchButton.parent()
+                .css('z-index', 20);
+
+            if (focusState) {
+                searchInput.focus();
+            }
+        });
+
+        searchInput.on( 'keyup', function () {
+            dataTable.search(this.value).draw();
+        });
 
         // Set refresh button
-        refresh = $('<button>');
-        refresh.text('Refresh');
-        refresh.addClass('btn btn-default action-button pull-left');
-        refresh.click(getImageList);
-        refresh.insertBefore($('#images_table_paginate'));
+        refresh = $('<button>')
+            .html('<i class="fa fa-refresh"></i>')
+            .addClass('btn btn-default action-button pull-left')
+            .css('margin-left', '54px')
+            .click(getImageList)
+            .insertBefore($('#images_table_paginate'));
 
         // Set upload button
-        createButton = $('<button>');
-        createButton.text('Create Image');
-        createButton.addClass('btn btn-default action-button pull-left');
-        createButton.attr('data-toggle', 'modal');
-        createButton.attr('data-target', '#uploadImageModal');
-        createButton.insertBefore($('#images_table_paginate'));
+        createButton = $('<button>')
+            .html('<i class="fa fa-plus"></i>')
+            .addClass('btn btn-success action-button pull-left')
+            .attr('data-toggle', 'modal')
+            .attr('data-target', '#uploadImageModal')
+            .insertBefore($('#images_table_paginate'));
 
         // Set modal create image button click
         modalCreateButton = $('#create-image');
@@ -301,11 +323,10 @@ var OpenStackProto = (function (JSTACK) {
             var id = data[0];
             selectedRowId = id;
 
-            //$('#images_table tbody tr').removeClass('selected');
             dataTable.row('.selected')
-            .nodes()
-            .to$()
-            .removeClass('selected');
+                .nodes()
+                .to$()
+                .removeClass('selected');
             $(this).addClass('selected');
             rowClickCallback(id);
         });
