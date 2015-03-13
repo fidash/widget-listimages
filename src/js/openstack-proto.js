@@ -2,7 +2,7 @@ var OpenStackProto = (function (JSTACK) {
     "use strict";
 
     var url = 'https://cloud.lab.fiware.org/keystone/v2.0/';
-    var imageList, dataTable, hiddenColumns, fixedHeader;
+    var imageList, dataTable, hiddenColumns, fixedHeader, selectedRowId;
 
     function authenticate () {
         
@@ -228,7 +228,7 @@ var OpenStackProto = (function (JSTACK) {
 
     function callbackImageList (result) {
         
-        var image, displayableSize, scroll, page;
+        var image, displayableSize, scroll, page, row;
         var dataSet = [];
 
         // Launch button
@@ -253,7 +253,7 @@ var OpenStackProto = (function (JSTACK) {
             image.is_public = image.is_public ? 'Public' : 'Private';  
             displayableSize = getDisplayableSize(image.size);
 
-            dataTable.row.add([
+            row = dataTable.row.add([
                 image.id,
                 image.name,
                 image.status,
@@ -265,7 +265,14 @@ var OpenStackProto = (function (JSTACK) {
                 image.container_format,
                 image.disk_format,
                 wrapper.html()
-            ]).draw();
+            ])
+            .draw()
+            .nodes()
+            .to$();
+
+            if (image.id === selectedRowId) {
+                row.addClass('selected');
+            }
         }
 
         // Launch button events
@@ -292,7 +299,13 @@ var OpenStackProto = (function (JSTACK) {
         $('#images_table tbody').on('click', 'tr', function () {
             var data = dataTable.row(this).data();
             var id = data[0];
-            $('#images_table tbody tr').removeClass('selected');
+            selectedRowId = id;
+
+            //$('#images_table tbody tr').removeClass('selected');
+            dataTable.row('.selected')
+            .nodes()
+            .to$()
+            .removeClass('selected');
             $(this).addClass('selected');
             rowClickCallback(id);
         });
