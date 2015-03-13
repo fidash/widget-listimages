@@ -77,7 +77,6 @@ var OpenStackProto = (function (JSTACK) {
             searchInput;
         var focusState = false;
 
-        // TODO let the user choose the content of columns as a preference
         var columns = [
             {'title': 'ID'},
             {'title': 'Name'},
@@ -103,17 +102,46 @@ var OpenStackProto = (function (JSTACK) {
             'dom': 't<"navbar navbar-default navbar-fixed-bottom"p>',
             'binfo': false,
             'pagingType': 'full_numbers',
-            'info': false
+            'info': false,
+            "language": {
+                "paginate": {
+                    "first": '<i class="fa fa-fast-backward"></i>',
+                    "last": '<i class="fa fa-fast-forward"></i>',
+                    "next": '<i class="fa fa-forward"></i>',
+                    "previous": '<i class="fa fa-backward"></i>'
+                }
+            }
         });
 
+        // Padding bottom for fixed to bottom bar
         $('#images_table_wrapper').attr('style', 'padding-bottom: 49px;');
 
+        // Pagination style
+        $('#images_table_paginate').addClass('pagination pull-right');
+
+        // Fixed header
         fixedHeader = new $.fn.dataTable.FixedHeader(dataTable);
 
         $(window).resize(function () {
             fixedHeader._fnUpdateClones(true); // force redraw
             fixedHeader._fnUpdatePositions();
         });
+
+        // Set refresh button
+        refresh = $('<button>')
+            .html('<i class="fa fa-refresh"></i>')
+            .addClass('btn btn-default action-button pull-left')
+            .css('margin-left', '54px')
+            .click(getImageList)
+            .insertBefore($('#images_table_paginate'));
+
+        // Set upload button
+        createButton = $('<button>')
+            .html('<i class="fa fa-plus"></i>')
+            .addClass('btn btn-success action-button pull-left')
+            .attr('data-toggle', 'modal')
+            .attr('data-target', '#uploadImageModal')
+            .insertBefore($('#images_table_paginate'));
 
         // Set Search field
         search = $('<div>').addClass('input-group search-container').insertBefore($('#images_table_paginate'));
@@ -136,22 +164,6 @@ var OpenStackProto = (function (JSTACK) {
         searchInput.on( 'keyup', function () {
             dataTable.search(this.value).draw();
         });
-
-        // Set refresh button
-        refresh = $('<button>')
-            .html('<i class="fa fa-refresh"></i>')
-            .addClass('btn btn-default action-button pull-left')
-            .css('margin-left', '54px')
-            .click(getImageList)
-            .insertBefore($('#images_table_paginate'));
-
-        // Set upload button
-        createButton = $('<button>')
-            .html('<i class="fa fa-plus"></i>')
-            .addClass('btn btn-success action-button pull-left')
-            .attr('data-toggle', 'modal')
-            .attr('data-target', '#uploadImageModal')
-            .insertBefore($('#images_table_paginate'));
 
         // Set modal create image button click
         modalCreateButton = $('#create-image');
