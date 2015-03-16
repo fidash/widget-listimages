@@ -131,7 +131,6 @@ var OpenStackProto = (function (JSTACK) {
         refresh = $('<button>')
             .html('<i class="fa fa-refresh"></i>')
             .addClass('btn btn-default action-button pull-left')
-            .css('margin-left', '54px')
             .click(getImageList)
             .insertBefore($('#images_table_paginate'));
 
