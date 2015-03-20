@@ -114,7 +114,7 @@ var OpenStackProto = (function (JSTACK) {
         });
 
         // Padding bottom for fixed to bottom bar
-        $('#images_table_wrapper').attr('style', 'padding-bottom: 49px;');
+        $('#images_table_wrapper').attr('style', 'padding-bottom: 40px;');
 
         // Pagination style
         $('#images_table_paginate').addClass('pagination pull-right');
@@ -127,17 +127,10 @@ var OpenStackProto = (function (JSTACK) {
             fixedHeader._fnUpdatePositions();
         });
 
-        // Set refresh button
-        refresh = $('<button>')
-            .html('<i class="fa fa-refresh"></i>')
-            .addClass('btn btn-default action-button pull-left')
-            .click(getImageList)
-            .insertBefore($('#images_table_paginate'));
-
         // Set upload button
         createButton = $('<button>')
             .html('<i class="fa fa-plus"></i>')
-            .addClass('btn btn-success action-button pull-left')
+            .addClass('btn btn-primary action-button pull-left')
             .attr('data-toggle', 'modal')
             .attr('data-target', '#uploadImageModal')
             .insertBefore($('#images_table_paginate'));
@@ -163,6 +156,13 @@ var OpenStackProto = (function (JSTACK) {
         searchInput.on( 'keyup', function () {
             dataTable.search(this.value).draw();
         });
+
+        // Set refresh button
+        refresh = $('<button>')
+            .html('<i class="fa fa-refresh"></i>')
+            .addClass('btn btn-default action-button pull-left')
+            .click(getImageList)
+            .insertBefore($('#images_table_paginate'));
 
         // Set modal create image button click
         modalCreateButton = $('#create-image');
