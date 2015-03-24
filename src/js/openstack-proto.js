@@ -33,6 +33,9 @@ var OpenStackProto = (function (JSTACK) {
         // Initialize Keystone
         JSTACK.Keystone.init(url);
 
+        // Start loading animation
+        startLoadingAnimation();
+
         // Get tenants with the user's FIWARE token
         MashupPlatform.http.makeRequest(url + 'tenants', {
             method: 'GET',
@@ -55,7 +58,13 @@ var OpenStackProto = (function (JSTACK) {
                         JSTACK.Keystone.params.access = response.access;
                         JSTACK.Keystone.params.currentstate = 2;
 
+                        // Stop loading animation
+                        stopLoadingAnimation();
+                        
+                        // Create table
                         createTable();
+
+                        // Get image list and draw it in the table
                         getImageList();
                     },
                     onFailure: function (response) {
@@ -221,6 +230,26 @@ var OpenStackProto = (function (JSTACK) {
             dataTable.columns.adjust().draw(false);
         }
 
+    }
+
+    function startLoadingAnimation () {
+
+        // Reference size is the smaller between height and width
+        var referenceSize = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
+        var font_size = referenceSize / 4;
+
+        // Calculate loading icon size
+        $('.loading i').css('font-size', font_size);
+
+        // Show
+        $('.loading').removeClass('hide');
+
+    }
+
+    function stopLoadingAnimation () {
+
+        // Hide
+        $('.loading').addClass('hide');
     }
 
     function launchInstanceCallback (response) {
