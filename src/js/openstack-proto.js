@@ -175,14 +175,46 @@ var OpenStackProto = (function (JSTACK) {
 
         // Set modal create image button click
         modalCreateButton = $('#create-image');
-        //modalCreateButton.on('click', createImage);
+        modalCreateButton.on('click', createImage);
 
     }
 
+    function createImage (e) {
+
+        var glanceURL = "https://cloud.lab.fiware.org/Spain2/image/v1/images";
+        var token = JSTACK.Keystone.params.token;
+        var form = $('#create_image_form');
+        var headers = {
+            "X-Auth-Token": token
+        };
+
+        $.each(form.serializeArray(), function(i, field) {
+            if (field.value !== "") {
+                headers[field.name] = field.value;
+            }
+        });
+
+        // Post request to receive service token from Openstack
+        MashupPlatform.http.makeRequest(glanceURL, {
+            requestHeaders: headers,
+            contentType: "application/json",
+            onSuccess: createImageSuccess,
+            onFailure: onError
+        });
+
+        // Reset form, prevent submit and close modal
+        form.reset();
+        e.preventDefault();
+        $('#uploadImageModal').modal('hide');
+
+    }
+
+    function createImageSuccess (response) {
+        getImageList();
+    }
+
     function getImageList () {
-
-        JSTACK.Nova.getimagelist(true, callbackImageList, onError, null);
-
+        JSTACK.Nova.getimagelist(true, callbackImageList, onError, "Spain2");
     }
 
     function rowClickCallback (id) {
@@ -351,7 +383,7 @@ var OpenStackProto = (function (JSTACK) {
             var row = $(this).parent().parent();
             var data = dataTable.row(row).data();
 
-            JSTACK.Nova.createserver(data[1] + '__instance', data[0], 1, key_name, user_data, security_groups, min_count, max_count, availability_zone, launchInstanceCallback, onerror);
+            JSTACK.Nova.createserver(data[1] + '__instance', data[0], 1, key_name, user_data, security_groups, min_count, max_count, availability_zone, launchInstanceCallback, onerror, "Spain2");
         });
 
         // Remove previous row click events
