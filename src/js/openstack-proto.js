@@ -203,7 +203,7 @@ var OpenStackProto = (function (JSTACK) {
         });
 
         // Reset form, prevent submit and close modal
-        form.reset();
+        form[0].reset();
         e.preventDefault();
         $('#uploadImageModal').modal('hide');
 
@@ -490,6 +490,7 @@ var OpenStackProto = (function (JSTACK) {
 
         this.init = authenticate;
         this.listImage = getImageList;
+        this.createImage = createImage;
 
         // Initialize preferences
         handlePreferences();
