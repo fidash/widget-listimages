@@ -997,7 +997,7 @@ JSTACK.Nova = (function (JS, undefined) {
             var service = JS.Keystone.getservice(params.service);
             if (service) {
                 //params.url = JSTACK.Comm.getEndpoint(service, region, params.endpointType);
-                params.url = "https://cloud.lab.fiware.org/Spain2/image/v2";
+                params.url = "https://cloud.lab.fiware.org/Spain2/image/v1";
                 return true;
             }
             return false;            
@@ -2530,7 +2530,7 @@ JSTACK.Cinder = (function (JS, undefined) {
             var service = JS.Keystone.getservice("volume");
             if (service) {
                 //params.url = JSTACK.Comm.getEndpoint(service, region, params.endpointType);
-                params.url = 'https://cloud.lab.fiware.org/Spain2/volume/v2/' + JS.Keystone.params.access.token.tenant.id;
+                params.url = 'https://cloud.lab.fiware.org/Spain2/volume/v1/' + JS.Keystone.params.access.token.tenant.id;
                 return true;
             }
             return false;
@@ -2863,7 +2863,7 @@ JSTACK.Glance = (function(JS, undefined) {
         if (JS.Keystone !== undefined && JS.Keystone.params.currentstate === JS.Keystone.STATES.AUTHENTICATED) {
             var service = JS.Keystone.getservice("image");
             //params.url = JSTACK.Comm.getEndpoint(service, region, params.endpointType);
-            params.url = "https://cloud.lab.fiware.org/Spain2/image/v2";
+            params.url = "https://cloud.lab.fiware.org/Spain2/image/v1";
             return true;
         }
         return false;
