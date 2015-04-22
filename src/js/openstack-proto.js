@@ -308,7 +308,7 @@ var OpenStackProto = (function (JSTACK) {
         var unit = 0;
 
         if (size <= 1024) {
-            return size + units[0];
+            return size + ' ' + units[0];
         }
 
         while (parseFloat(displayableSize/1024) > parseFloat(1) && unit < 9) {
