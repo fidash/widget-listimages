@@ -378,12 +378,15 @@ var OpenStackProto = (function (JSTACK) {
                 security_groups,
                 min_count,
                 max_count,
-                availability_zone;
+                availability_zone,
+                networks,
+                block_device_mapping,
+                metadata;
 
             var row = $(this).parent().parent();
             var data = dataTable.row(row).data();
 
-            JSTACK.Nova.createserver(data[1] + '__instance', data[0], 1, key_name, user_data, security_groups, min_count, max_count, availability_zone, launchInstanceCallback, onerror, "Spain2");
+            JSTACK.Nova.createserver(data[1] + '__instance', data[0], 1, key_name, user_data, security_groups, min_count, max_count, availability_zone, networks, block_device_mapping, metadata, launchInstanceCallback, onerror, "Spain2");
         });
 
         // Remove previous row click events
