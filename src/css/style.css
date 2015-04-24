@@ -96,3 +96,24 @@ tr button.btn.btn-primary {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+input[type=file] {
+    display: inline-block;
+    width: 95%;
+    vertical-align: text-bottom;
+    border: none;
+}
+
+input[type=radio] {
+    display: inline-block;
+    width: 5%;
+    vertical-align: text-bottom;
+    border: none;
+}
+
+input[name=x-image-meta-location] {
+    display: inline-block;
+    width: 95%;
+    vertical-align: text-bottom;
+    border: none;
+}

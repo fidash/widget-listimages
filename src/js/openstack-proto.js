@@ -187,17 +187,26 @@ var OpenStackProto = (function (JSTACK) {
         var headers = {
             "X-Auth-Token": token
         };
+        var content = "application/json";
+        var file = $('#x-image-meta-file').val() !== "" ? $('#x-image-meta-file')[0].files[0] : "";
 
         $.each(form.serializeArray(), function(i, field) {
             if (field.value !== "") {
-                headers[field.name] = field.value;
+                if (field.name === "image" && field.value === "file" && $('#x-image-meta-file').val() !== "") {
+                    content = "application/octet-stream";
+                    headers['x-image-meta-size'] = $('#x-image-meta-file')[0].files[0].size;
+                }
+                else {
+                    headers[field.name] = field.value;
+                }
             }
         });
 
         // Post request to receive service token from Openstack
         MashupPlatform.http.makeRequest(glanceURL, {
             requestHeaders: headers,
-            contentType: "application/json",
+            contentType: content,
+            postBody: file,
             onSuccess: createImageSuccess,
             onFailure: onError
         });
@@ -463,6 +472,23 @@ var OpenStackProto = (function (JSTACK) {
 
     }
 
+    function initEvents () {
+        $('input[name=image]').change(function () {
+            if ($(this).val() === "file") {
+                $('#x-image-meta-file').prop('disabled', false);
+                $('#x-image-meta-location')
+                    .prop('disabled', true)
+                    .val('');
+            }
+            else {
+                $('#x-image-meta-file')
+                    .prop('disabled', true)
+                    .val('');
+                $('#x-image-meta-location').prop('disabled', false);
+            }
+        });
+    }
+
     function onError (error) {
 
         var errors = {
@@ -494,6 +520,9 @@ var OpenStackProto = (function (JSTACK) {
         this.init = authenticate;
         this.listImage = getImageList;
         this.createImage = createImage;
+
+        // Init events
+        initEvents();
 
         // Initialize preferences
         handlePreferences();

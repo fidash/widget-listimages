@@ -492,4 +492,29 @@ describe('Test Image Table', function () {
 
 	});
 
+	it('should disable and reset the file or location field in the create image form when the other is selected', function () {
+
+		var file = $('#x-image-meta-file');
+		var location = $('#x-image-meta-location');
+
+		file.val('Something');
+		$('input[name=image][value=location]')
+			.attr('checked', 'checked')
+			.change();
+
+		expect(file).toBeDisabled();
+		expect(file).toHaveValue('');
+		expect(location).not.toBeDisabled();
+
+		location.val('Something else');
+		$('input[name=image][value=file]')
+			.attr('checked', 'checked')
+			.change();
+
+		expect(file).not.toBeDisabled();
+		expect(location).toBeDisabled();
+		expect(location).toHaveValue('');
+
+	});
+
 });
