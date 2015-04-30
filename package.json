@@ -42,6 +42,6 @@
     "grunt-template-jasmine-istanbul": "^0.3.0",
     "grunt-text-replace": "^0.3.12",
     "jasmine-jquery": "^2.0.5",
-    "jquery": "^2.1.1"
+    "jquery": "2.1.3"
   }
 }
