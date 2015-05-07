@@ -275,8 +275,11 @@ var OpenStackProto = (function (JSTACK) {
 
     function startLoadingAnimation () {
 
+        var bodyWidth = $('body').width();
+        var bodyHeight = $('body').height();
+
         // Reference size is the smaller between height and width
-        var referenceSize = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
+        var referenceSize = (bodyWidth < bodyHeight) ? bodyWidth : bodyHeight;
         var font_size = referenceSize / 4;
 
         // Calculate loading icon size
