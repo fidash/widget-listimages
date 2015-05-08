@@ -2,7 +2,7 @@
     "use strict";
 
     config.set({
-      frameworks: ['jasmine-jquery','jasmine', 'fixture'],
+      frameworks: ['jasmine', 'fixture'],
     
       singleRun: true,
 
@@ -48,7 +48,6 @@
       ],
 
       plugins: [
-        'karma-jasmine-jquery',
         'karma-jasmine',
         'karma-firefox-launcher',
         'karma-chrome-launcher',
