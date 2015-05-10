@@ -1,9 +1,9 @@
-/* global OpenStackProto */
+/* global ListImages */
 
 describe('Test Image Table', function () {
     "use strict";
 
-    var openStack = null;
+    var listImages = null;
     var respImageList = null;
     var respAuthenticate = null;
     var respTenants = null;
@@ -64,7 +64,7 @@ describe('Test Image Table', function () {
         JSTACK.Nova = jasmine.createSpyObj("Nova", ["getimagelist", "createimage", "createserver"]);
 
 
-        // Set/Reset prefs values
+        // Set preferences values
         prefsValues = {
             "MashupPlatform.prefs.get": {
                 "id": true,
@@ -80,10 +80,10 @@ describe('Test Image Table', function () {
             }
         };
 
-        // Set/Reset strategy
+        // Set strategy
         MashupPlatform.setStrategy(new MyStrategy(), prefsValues);
 
-        // Set/Reset fixtures
+        // Load fixtures
         jasmine.getFixtures().fixturesPath = 'base/src/test/fixtures/html';
         loadFixtures('defaultTemplate.html');
         jasmine.getJSONFixtures().fixturesPath = 'base/src/test/fixtures/json';
@@ -94,7 +94,8 @@ describe('Test Image Table', function () {
         imageListSingleImage = getJSONFixture('imageListSingleImage.json');
 
         // Create new instance
-        openStack = new OpenStackProto();
+        listImages = new ListImages();
+        listImages.init();
     });
 
     afterEach(function () {
@@ -110,7 +111,7 @@ describe('Test Image Table', function () {
     function callListImage() {
 
         var handleServiceTokenCallback, getTenantsOnSuccess;
-        openStack.init();
+        listImages.authenticate();
 
         getTenantsOnSuccess = MashupPlatform.http.makeRequest.calls.mostRecent().args[1].onSuccess;
         respTenants = {
@@ -129,7 +130,7 @@ describe('Test Image Table', function () {
         
         var getTenantsOnError;
 
-        openStack.init();
+        listImages.authenticate();
         getTenantsOnError = MashupPlatform.http.makeRequest.calls.mostRecent().args[1].onFailure;
         getTenantsOnError('Test successful');
     }
@@ -416,7 +417,7 @@ describe('Test Image Table', function () {
         callListImageErrorCallback(error);
         
         expect($('.alert > strong').last().text()).toBe('Error ');
-        expect($('.alert > span').last().text()).toBe('An error has occurred on the server side. ');
+        expect($('.alert > span').last().text()).toBe('An error has occurred in FIWARE\'s Cloud. ');
         expect($('.alert > div').last().text()).toBe(error.message + ' ' + error.body + ' ');
 
     });

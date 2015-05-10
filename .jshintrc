@@ -15,10 +15,9 @@
     "globals": {
         "URL": false,
         "MashupPlatform": true,
-        "DataViewer": true,
         "JSTACK": true,
         "StyledElements": true,
         "console": true,
-        "OpenStackProto": true
+        "ListImages": true
     }
 }

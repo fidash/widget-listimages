@@ -9,6 +9,9 @@
       browsers: ['Firefox', 'Chrome'],
 
       files: [
+        // PhantomJS polyfill
+        'node_modules/phantomjs-polyfill/bind-polyfill.js',
+
         // Vendor files
         'src/test/vendor/*.js',
         'node_modules/jquery/dist/jquery.js',
@@ -33,7 +36,9 @@
           included: false },
 
         // Source code
-        'src/js/*.js',
+        'src/js/Utils.js',
+        'src/js/UI.js',
+        'src/js/ListImages.js',
 
         // Spec files
         'src/test/js/*Spec.js'

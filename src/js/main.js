@@ -1,9 +1,10 @@
-/* global OpenStackProto */
+/* global ListImages */
 
 $(document).ready(function() {
     "use strict";
 
-	var openStackProto = new OpenStackProto();
+	var listImages = new ListImages();
 
-    openStackProto.init();
+    listImages.init();
+    listImages.authenticate();
 });
