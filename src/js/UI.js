@@ -4,6 +4,7 @@ var UI = (function () {
     "use strict";
 
     var hiddenColumns = [];
+    var dataTable;
 
     /******************************************************************/
     /*                P R I V A T E   F U N C T I O N S               */
@@ -33,7 +34,7 @@ var UI = (function () {
             {'title': 'Actions'}
         ];
 
-        UI.dataTable = $('#images_table').dataTable({
+        dataTable = $('#images_table').dataTable({
             'columns': columns,
             "columnDefs": [
                 {
@@ -77,7 +78,7 @@ var UI = (function () {
         });
 
         searchInput.on( 'keyup', function () {
-            UI.dataTable.api().search(this.value).draw();
+            dataTable.api().search(this.value).draw();
         });
     }
 
@@ -112,14 +113,14 @@ var UI = (function () {
             .appendTo(wrapper);
 
         // Clear previous elements
-        UI.dataTable.api().clear();
+        dataTable.api().clear();
 
         for (var i=0; i<imageList.images.length; i++) {
            
             image = imageList.images[i];
             image.is_public = image.is_public ? 'Public' : 'Private';
 
-            row = UI.dataTable.api().row.add([
+            row = dataTable.api().row.add([
                 image.id,
                 image.name,
                 image.status,
@@ -159,7 +160,7 @@ var UI = (function () {
                 metadata;
 
             var row = $(this).parent().parent();
-            var data = UI.dataTable.api().row(row).data();
+            var data = dataTable.api().row(row).data();
 
             JSTACK.Nova.createserver(data[1] + '__instance', data[0], 1, key_name, user_data, security_groups, min_count, max_count, availability_zone, networks, block_device_mapping, metadata, launchInstanceCallback, onerror, "Spain2");
         });
@@ -172,11 +173,11 @@ var UI = (function () {
 
         // Row events
         $('#images_table tbody').on('click', 'tr', function () {
-            var data = UI.dataTable.api().row(this).data();
+            var data = dataTable.api().row(this).data();
             var id = data[0];
             UI.selectedRowId = id;
 
-            UI.dataTable.api().row('.selected')
+            dataTable.api().row('.selected')
                 .nodes()
                 .to$()
                 .removeClass('selected');
@@ -187,7 +188,7 @@ var UI = (function () {
 
     function initFixedHeader () {
         // Fixed header
-        UI.fixedHeader = new $.fn.dataTable.FixedHeader(UI.dataTable);
+        UI.fixedHeader = new $.fn.dataTable.FixedHeader(dataTable);
 
         $(window).resize(function () {
             UI.fixedHeader._fnUpdateClones(true); // force redraw
@@ -245,15 +246,15 @@ var UI = (function () {
                 hiddenColumns.push(i);
             }
 
-            if (UI.dataTable) {
-                UI.dataTable.api().column(i).visible(display, false);
+            if (dataTable) {
+                dataTable.api().column(i).visible(display, false);
             }
 
         }
 
         // Recalculate all columns size at once
-        if (UI.dataTable) {
-            UI.dataTable.api().columns.adjust();
+        if (dataTable) {
+            dataTable.api().columns.adjust();
         }
 
     }
@@ -262,17 +263,17 @@ var UI = (function () {
 
         // Save previous scroll and page
         var scroll = $(window).scrollTop();
-        var page = UI.dataTable.api().page();
+        var page = dataTable.api().page();
 
         buildTableBody(imageList);
         setLaunchInstanceEvents(callbacks.launchInstanceCallback);
         setSelectImageEvents();
 
-        UI.dataTable.api().columns.adjust().draw();
+        dataTable.api().columns.adjust().draw();
 
         // Restore previous scroll and page
         $(window).scrollTop(scroll);
-        UI.dataTable.api().page(page).draw(false);
+        dataTable.api().page(page).draw(false);
         
         setTimeout(function () {
             callbacks.getImageList();

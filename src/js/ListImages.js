@@ -9,7 +9,7 @@ var ListImages = (function (JSTACK) {
         '422 Error': 'You are not authenticated in the wirecloud platform.'
     };
 
-    var authURL = 'https://cloud.lab.fiware.org/keystone/v2.0/';
+    var authURL = 'https://cloud.lab.fiware.org/keystone/v3/auth/';
 
 
     /******************************************************************/
@@ -43,7 +43,7 @@ var ListImages = (function (JSTACK) {
 
     }
 
-    function readForm(form) {
+    function readCreateImageForm (form) {
 
         var fields = {};
 
@@ -61,45 +61,23 @@ var ListImages = (function (JSTACK) {
         return fields;
     }
 
-    function createServiceToken (tenantResponse) {
-
-        tenantResponse = JSON.parse(tenantResponse.responseText);
-
-        var headersAuth = {
-            "Accept": "application/json",
-            "X-FI-WARE-OAuth-Token": "true",
-            "X-FI-WARE-OAuth-Token-Body-Pattern": "%fiware_token%"
-        };
-        var postBody = {
-            "auth": {
-                "token": {
-                    "id": "%fiware_token%"
-                },
-                "tenantId": tenantResponse.tenants[0].id
-            }
-        };
-
-        // Post request to receive service token from Openstack
-        MashupPlatform.http.makeRequest(authURL + 'tokens', {
-            requestHeaders: headersAuth,
-            contentType: "application/json",
-            postBody: JSON.stringify(postBody),
-            onSuccess: createWidgetUI,
-            onFailure: authError
-        });
-    }
-
     function createWidgetUI (tokenResponse) {
-        tokenResponse = JSON.parse(tokenResponse.responseText);
+        
+        var token = tokenResponse.getHeader('x-subject-token');
+        var responseBody = JSON.parse(tokenResponse.responseText);
+
+        // Temporal change to fix catalog name
+        responseBody.token.serviceCatalog = responseBody.token.catalog;
 
         // Mimic JSTACK.Keystone.authenticate behavior on success
-        JSTACK.Keystone.params.token = tokenResponse.access.token.id;
-        JSTACK.Keystone.params.access = tokenResponse.access;
+        JSTACK.Keystone.params.token = token;
+        JSTACK.Keystone.params.access = responseBody.token;
         JSTACK.Keystone.params.currentstate = 2;
 
         UI.stopLoadingAnimation($('.loading'));
         UI.createTable(getImageList, createImage);
         getImageList();
+
     }
 
     function onError (error) {
@@ -151,19 +129,35 @@ var ListImages = (function (JSTACK) {
 
     function authenticate () {
         
-        var headersTenants = {};
+        var headersAuth = {
+            "X-FI-WARE-OAuth-Token": "true",
+            "X-FI-WARE-OAuth-Token-Body-Pattern": "%fiware_token%",
+            "Accept": "application/json"
+        };
 
-        headersTenants['X-FI-WARE-OAuth-Token'] = 'true';
-        headersTenants['X-FI-WARE-OAuth-Header-Name'] = 'X-Auth-Token';
+        var authBody = {
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "oauth2"
+                    ],
+                    "oauth2": {
+                        "access_token_id": "%fiware_token%"
+                    }
+                }
+            }
+        };
 
         JSTACK.Keystone.init(authURL);
         UI.startLoadingAnimation($('.loading'), $('.loading i'));
 
-        // Get tenants with user's FIWARE token
-        MashupPlatform.http.makeRequest(authURL + 'tenants', {
-            method: 'GET',
-            requestHeaders: headersTenants,
-            onSuccess: createServiceToken,
+        // Get token with user's FIWARE token
+        MashupPlatform.http.makeRequest(authURL + 'tokens', {
+            method: 'POST',
+            requestHeaders: headersAuth,
+            contentType: "application/json",
+            postBody: JSON.stringify(authBody),
+            onSuccess: createWidgetUI,
             onFailure: authError
         });
         
@@ -174,7 +168,7 @@ var ListImages = (function (JSTACK) {
         var glanceURL = "https://cloud.lab.fiware.org/Spain2/image/v1/images";
         var token = JSTACK.Keystone.params.token;
         var form = $('#create_image_form');
-        var headers = readForm(form);
+        var headers = readCreateImageForm(form);
         headers['X-Auth-Token'] = token;
         var content = $('input[type=radio][name=image]').val() == 'file' ? "application/octet-stream" : "application/json";
         var file = $('#x-image-meta-file').val() !== "" ? $('#x-image-meta-file')[0].files[0] : "";

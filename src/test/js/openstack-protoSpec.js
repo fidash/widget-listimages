@@ -6,8 +6,6 @@ describe('Test Image Table', function () {
     var listImages = null;
     var respImageList = null;
     var respAuthenticate = null;
-    var respTenants = null;
-    var respServices = null;
     var imageListSingleImage = null;
     var prefsValues;
     var units = [
@@ -89,8 +87,6 @@ describe('Test Image Table', function () {
         jasmine.getJSONFixtures().fixturesPath = 'base/src/test/fixtures/json';
         respImageList = getJSONFixture('respImageList.json');
         respAuthenticate = getJSONFixture('respAuthenticate.json');
-        respTenants = getJSONFixture('respTenants.json');
-        respServices = getJSONFixture('respServices.json');
         imageListSingleImage = getJSONFixture('imageListSingleImage.json');
 
         // Create new instance
@@ -110,43 +106,25 @@ describe('Test Image Table', function () {
 
     function callListImage() {
 
-        var handleServiceTokenCallback, getTenantsOnSuccess;
+        var createWidgetUI;
         listImages.authenticate();
 
-        getTenantsOnSuccess = MashupPlatform.http.makeRequest.calls.mostRecent().args[1].onSuccess;
-        respTenants = {
-            responseText: JSON.stringify(respTenants)
+        createWidgetUI = MashupPlatform.http.makeRequest.calls.mostRecent().args[1].onSuccess;
+        respAuthenticate = {
+            responseText: JSON.stringify(respAuthenticate),
+            getHeader: function () {}
         };
-        getTenantsOnSuccess(respTenants);
+        createWidgetUI(respAuthenticate);
         
-        handleServiceTokenCallback = MashupPlatform.http.makeRequest.calls.mostRecent().args[1].onSuccess;
-        respServices = {
-            responseText: JSON.stringify(respServices)
-        };
-        handleServiceTokenCallback(respServices);
     }
 
-    function callgetTenantsWithError () {
+    function callAuthenticateWithError (error) {
         
-        var getTenantsOnError;
+        var authError;
 
-        listImages.authenticate();
-        getTenantsOnError = MashupPlatform.http.makeRequest.calls.mostRecent().args[1].onFailure;
-        getTenantsOnError('Test successful');
-    }
+        authError = MashupPlatform.http.makeRequest.calls.mostRecent().args[1].onFailure;
+        authError(error);
 
-    function callAuthenticateWithError () {
-        
-        var authenticateError, getTenantsOnSuccess;
-
-        getTenantsOnSuccess = MashupPlatform.http.makeRequest.calls.mostRecent().args[1].onSuccess;
-        respTenants = {
-            responseText: JSON.stringify(respTenants)
-        };
-        getTenantsOnSuccess(respTenants);
-
-        authenticateError = MashupPlatform.http.makeRequest.calls.mostRecent().args[1].onFailure;
-        authenticateError('Test successful');
     }
 
     function callListImageSuccessCallback (imageList) {
@@ -172,7 +150,7 @@ describe('Test Image Table', function () {
 
         callListImage();
 
-        expect(MashupPlatform.http.makeRequest.calls.count()).toBe(2);
+        expect(MashupPlatform.http.makeRequest.calls.count()).toBe(1);
         expect(JSTACK.Keystone.params.currentstate).toBe(2);
 
     });
@@ -187,20 +165,12 @@ describe('Test Image Table', function () {
         expect(rows.length).toBeGreaterThan(0);
     });
 
-    it('should call error callback for getTenants correctly',function () {
-
-        var consoleSpy = spyOn(console, "log"); // REFACTOR
-
-        callgetTenantsWithError();
-        expect(consoleSpy.calls.mostRecent().args[0]).toBe('Error: "Test successful"');
-    });
-
     it('should call error callback for authenticate correctly', function () {
         
         var consoleSpy = spyOn(console, "log"); // REFACTOR
 
-        callgetTenantsWithError();
-        callAuthenticateWithError();
+        callListImage();
+        callAuthenticateWithError('Test successful');
         expect(consoleSpy.calls.mostRecent().args[0]).toBe('Error: "Test successful"');
     });
 
@@ -215,16 +185,16 @@ describe('Test Image Table', function () {
         expect(spyLog).toHaveBeenCalledWith("Error: " + JSON.stringify(error));
     });
 
-    it('should call getserverlist 2 seconds after receiving the last update', function () {
+    it('should call getserverlist 4 seconds after receiving the last update', function () {
 
-        var expectedCount, callback;
+        var expectedCount, refresh;
         var setTimeoutSpy = spyOn(window, 'setTimeout');
 
         callListImage();
-        expectedCount = JSTACK.Nova.getimagelist.calls.count() + 1;
         callListImageSuccessCallback(imageListSingleImage);
-        callback = setTimeout.calls.mostRecent().args[0];
-        callback();
+        expectedCount = JSTACK.Nova.getimagelist.calls.count() + 1;
+        refresh = setTimeout.calls.mostRecent().args[0];
+        refresh();
 
         expect(JSTACK.Nova.getimagelist.calls.count()).toEqual(expectedCount);
         expect(setTimeoutSpy).toHaveBeenCalledWith(jasmine.any(Function), 4000);
@@ -394,7 +364,7 @@ describe('Test Image Table', function () {
             
             var handlePreferences;
             var imageData = imageListSingleImage.images[0];
-
+            var sizeCopy = imageData.size;
             imageData.size = unit.value;
             prefsValues["MashupPlatform.prefs.get"].size = true;
             callListImage();
@@ -404,6 +374,7 @@ describe('Test Image Table', function () {
 
             expect($('tbody > tr > td')[4]).toContainText(unit.expected);
             prefsValues["MashupPlatform.prefs.get"].size = false;
+            imageData.size = sizeCopy;
         });
     });
 
