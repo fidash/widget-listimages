@@ -13,7 +13,8 @@ var UI = (function () {
     function selectImage (id) {
         var data = {
             'id': id,
-            'access': JSTACK.Keystone.params.access
+            'access': JSTACK.Keystone.params.access,
+            'token': JSTACK.Keystone.params.token
         };
         MashupPlatform.wiring.pushEvent('image_id', JSON.stringify(data));
     }

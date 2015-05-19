@@ -1282,7 +1282,7 @@ JSTACK.Nova = (function (JS, undefined) {
             }
         };
 
-        JS.Comm.post("https://cloud.lab.fiware.org/Spain2/compute/v2/" + JS.Keystone.params.access.token.tenant.id + urlPost, data, JS.Keystone.params.token, onOK, onError);
+        JS.Comm.post("https://cloud.lab.fiware.org/Spain2/compute/v2/" + JS.Keystone.params.access.project.id + urlPost, data, JS.Keystone.params.token, onOK, onError);
 
     };
     // This operation deletes a cloud server instance from the system.
@@ -2530,7 +2530,7 @@ JSTACK.Cinder = (function (JS, undefined) {
             var service = JS.Keystone.getservice("volume");
             if (service) {
                 //params.url = JSTACK.Comm.getEndpoint(service, region, params.endpointType);
-                params.url = 'https://cloud.lab.fiware.org/Spain2/volume/v1/' + JS.Keystone.params.access.token.tenant.id;
+                params.url = 'https://cloud.lab.fiware.org/Spain2/volume/v1/' + JS.Keystone.params.access.project.id;
                 return true;
             }
             return false;
