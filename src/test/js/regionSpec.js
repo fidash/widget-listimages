@@ -44,7 +44,7 @@ describe('Test Region Module', function () {
         var expectedRegions = ['Crete', 'Prague'];
 
         selectRegionsInHTML(expectedRegions);
-        Region.setCurrentRegions(regionSelector)
+        Region.setCurrentRegions(regionSelector);
 
         expect(Region.getCurrentRegions()).toEqual(expectedRegions);
     });
@@ -56,7 +56,7 @@ describe('Test Region Module', function () {
     });
 
     it('should leave the current region list empty after setting the regions with no one selected', function () {
-        Region.setCurrentRegions(regionSelector)
+        Region.setCurrentRegions(regionSelector);
 
         expect(Region.getCurrentRegions()).toEqual(['Spain2']);
     });
