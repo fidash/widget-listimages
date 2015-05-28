@@ -1,4 +1,4 @@
-/* global Utils,UI */
+/* global Utils,UI,Region */
 
 var ListImages = (function (JSTACK) {
     "use strict";
@@ -76,17 +76,17 @@ var ListImages = (function (JSTACK) {
 
         UI.stopLoadingAnimation($('.loading'));
         UI.createTable(getImageList, createImage);
-        getImageList();
+        getImageList(true);
 
     }
 
     function onError (error) {
 
         if (error.message in ERRORS) {
-            Utils.createAlert('danger', 'Error', ERRORS[error.message], error);            
+            Utils.createAlert('danger', 'Error', ERRORS[error.message], error.region, error);
         }
         else {
-            Utils.createAlert('danger', error.message, error.body);
+            Utils.createAlert('danger', error.message, error.body, error.region);
         }
 
         console.log('Error: ' + JSON.stringify(error));
@@ -95,6 +95,59 @@ var ListImages = (function (JSTACK) {
     function authError (error) {
         onError(error);
         authenticate();
+    }
+
+    function createJoinRegions (regionsLimit, autoRefresh) {
+
+        var currentImageList = [];
+        var errorList = [];
+
+        function deductRegionLimit () {
+
+            regionsLimit -= 1;
+
+            if (regionsLimit === 0) {
+
+                var callbacks = {
+                    "getImageList": getImageList,
+                    "launchInstanceCallback": launchInstanceCallback
+                };
+
+                UI.drawImages(callbacks, currentImageList, autoRefresh);
+                drawErrors();
+            }
+        }
+
+        function drawErrors () {
+            if (errorList.length === 0) return;
+
+            errorList.forEach(function (error) {
+                onError(error);
+            });
+        }
+
+        function joinRegionsSuccess (region, imageList) {
+
+            imageList.images.forEach(function (image) {
+                image.region = region;
+                currentImageList.push(image);
+            });
+
+            deductRegionLimit();
+        }
+
+        function joinRegionsErrors (region, error) {
+
+            error.region = region;
+            errorList.push(error);
+
+            deductRegionLimit();
+        }
+
+        return {
+            success: joinRegionsSuccess,
+            error: joinRegionsErrors
+        };
     }
 
 
@@ -165,21 +218,27 @@ var ListImages = (function (JSTACK) {
 
     function createImage (e) {
 
-        var glanceURL = "https://cloud.lab.fiware.org/Spain2/image/v1/images";
         var token = JSTACK.Keystone.params.token;
         var form = $('#create_image_form');
         var headers = readCreateImageForm(form);
         headers['X-Auth-Token'] = token;
         var content = $('input[type=radio][name=image]').val() == 'file' ? "application/octet-stream" : "application/json";
         var file = $('#x-image-meta-file').val() !== "" ? $('#x-image-meta-file')[0].files[0] : "";
+        var glanceURL = "";
 
-        // Call OpenStack API
-        MashupPlatform.http.makeRequest(glanceURL, {
-            requestHeaders: headers,
-            contentType: content,
-            postBody: file,
-            onSuccess: getImageList,
-            onFailure: onError
+        var regions =  Region.getCurrentRegions();
+
+        regions.forEach(function (region) {
+            glanceURL = "https://cloud.lab.fiware.org/" + region + "/image/v1/images";
+
+            // Call OpenStack API
+            MashupPlatform.http.makeRequest(glanceURL, {
+                requestHeaders: headers,
+                contentType: content,
+                postBody: file,
+                onSuccess: getImageList,
+                onFailure: onError
+            });
         });
 
         // Reset form, prevent submit and close modal
@@ -189,13 +248,14 @@ var ListImages = (function (JSTACK) {
 
     }
 
-    function getImageList () {
-        var callbacks = {
-            "getImageList": getImageList,
-            "launchInstanceCallback": launchInstanceCallback
-        };
+    function getImageList (autoRefresh) {
 
-        JSTACK.Nova.getimagelist(true, UI.drawImages.bind(null, callbacks), onError, "Spain2");
+        var regions = Region.getCurrentRegions();
+        var joinRegions = createJoinRegions(regions.length, autoRefresh);
+
+        regions.forEach(function (region) {
+            JSTACK.Nova.getimagelist(true, joinRegions.success.bind(null, region), joinRegions.error.bind(null, region), region);
+        });
     }
 
     return ListImages;

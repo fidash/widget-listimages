@@ -24,7 +24,7 @@
         'src/test/helpers/*.js',
 
         // Fixtures
-        { pattern: 'src/test/fixtures/html/defaultTemplate.html',
+        { pattern: 'src/test/fixtures/html/*.html',
           watched: true,
           served:  true,
           included: false },
@@ -36,6 +36,7 @@
 
         // Source code
         'src/js/Utils.js',
+        'src/js/Region.js',
         'src/js/UI.js',
         'src/js/ListImages.js',
 

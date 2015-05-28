@@ -36,16 +36,21 @@ var Utils = (function () {
     
     }
 
-    function createAlert (type, title, message, details) {
+    function createAlert (type, title, message, region, details) {
 
-        // TODO buffer them and shown them on a list instead of removing them
-        // Hide previous alerts
-        $('.alert').hide();
+        // TODO buffer previous alerts and shown them on a list
  
         var alert = $('<div>')
             .addClass('alert alert-dismissible alert-' + type + ' fade in')
             .attr('role', 'alert')
             .html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>');
+
+        if (region) {
+            // Region
+            $('<strong>')
+                .text(region + ' ')
+                .appendTo(alert);
+        }
 
         // Title
         $('<strong>')

@@ -1,4 +1,4 @@
-/* global Utils */
+/* global Utils,Region */
 
 var UI = (function () {
     "use strict";
@@ -32,6 +32,7 @@ var UI = (function () {
             {'title': 'Size'},
             {'title': 'Container format'},
             {'title': 'Disk format'},
+            {'title': 'Region'},
             {'title': 'Actions'}
         ];
 
@@ -98,11 +99,56 @@ var UI = (function () {
         $('<button>')
             .html('<i class="fa fa-refresh"></i>')
             .addClass('btn btn-default action-button pull-left')
-            .click(refreshCallback)
+            .click(refreshCallback.bind(null, false))
+            .insertBefore(nextElement);
+    }
+    
+    function createRegionsButton (nextElement) {
+        $('<button>')
+            .html('<i class="fa fa-globe"></i>')
+            .addClass('btn btn-default action-button pull-left')
+            .click(toggleRegionSelector)
             .insertBefore(nextElement);
     }
 
-    function buildTableBody (imageList) {
+    function createRegionSelector () {
+        var regions = Region.getAvailableRegions();
+        var regionSelector = $('<div>')
+                .attr('id', 'region-selector')
+                .addClass('region-selector')
+                .css('max-height', window.innerHeight - 50)
+                .appendTo($('body'));
+
+
+        $(window).resize(function () {
+            regionSelector.css('max-height', window.innerHeight - 50);
+        });
+
+        regions.forEach(function(region) {
+            $('<div>')
+                .html('<input type="checkbox" name="region" value="' + region + '" /> ' + region)
+                .addClass('region-container')
+                .click(function (e) {
+                    var input = $('input', this);
+                    input.toggleClass('selected');
+                    if (input.prop('checked')) {
+                        input.prop('checked', false);
+                        Region.setCurrentRegions(regionSelector);
+                    }
+                    else {
+                        input.prop('checked', true);
+                        Region.setCurrentRegions(regionSelector);
+                    }
+                })
+                .appendTo(regionSelector);
+        });
+    }
+
+    function toggleRegionSelector () {
+        $('#region-selector').toggleClass('slideRight');
+    }
+
+    function buildTableBody (imageList, region) {
 
         var row, image;
 
@@ -116,9 +162,8 @@ var UI = (function () {
         // Clear previous elements
         dataTable.api().clear();
 
-        for (var i=0; i<imageList.images.length; i++) {
+        imageList.forEach(function (image) {
            
-            image = imageList.images[i];
             image.is_public = image.is_public ? 'Public' : 'Private';
 
             row = dataTable.api().row.add([
@@ -132,6 +177,7 @@ var UI = (function () {
                 Utils.getDisplayableSize(image.size),
                 image.container_format,
                 image.disk_format,
+                image.region,
                 wrapper.html()
             ])
             .draw()
@@ -141,7 +187,7 @@ var UI = (function () {
             if (UI.selectedRowId && image.id === UI.selectedRowId) {
                 row.addClass('selected');
             }
-        }
+        });
     }
 
     function setLaunchInstanceEvents (launchInstanceCallback) {
@@ -162,8 +208,25 @@ var UI = (function () {
 
             var row = $(this).parent().parent();
             var data = dataTable.api().row(row).data();
-
-            JSTACK.Nova.createserver(data[1] + '__instance', data[0], 1, key_name, user_data, security_groups, min_count, max_count, availability_zone, networks, block_device_mapping, metadata, launchInstanceCallback, onerror, "Spain2");
+            var regions = Region.getCurrentRegions();
+            
+            regions.forEach(function (region) {
+                JSTACK.Nova.createserver(data[1] + '__instance',
+                    data[0],
+                    1,
+                    key_name,
+                    user_data,
+                    security_groups,
+                    min_count,
+                    max_count,
+                    availability_zone,
+                    networks,
+                    block_device_mapping,
+                    metadata,
+                    launchInstanceCallback,
+                    onerror,
+                    region);
+            });
         });
     }
 
@@ -212,6 +275,8 @@ var UI = (function () {
         // Pagination style
         $('#images_table_paginate').addClass('pagination pull-right');
 
+        createRegionSelector();
+        createRegionsButton($('#images_table_paginate'));
         createModalButton($('#images_table_paginate'));
         createSearchField($('#images_table_paginate'));
         createRefreshButton($('#images_table_paginate'), refreshCallback);
@@ -239,19 +304,19 @@ var UI = (function () {
 
         hiddenColumns = [];
         
-        for (var i=0; i<preferenceList.length; i++) {
+        preferenceList.forEach(function (preference, index) {
 
-            display = MashupPlatform.prefs.get(preferenceList[i]);
+            display = MashupPlatform.prefs.get(preference);
             
             if (!display) {
-                hiddenColumns.push(i);
+                hiddenColumns.push(index);
             }
 
             if (dataTable) {
-                dataTable.api().column(i).visible(display, false);
+                dataTable.api().column(index).visible(display, false);
             }
 
-        }
+        });
 
         // Recalculate all columns size at once
         if (dataTable) {
@@ -260,7 +325,7 @@ var UI = (function () {
 
     }
 
-    function drawImages (callbacks, imageList) {
+    function drawImages (callbacks, imageList, autoRefresh) {
 
         // Save previous scroll and page
         var scroll = $(window).scrollTop();
@@ -275,10 +340,12 @@ var UI = (function () {
         // Restore previous scroll and page
         $(window).scrollTop(scroll);
         dataTable.api().page(page).draw(false);
-        
-        setTimeout(function () {
-            callbacks.getImageList();
-        }, 4000);
+
+        if (autoRefresh) {
+            setTimeout(function () {
+                callbacks.getImageList(true);
+            }, 4000);
+        }
         
         initFixedHeader();
     }

@@ -165,7 +165,7 @@ describe('Test Image Table', function () {
         expect(rows.length).toBeGreaterThan(0);
     });
 
-    it('should call error callback for authenticate correctly', function () {
+    it('should call error callback when authentication fails', function () {
         
         var consoleSpy = spyOn(console, "log"); // REFACTOR
 
@@ -274,6 +274,7 @@ describe('Test Image Table', function () {
             'Name',
             'Status',
             'Updated',
+            'Region',
             'Actions'
         ];
 
@@ -296,6 +297,7 @@ describe('Test Image Table', function () {
             'Size',
             'Container format',
             'Disk format',
+            'Region',
             'Actions'
         ];
 
@@ -389,7 +391,7 @@ describe('Test Image Table', function () {
         
         expect($('.alert > strong').last().text()).toBe('Error ');
         expect($('.alert > span').last().text()).toBe('An error has occurred in FIWARE\'s Cloud. ');
-        expect($('.alert > div').last().text()).toBe(error.message + ' ' + error.body + ' ');
+        expect($('.alert > div').last().text()).toBe(error.message + ' ' + error.body + ' ' + error.region + ' ');
 
     });
 
