@@ -62,7 +62,15 @@ module.exports = function(grunt) {
       },
 
       all: {
+        configFile: 'karma.conf.js'
+      },
+
+      debug: {
         configFile: 'karma.conf.js',
+        options: {
+          preprocessors: [],
+          singleRun: false
+        }
       }
     },
 
