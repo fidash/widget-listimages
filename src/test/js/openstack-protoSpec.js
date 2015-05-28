@@ -8,50 +8,56 @@ describe('Test Image Table', function () {
     var respAuthenticate = null;
     var imageListSingleImage = null;
     var prefsValues;
+
     var units = [
         {
             "unit": "B",
-            "value": 1,
+            "bytes": 1,
             "expected": "1 B"
         },
         {
             "unit": "kiB",
-            "value": 135821,
+            "bytes": 1024,
+            "expected": "1.00 kiB"
+        },
+        {
+            "unit": "kiB",
+            "bytes": 135821,
             "expected": "132.64 kiB"
         },
         {
             "unit": "MiB",
-            "value": 12358468,
+            "bytes": 12358468,
             "expected": "11.79 MiB"
         },
         {
             "unit": "GiB",
-            "value": 4532282751,
+            "bytes": 4532282751,
             "expected": "4.22 GiB"
         },
         {
             "unit": "TiB",
-            "value": 5423864125103,
+            "bytes": 5423864125103,
             "expected": "4.93 TiB"
         },
         {
             "unit": "PiB",
-            "value": 1452687412365789,
+            "bytes": 1452687412365789,
             "expected": "1.29 PiB"
         },
         {
             "unit": "EiB",
-            "value": 4125369753962148752,
+            "bytes": 4125369753962148752,
             "expected": "3.58 EiB"
         },
         {
             "unit": "ZiB",
-            "value": 4756123651742368426957,
+            "bytes": 4756123651742368426957,
             "expected": "4.03 ZiB"
         },
         {
             "unit": "YiB",
-            "value": 5123698741236987412369874,
+            "bytes": 5123698741236987412369874,
             "expected": "4.24 YiB"
         }
     ];
@@ -367,7 +373,7 @@ describe('Test Image Table', function () {
             var handlePreferences;
             var imageData = imageListSingleImage.images[0];
             var sizeCopy = imageData.size;
-            imageData.size = unit.value;
+            imageData.size = unit.bytes;
             prefsValues["MashupPlatform.prefs.get"].size = true;
             callListImage();
             callListImageSuccessCallback(imageListSingleImage);

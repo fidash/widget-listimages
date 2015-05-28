@@ -8,6 +8,7 @@ var Utils = (function () {
 
     function getDisplayableSize (size) {
         
+        var unitChangeLimit = 1024;
         var units = [
             "B",
             "kiB",
@@ -23,12 +24,12 @@ var Utils = (function () {
         var displayableSize = size;
         var unit = 0;
 
-        if (size <= 1024) {
+        if (size < unitChangeLimit) {
             return size + ' ' + units[0];
         }
 
-        while (parseFloat(displayableSize/1024) > parseFloat(1) && unit < 9) {
-            displayableSize /= 1024;
+        while (parseFloat(displayableSize/unitChangeLimit) >= parseFloat(1) && unit < 9) {
+            displayableSize /= unitChangeLimit;
             unit += 1;
         }
 
