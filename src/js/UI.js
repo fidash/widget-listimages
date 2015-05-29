@@ -148,7 +148,7 @@ var UI = (function () {
         $('#region-selector').toggleClass('slideRight');
     }
 
-    function buildTableBody (imageList, region) {
+    function buildTableBody (imageList) {
 
         var row, image;
 
