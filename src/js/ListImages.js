@@ -113,7 +113,7 @@ var ListImages = (function (JSTACK) {
                     "launchInstanceCallback": launchInstanceCallback
                 };
 
-                UI.drawImages(callbacks, currentImageList, autoRefresh);
+                UI.drawImages(callbacks, autoRefresh, currentImageList);
                 drawErrors();
             }
         }

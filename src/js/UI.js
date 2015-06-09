@@ -251,13 +251,14 @@ var UI = (function () {
     }
 
     function initFixedHeader () {
-        // Fixed header
+
         UI.fixedHeader = new $.fn.dataTable.FixedHeader(dataTable);
 
         $(window).resize(function () {
             UI.fixedHeader._fnUpdateClones(true); // force redraw
             UI.fixedHeader._fnUpdatePositions();
         });
+        
     }
 
 
@@ -325,7 +326,7 @@ var UI = (function () {
 
     }
 
-    function drawImages (callbacks, imageList, autoRefresh) {
+    function drawImages (callbacks, autoRefresh, imageList) {
 
         // Save previous scroll and page
         var scroll = $(window).scrollTop();
