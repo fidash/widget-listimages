@@ -225,7 +225,7 @@ var UI = (function () {
                 metadata,
                 launchInstanceCallback,
                 onerror,
-                region);
+                "Spain2");
         });
     }
 
