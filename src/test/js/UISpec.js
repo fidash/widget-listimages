@@ -286,6 +286,9 @@ describe('User Interface', function () {
         UI.startLoadingAnimation($('.loading'), $('.loading i'));
 
         expect($('.loading i').css('font-size')).toBe(Math.floor(bodyWidth/4) + 'px');
+
+        // Return to original state
+        UI.stopLoadingAnimation($('.loading'));
     });
 
     it('should start loading animation with height lesser than the width', function () {
@@ -298,6 +301,9 @@ describe('User Interface', function () {
         UI.startLoadingAnimation($('.loading'), $('.loading i'));
 
         expect($('.loading i').css('font-size')).toBe(Math.floor(bodyHeight/4) + 'px');
+
+        // Return to original state
+        UI.stopLoadingAnimation($('.loading'));
     });
 
     it('should correctly search images when new data is introduced in the input field', function () {
