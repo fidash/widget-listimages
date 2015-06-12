@@ -157,21 +157,6 @@ var ListImages = (function (JSTACK) {
 
     function init () {
 
-        $('input[name=image]').change(function () {
-            if ($(this).val() === "file") {
-                $('#x-image-meta-file').prop('disabled', false);
-                $('#x-image-meta-location')
-                    .prop('disabled', true)
-                    .val('');
-            }
-            else {
-                $('#x-image-meta-file')
-                    .prop('disabled', true)
-                    .val('');
-                $('#x-image-meta-location').prop('disabled', false);
-            }
-        });
-
         // Initialize preferences
         handlePreferences();
 

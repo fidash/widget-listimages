@@ -163,7 +163,7 @@ var UI = (function () {
         dataTable.api().clear();
 
         imageList.forEach(function (image) {
-           
+
             image.is_public = image.is_public ? 'Public' : 'Private';
 
             row = dataTable.api().row.add([
@@ -261,6 +261,23 @@ var UI = (function () {
         
     }
 
+    function initFileChooserEvents () {
+        $('input[name=image]').change(function () {
+            if ($(this).val() === "file") {
+                $('#x-image-meta-file').prop('disabled', false);
+                $('#x-image-meta-location')
+                    .prop('disabled', true)
+                    .val('');
+            }
+            else {
+                $('#x-image-meta-file')
+                    .prop('disabled', true)
+                    .val('');
+                $('#x-image-meta-location').prop('disabled', false);
+            }
+        });
+    }
+
 
     /******************************************************************/
     /*                 P U B L I C   F U N C T I O N S                */
@@ -277,6 +294,7 @@ var UI = (function () {
         $('#images_table_paginate').addClass('pagination pull-right');
 
         createRegionSelector();
+        initFileChooserEvents();
         createRegionsButton($('#images_table_paginate'));
         createModalButton($('#images_table_paginate'));
         createSearchField($('#images_table_paginate'));
