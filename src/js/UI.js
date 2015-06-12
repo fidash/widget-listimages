@@ -77,6 +77,9 @@ var UI = (function () {
             if (focusState) {
                 searchInput.focus();
             }
+            else {
+                searchInput.blur();
+            }
         });
 
         searchInput.on( 'keyup', function () {
@@ -125,20 +128,18 @@ var UI = (function () {
         });
 
         regions.forEach(function(region) {
+            var checked = false;
             $('<div>')
                 .html('<input type="checkbox" name="region" value="' + region + '" /> ' + region)
                 .addClass('region-container')
                 .click(function (e) {
                     var input = $('input', this);
+                    checked = !checked; 
+
                     input.toggleClass('selected');
-                    if (input.prop('checked')) {
-                        input.prop('checked', false);
-                        Region.setCurrentRegions(regionSelector);
-                    }
-                    else {
-                        input.prop('checked', true);
-                        Region.setCurrentRegions(regionSelector);
-                    }
+                    input.prop('checked', checked);
+
+                    Region.setCurrentRegions(regionSelector);
                 })
                 .appendTo(regionSelector);
         });
@@ -210,23 +211,21 @@ var UI = (function () {
             var data = dataTable.api().row(row).data();
             var regions = Region.getCurrentRegions();
             
-            regions.forEach(function (region) {
-                JSTACK.Nova.createserver(data[1] + '__instance',
-                    data[0],
-                    1,
-                    key_name,
-                    user_data,
-                    security_groups,
-                    min_count,
-                    max_count,
-                    availability_zone,
-                    networks,
-                    block_device_mapping,
-                    metadata,
-                    launchInstanceCallback,
-                    onerror,
-                    region);
-            });
+            JSTACK.Nova.createserver(data[1] + '__instance',
+                data[0],
+                1,
+                key_name,
+                user_data,
+                security_groups,
+                min_count,
+                max_count,
+                availability_zone,
+                networks,
+                block_device_mapping,
+                metadata,
+                launchInstanceCallback,
+                onerror,
+                region);
         });
     }
 

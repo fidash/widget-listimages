@@ -1,6 +1,6 @@
 /* global Region */
 
-describe('Test Region Module', function () {
+describe('Region Module', function () {
     "use strict";
 
     var catalog = null;

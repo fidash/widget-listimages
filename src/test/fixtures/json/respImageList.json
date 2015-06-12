@@ -1,6 +1,7 @@
 {  
   "images":[  
     {  
+      "region": "Prague",
       "status":"active",
       "name":"RealVirtualInteractionGE-3.3.3",
       "deleted":false,
@@ -23,6 +24,7 @@
       "size":3767730176
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"2D3DCapture-3.3.3",
       "deleted":false,
@@ -45,6 +47,7 @@
       "size":4492492800
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"GIS-3.3.3",
       "deleted":false,
@@ -67,6 +70,7 @@
       "size":6279266304
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"UTBigDataAssign5",
       "deleted":false,
@@ -88,6 +92,7 @@
       "size":4664459264
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"Alex_vm",
       "deleted":false,
@@ -109,6 +114,7 @@
       "size":2020671488
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"VM_alex",
       "deleted":false,
@@ -130,6 +136,7 @@
       "size":1875836928
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"vamos",
       "deleted":false,
@@ -151,6 +158,7 @@
       "size":3709337600
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"primera snap",
       "deleted":false,
@@ -172,6 +180,7 @@
       "size":3154575360
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"WebTundraClient",
       "deleted":false,
@@ -193,6 +202,7 @@
       "size":3741646848
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"UTBigDataAssign4",
       "deleted":false,
@@ -214,6 +224,7 @@
       "size":4433510400
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"UTBigDataAssign3",
       "deleted":false,
@@ -235,6 +246,7 @@
       "size":4415815680
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"ubuntu12.04init",
       "deleted":false,
@@ -257,6 +269,7 @@
       "size":2057699328
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"VirtualCharacters",
       "deleted":false,
@@ -279,6 +292,7 @@
       "size":3739090944
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"UTBigDataAssignment2Kafka",
       "deleted":false,
@@ -300,6 +314,7 @@
       "size":4593483776
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"CentOS-7-x64",
       "deleted":false,
@@ -321,6 +336,7 @@
       "size":1212612608
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"3D-UI-XML3D",
       "deleted":false,
@@ -343,6 +359,7 @@
       "size":3750887424
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"CentOS-6.3init",
       "deleted":false,
@@ -365,6 +382,7 @@
       "size":3472949248
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"kernel_ub1204_3.2.0-29-amd64",
       "deleted":false,
@@ -386,6 +404,7 @@
       "size":4960752
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"ramdisk_ub1204_3.2.0-29-amd64",
       "deleted":false,
@@ -407,6 +426,7 @@
       "size":14207719
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"Ubuntu14.04init",
       "deleted":false,
@@ -429,6 +449,7 @@
       "size":3710320640
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"augmented-reality-img",
       "deleted":false,
@@ -453,6 +474,7 @@
       "size":10737418240
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"CentOS-6.3-x86_64",
       "deleted":false,
@@ -474,6 +496,7 @@
       "size":3041132544
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"kurento-image-R5.0.4",
       "deleted":false,
@@ -496,6 +519,7 @@
       "size":3849977856
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"CentOS-6.5init",
       "deleted":false,
@@ -518,6 +542,7 @@
       "size":4302372864
     },
     {  
+      "region": "Prague",
       "status":"active",
       "name":"2d-ui-r3.3.3",
       "deleted":false,

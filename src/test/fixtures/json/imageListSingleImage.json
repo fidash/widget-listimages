@@ -20,7 +20,8 @@
       "is_public":true,
       "deleted_at":null,
       "min_ram":0,
-      "size":3767730176
+      "size":3767730176,
+      "region": "Prague"
     }
   ]
 }
