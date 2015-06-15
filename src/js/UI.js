@@ -302,6 +302,8 @@ var UI = (function () {
         // Set modal create image button click
         $('#create-image').on('click', modalSubmitCallback);
 
+        initFixedHeader();
+        
     }
 
     function updateHiddenColumns () {
@@ -353,8 +355,6 @@ var UI = (function () {
         setLaunchInstanceEvents(callbacks.launchInstanceCallback);
         setSelectImageEvents();
 
-        dataTable.api().columns.adjust().draw();
-
         // Restore previous scroll and page
         $(window).scrollTop(scroll);
         dataTable.api().page(page).draw(false);
@@ -364,8 +364,6 @@ var UI = (function () {
                 callbacks.getImageList(true);
             }, 4000);
         }
-        
-        initFixedHeader();
     }
 
     function startLoadingAnimation (element, icon) {
