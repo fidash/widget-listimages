@@ -14,6 +14,7 @@
 
         // Vendor files
         'src/test/vendor/*.js',
+        'node_modules/jasmine-utils/src/jasmine-utils.js',
         'node_modules/jquery/dist/jquery.js',
         'node_modules/datatables/media/js/jquery.dataTables.js',
         'node_modules/bootstrap/dist/js/bootstrap.min.js',

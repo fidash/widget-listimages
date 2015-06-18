@@ -10,10 +10,6 @@ describe('List Image', function () {
 
     beforeEach(function() {
 
-        JSTACK.Keystone = jasmine.createSpyObj("Keystone", ["init", "authenticate", "gettenants", "params"]);
-        JSTACK.Nova = jasmine.createSpyObj("Nova", ["getimagelist", "createimage", "createserver"]);
-
-
         // Set strategy
         MashupPlatform.setStrategy(new MyStrategy(), undefined);
 
@@ -28,6 +24,15 @@ describe('List Image', function () {
         // Create new instance
         listImages = new ListImages();
         listImages.init();
+
+    });
+
+    afterEach(function () {
+
+        MashupPlatform.reset();
+        jasmine.resetAll(JSTACK.Keystone);
+        jasmine.resetAll(JSTACK.Nova);
+
     });
 
 
@@ -118,16 +123,15 @@ describe('List Image', function () {
 
     it('should call getserverlist 4 seconds after receiving the last update', function () {
 
-        var expectedCount, refresh;
+        var refresh;
         var setTimeoutSpy = spyOn(window, 'setTimeout');
 
         callListImage();
         callListImageSuccessCallback(imageListSingleImage);
-        expectedCount = JSTACK.Nova.getimagelist.calls.count() + 1;
         refresh = setTimeout.calls.mostRecent().args[0];
         refresh();
 
-        expect(JSTACK.Nova.getimagelist.calls.count()).toEqual(expectedCount);
+        expect(JSTACK.Nova.getimagelist).toHaveBeenCalled();
         expect(setTimeoutSpy).toHaveBeenCalledWith(jasmine.any(Function), 4000);
     });
 

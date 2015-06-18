@@ -22,14 +22,17 @@ describe('Region Module', function () {
 
         regionSelector = $('#region-selector');
 
-        JSTACK.Keystone = jasmine.createSpyObj("Keystone", ["params"]);
         JSTACK.Keystone.params.access = {
             "serviceCatalog": catalog
         };
+
     });
 
     afterEach(function () {
+
         $('input').prop('checked', false);
+        jasmine.resetAll(JSTACK.Keystone);
+
     });
 
     xit('should return the platform region when there is one and there are no current regions', function () {
