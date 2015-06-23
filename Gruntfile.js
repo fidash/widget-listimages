@@ -142,6 +142,12 @@ module.exports = function(grunt) {
           livereload: true
         }
       }
+    },
+
+    wirecloud: {
+      publish: {
+        file: 'build/<%= pkg.vendor %>_<%= pkg.name %>_<%= pkg.version %>-dev.wgt'
+      }
     }
   });
 
@@ -154,6 +160,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-text-replace');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-wirecloud');
 
   grunt.registerTask('manifest', 'Creates a manifest.json file', function() {
 
