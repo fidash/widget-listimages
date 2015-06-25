@@ -10,11 +10,12 @@ var UI = (function () {
     /*                P R I V A T E   F U N C T I O N S               */
     /******************************************************************/
 
-    function selectImage (id) {
+    function selectImage (id, region) {
         var data = {
             'id': id,
             'access': JSTACK.Keystone.params.access,
-            'token': JSTACK.Keystone.params.token
+            'token': JSTACK.Keystone.params.token,
+            'region': region
         };
         MashupPlatform.wiring.pushEvent('image_id', JSON.stringify(data));
     }
@@ -238,6 +239,7 @@ var UI = (function () {
         $('#images_table tbody').on('click', 'tr', function () {
             var data = dataTable.api().row(this).data();
             var id = data[0];
+            var region = data[data.length - 2];
             UI.selectedRowId = id;
 
             dataTable.api().row('.selected')
@@ -245,7 +247,7 @@ var UI = (function () {
                 .to$()
                 .removeClass('selected');
             $(this).addClass('selected');
-            selectImage(id);
+            selectImage(id, region);
         });
     }
 
