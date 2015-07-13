@@ -93,7 +93,8 @@ var ListImages = (function (JSTACK) {
     }
 
     function authError (error) {
-        onError(error);
+        error = error.error;
+        onError({message: error.code + " " + error.title, body: error.message, region: "IDM"});
         authenticate();
     }
 

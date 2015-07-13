@@ -106,8 +106,8 @@ describe('List Image', function () {
         var consoleSpy = spyOn(console, "log"); // REFACTOR
 
         callListImage();
-        callAuthenticateWithError('Test successful');
-        expect(consoleSpy.calls.mostRecent().args[0]).toBe('Error: "Test successful"');
+        callAuthenticateWithError({"error": {"message": "An unexpected error prevented the server from fulfilling your request.", "code": 500, "title": "Internal Server Error"}});
+        expect(consoleSpy.calls.mostRecent().args[0]).toBe("Error: " + JSON.stringify({message: "500 Internal Server Error", body: "An unexpected error prevented the server from fulfilling your request.", region: "IDM"}));
     });
 
     it('should call error callback for getImageList correctly', function () {
