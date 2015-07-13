@@ -1,7 +1,7 @@
 {
   "name": "OpenStack-ListImage",
   "homepage": "https://repo.conwet.fi.upm.es/wirecloud/openstack-listimages-widget",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "vendor": "CoNWeT",
   "author": "CoNWeT Lab., Universidad Politecnica de Madrid",
   "description": "A widget showing a list of current images available for a user of an openstack instance.",

@@ -210,7 +210,7 @@ var UI = (function () {
 
             var row = $(this).parent().parent();
             var data = dataTable.api().row(row).data();
-            var regions = Region.getCurrentRegions();
+            var region = data[data.length - 2];
             
             JSTACK.Nova.createserver(data[1] + '__instance',
                 data[0],
@@ -226,7 +226,7 @@ var UI = (function () {
                 metadata,
                 launchInstanceCallback,
                 onerror,
-                "Spain2");
+                region);
         });
     }
 
