@@ -37,16 +37,22 @@
                 </div>
                 <div class="form-group ">
                   <label class="control-label  " for="x-image-meta-file">Image File</label>
-                  <span class="help-icon" data-toggle="tooltip" data-placement="top" title="Un archivo local que subir como imagen."><span class="glyphicon glyphicon-question-sign"></span></span>
-                  <div class=" ">
-                    <input type="radio" name="image" class="form-control" value="file" checked="checked" /> <input type="file" class="form-control" id="x-image-meta-file" name="x-image-meta-file" />
+                  <span class="help-icon" data-toggle="tooltip" data-placement="top" title="A local file uploaded as an image."><span class="glyphicon glyphicon-question-sign"></span></span>
+                  <div class="input-group">
+                    <span class="input-group-addon">
+                      <input type="radio" name="image" value="file" checked="checked" />
+                    </span>
+                    <input type="file" class="form-control" id="x-image-meta-file" name="x-image-meta-file" />
                   </div>
                 </div>
                 <div class="form-group ">
                   <label class="control-label  " for="x-image-meta-location">Image URL</label>
                   <span class="help-icon" data-toggle="tooltip" data-placement="top" title="Una (HTTP) URL externa desde la que cargar la imagen."><span class="glyphicon glyphicon-question-sign"></span></span>
-                  <div class=" ">
-                      <input type="radio" name="image" class="form-control" value="location" /> <input class="form-control" id="x-image-meta-location" maxlength="255" name="x-image-meta-location" type="text" placeholder="http://example.com/image.iso" disabled="disabled" />
+                  <div class="input-group">
+                      <span class="input-group-addon">
+                        <input type="radio" name="image" value="location" />
+                      </span>
+                      <input class="form-control" id="x-image-meta-location" maxlength="255" name="x-image-meta-location" type="text" placeholder="http://example.com/image.iso" disabled="disabled" />
                       
                   </div>
                 </div>
