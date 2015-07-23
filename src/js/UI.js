@@ -279,6 +279,25 @@ var UI = (function () {
         });
     }
 
+    function createFormRegionSelector () {
+        
+        var availableRegions = Region.getAvailableRegions();
+        var currentRegions = Region.getCurrentRegions();
+        var regionFormSelector = $('#id_region');
+
+        availableRegions.forEach(function (region) {
+            $('<option>')
+                .val(region)
+                .text(region)
+                .appendTo(regionFormSelector);
+        });
+
+        if (currentRegions.length === 1) {
+            $('option[value=' + currentRegions[0] + ']').attr('default', true);
+        }
+
+    }
+
 
     /******************************************************************/
     /*                 P U B L I C   F U N C T I O N S                */
@@ -295,6 +314,7 @@ var UI = (function () {
         $('#images_table_paginate').addClass('pagination pull-right');
 
         createRegionSelector();
+        createFormRegionSelector();
         initFileChooserEvents();
         createRegionsButton($('#images_table_paginate'));
         createModalButton($('#images_table_paginate'));

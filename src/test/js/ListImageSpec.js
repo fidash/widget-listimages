@@ -138,16 +138,19 @@ describe('List Image', function () {
     it('should call createImage function when click event is triggered on the create image button', function () {
 
         var createButton = $("#create-image");
-        var spyEvent;
+        var spyEvent, region;
 
         callListImage();
         callListImageSuccessCallback(respImageList);
+
+        region = $('#id_region').find(":selected").val();
+        
         $('#x-image-meta-name').val("ImageName");
         spyEvent = spyOnEvent(createButton, 'click');
         createButton.trigger('click');
 
         expect('click').toHaveBeenTriggeredOn('#create-image');
-        expect(MashupPlatform.http.makeRequest).toHaveBeenCalledWith('https://cloud.lab.fiware.org/Spain2/image/v1/images', jasmine.any(Object));
+        expect(MashupPlatform.http.makeRequest).toHaveBeenCalledWith('https://cloud.lab.fiware.org/' + region + '/image/v1/images', jasmine.any(Object));
 
     });
 

@@ -127,7 +127,6 @@ describe('User Interface', function () {
         // Callbacks spies
         drawCallbacks = jasmine.createSpyObj('drawCallbacks', ['refresh', 'create']);
 
-        // Draw default columns
         UI.createTable(drawCallbacks.refresh, drawCallbacks.create);
         UI.updateHiddenColumns();
     });

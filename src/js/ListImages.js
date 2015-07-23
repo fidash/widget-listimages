@@ -212,19 +212,17 @@ var ListImages = (function (JSTACK) {
         var file = $('#x-image-meta-file').val() !== "" ? $('#x-image-meta-file')[0].files[0] : "";
         var glanceURL = "";
 
-        var regions =  Region.getCurrentRegions();
+        var region = $('#id_region').find(":selected").val();
 
-        regions.forEach(function (region) {
-            glanceURL = "https://cloud.lab.fiware.org/" + region + "/image/v1/images";
+        glanceURL = "https://cloud.lab.fiware.org/" + region + "/image/v1/images";
 
-            // Call OpenStack API
-            MashupPlatform.http.makeRequest(glanceURL, {
-                requestHeaders: headers,
-                contentType: content,
-                postBody: file,
-                onSuccess: getImageList,
-                onFailure: onError
-            });
+        // Call OpenStack API
+        MashupPlatform.http.makeRequest(glanceURL, {
+            requestHeaders: headers,
+            contentType: content,
+            postBody: file,
+            onSuccess: getImageList,
+            onFailure: onError
         });
 
         // Reset form, prevent submit and close modal
