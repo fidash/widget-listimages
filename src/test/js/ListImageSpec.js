@@ -32,6 +32,7 @@ describe('List Image', function () {
         MashupPlatform.reset();
         jasmine.resetAll(JSTACK.Keystone);
         jasmine.resetAll(JSTACK.Nova);
+        $('.FixedHeader_Cloned.fixedHeader.FixedHeader_Header > table').empty();
 
     });
 
