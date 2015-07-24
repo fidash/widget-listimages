@@ -43,7 +43,7 @@ var ListImages = (function (JSTACK) {
 
     }
 
-    function readCreateImageForm (form) {
+    function readFormFields (form) {
 
         var fields = {};
 
@@ -206,7 +206,7 @@ var ListImages = (function (JSTACK) {
 
         var token = JSTACK.Keystone.params.token;
         var form = $('#create_image_form');
-        var headers = readCreateImageForm(form);
+        var headers = readFormFields(form);
         headers['X-Auth-Token'] = token;
         var content = $('input[type=radio][name=image]').val() == 'file' ? "application/octet-stream" : "application/json";
         var file = $('#x-image-meta-file').val() !== "" ? $('#x-image-meta-file')[0].files[0] : "";
