@@ -92,7 +92,7 @@ var UI = (function () {
 
         $('<button>')
             .html('<i class="fa fa-plus"></i>')
-            .addClass('btn btn-primary action-button pull-left')
+            .addClass('btn btn-success action-button pull-left')
             .attr('data-toggle', 'modal')
             .attr('data-target', '#uploadImageModal')
             .insertBefore(nextElement);
@@ -110,7 +110,7 @@ var UI = (function () {
     function createRegionsButton (nextElement) {
         $('<button>')
             .html('<i class="fa fa-globe"></i>')
-            .addClass('btn btn-default action-button pull-left')
+            .addClass('btn btn-primary action-button pull-left')
             .click(toggleRegionSelector)
             .insertBefore(nextElement);
     }
