@@ -1,4 +1,4 @@
-#OpenStack List Image Widget
+#List Images Widget
 
 This project is part of [FIWARE](https://www.fiware.org/). This widget is part of FI-Dash component included in FIWARE.
 
