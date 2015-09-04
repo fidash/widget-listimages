@@ -24,7 +24,7 @@
     <preference name="disk_format" type="boolean" description="Activate to display the disk format column" label="Disk format" default="false" />
   </preferences>
   <wiring>
-    <outputendpoint name="image_id" type="text" label="Image ID" description="Sends image ID and OpenStack access." friendcode="image_id"/>
+    <outputendpoint name="image_id" type="text" label="Image ID" description="Sends the image ID and OpenStack access." friendcode="image_id"/>
   </wiring>
   <contents src="index.html" useplatformstyle="true"/>
   <rendering height="25" width="9"/>
