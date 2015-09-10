@@ -1454,7 +1454,7 @@ JSTACK.Nova = (function (JS, undefined) {
         if (!check(region)) {
             return;
         }
-        url = params.url + '/flavors';
+        url = "https://cloud.lab.fiware.org/" + region + "/compute/v2/" + JS.Keystone.params.access.project.id + "/flavors";
         if (detailed !== undefined && detailed) {
             url += '/detail';
         }
@@ -3102,7 +3102,8 @@ JSTACK.Neutron = (function(JS, undefined) {
         if (JS.Keystone !== undefined && JS.Keystone.params.currentstate === JS.Keystone.STATES.AUTHENTICATED) {
             var service = JS.Keystone.getservice("network");
             if (service) {
-                params.url = JSTACK.Comm.getEndpoint(service, region, params.endpointType);
+                //params.url = JSTACK.Comm.getEndpoint(service, region, params.endpointType);
+                params.url = 'https://cloud.lab.fiware.org/' + region + '/network/';
                 return true;
             }
             return false;

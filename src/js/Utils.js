@@ -85,12 +85,18 @@ var Utils = (function () {
 
     }
 
-    function byteToGiB (bytes) {
+    function convertToGiB (size, unit) {
 
+        var unitToGiB = {
+            "B": 3,
+            "KiB": 2,
+            "MiB": 1,
+            "GiB": 0
+        };
         var unitChangeLimit = 1024;
-        var result = bytes;
+        var result = size;
 
-        for (var i=0; i<3; i++) {
+        for (var i=0; i<unitToGiB[unit]; i++) {
             result = parseFloat(result/unitChangeLimit);
         }
 
@@ -100,6 +106,6 @@ var Utils = (function () {
     return {
         getDisplayableSize: getDisplayableSize,
         createAlert: createAlert,
-        byteToGiB: byteToGiB
+        convertToGiB: convertToGiB
     };
 })();

@@ -39,7 +39,7 @@ var ListImages = (function (JSTACK) {
 
     function getFittingFlavor (flavorList, imageSize) {
         for (var flavor in flavorList) {
-            if (Utils.byteToGiB(imageSize) < flavorList[flavor].disk) {
+            if (imageSize < flavorList[flavor].disk) {
                 return flavorList[flavor].id;
             }
         }

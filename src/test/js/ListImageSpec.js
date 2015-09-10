@@ -165,7 +165,7 @@ describe('List Image', function () {
             id: "12345",
             name: "testImage",
             region: "someRegion",
-            size: "3000000000"
+            size: 1.3
         };
         var getNetworks, createServer;
 

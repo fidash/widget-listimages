@@ -196,9 +196,11 @@ var UI = (function () {
         $('#images_table tbody tr td').on('click', 'button', function () {
             var rowElement = $(this).parent().parent();
             var data = dataTable.api().row(rowElement).data();
+            var sizeInGiB = parseFloat(data[7].split(" ")[0]);
             var image = {
                 id: data[0],
                 name: data[1],
+                size: sizeInGiB,
                 region: data[data.length - 2]
             };
 
