@@ -20,8 +20,8 @@ var Utils = (function () {
             "ZiB",
             "YiB",
         ];
-        size = parseFloat(size);
-        var displayableSize = size;
+
+        var displayableSize = parseFloat(size);
         var unit = 0;
 
         if (size < unitChangeLimit) {
