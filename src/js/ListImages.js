@@ -22,6 +22,7 @@ var ListImages = (function (JSTACK) {
         this.authenticate = authenticate;
         this.listImage = getImageList;
         this.createImage = createImage;
+        this.launchImage = launchImage;
 
     }
 
@@ -36,11 +37,22 @@ var ListImages = (function (JSTACK) {
 
     }
 
-    function launchInstanceCallback (response) {
+    function getFittingFlavor (flavorList, imageSize) {
+        for (var flavor in flavorList) {
+            if (Utils.byteToGiB(imageSize) < flavorList[flavor].disk) {
+                return flavorList[flavor].id;
+            }
+        }
+    }
 
-        // Show instance created message
-        console.log("New instance created");
+    function getNetworksObject (networkList) {
+        var networks = [];
 
+        networkList.forEach(function (network) {
+            networks.push({uuid: network.id});
+        });
+
+        return networks;
     }
 
     function readFormFields (form) {
@@ -111,7 +123,7 @@ var ListImages = (function (JSTACK) {
 
                 var callbacks = {
                     "getImageList": getImageList,
-                    "launchInstanceCallback": launchInstanceCallback
+                    "launch": launchImage
                 };
 
                 UI.drawImages(callbacks, autoRefresh, currentImageList);
@@ -240,6 +252,51 @@ var ListImages = (function (JSTACK) {
         regions.forEach(function (region) {
             JSTACK.Nova.getimagelist(true, joinRegions.success.bind(null, region), joinRegions.error.bind(null, region), region);
         });
+    }
+
+    function launchImage (image) {
+
+        // Undefined parameters
+        var key_name,
+            user_data,
+            security_groups = [],
+            min_count = "1",
+            max_count = "1",
+            availability_zone,
+            block_device_mapping,
+            metadata = {region: image.region};
+
+        JSTACK.Nova.getflavorlist(true, function (flavorResponse) {
+            
+            var selectedFlavorId = getFittingFlavor(flavorResponse.flavors, image.size);
+
+            JSTACK.Neutron.getnetworkslist(function (networkResponse) {
+
+                var networks = getNetworksObject(networkResponse);
+
+                JSTACK.Nova.createserver(
+                    image.name + '__instance',
+                    image.id,
+                    selectedFlavorId,
+                    key_name,
+                    user_data,
+                    security_groups,
+                    min_count,
+                    max_count,
+                    availability_zone,
+                    networks,
+                    block_device_mapping,
+                    metadata,
+                    function () {
+                        console.log("Instance launched successfully.");
+                    },
+                    onerror,
+                    image.region
+                );
+
+            }.bind(this), onerror, image.region);
+        }.bind(this), onerror, image.region);
+
     }
 
     return ListImages;

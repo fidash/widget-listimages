@@ -7,6 +7,8 @@ describe('List Image', function () {
     var respImageList = null;
     var respAuthenticate = null;
     var imageListSingleImage = null;
+    var respFlavorList = null;
+    var respNetworksList = null;
 
     beforeEach(function() {
 
@@ -20,6 +22,8 @@ describe('List Image', function () {
         respImageList = getJSONFixture('respImageList.json');
         respAuthenticate = getJSONFixture('respAuthenticate.json');
         imageListSingleImage = getJSONFixture('imageListSingleImage.json');
+        respFlavorList = getJSONFixture('respFlavorList.json');
+        respNetworksList = getJSONFixture('respNetworksList.json');
 
         // Create new instance
         listImages = new ListImages();
@@ -155,17 +159,26 @@ describe('List Image', function () {
 
     });
 
-    it('should call JSTACK.Nova.createserver with the given arguments when click event is triggered on a launch button', function () {
+    it('should call JSTACK.Nova.createserver with the given arguments', function () {
 
-        var spyEvent;
+        var image = {
+            id: "12345",
+            name: "testImage",
+            region: "someRegion",
+            size: "3000000000"
+        };
+        var getNetworks, createServer;
 
         callListImage();
-        callListImageSuccessCallback(respImageList);
-        spyEvent = spyOnEvent('tbody > tr > td > button', 'click');
-        $('tbody > tr > td > button').trigger('click');
+        listImages.launchImage(image);
+        
+        getNetworks = JSTACK.Nova.getflavorlist.calls.mostRecent().args[1];
+        getNetworks(respFlavorList);
+        
+        createServer = JSTACK.Neutron.getnetworkslist.calls.mostRecent().args[0];
+        createServer(respNetworksList.networks);
 
-        expect(JSTACK.Nova.createserver).toHaveBeenCalled();
-        expect(spyEvent).toHaveBeenTriggered();
+        expect(JSTACK.Nova.createserver).toHaveBeenCalledWith(image.name + "__instance", image.id, "2", undefined, undefined, [], "1", "1", undefined, jasmine.any(Array), undefined, {"region": image.region}, jasmine.any(Function), jasmine.any(Function), image.region);
     });
 
     it('should show an error alert with the message' + 

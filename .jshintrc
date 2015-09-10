@@ -10,6 +10,7 @@
     "globalstrict": false,
     "strict": true,
     "jquery": true,
+    "validthis": true,
     "white": false,
     "quotmark": false,
     "globals": {

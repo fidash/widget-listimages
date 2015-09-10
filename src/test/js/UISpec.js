@@ -7,7 +7,7 @@ describe('User Interface', function () {
     var respImageList = null;
     var respAuthenticate = null;
     var imageListSingleImage = null;
-    var drawCallbacks;
+    var initCallbacks, drawCallbacks;
 	var prefsValues;
 	var units = [
         {
@@ -125,9 +125,10 @@ describe('User Interface', function () {
         imageListSingleImage = getJSONFixture('imageListSingleImage.json');
 
         // Callbacks spies
-        drawCallbacks = jasmine.createSpyObj('drawCallbacks', ['refresh', 'create']);
+        initCallbacks = jasmine.createSpyObj('initCallbacks', ['refresh', 'create']);
+        drawCallbacks = jasmine.createSpyObj('drawCallbacks', ['getImageList', 'launch']);
 
-        UI.createTable(drawCallbacks.refresh, drawCallbacks.create);
+        UI.createTable(initCallbacks.refresh, initCallbacks.create);
         UI.updateHiddenColumns();
     });
 
@@ -408,5 +409,18 @@ describe('User Interface', function () {
         expect('input[value=Spain2]').not.toHaveClass('selected');
         expect('input[value=Spain2]').toHaveProp('checked', false);
         
+    });
+
+    it('should call launchImage when a click event is triggered on a launch button', function () {
+
+        var spyEvent = spyOnEvent('tbody > tr button', 'click');
+        var imageId;
+
+        UI.drawImages(drawCallbacks, false, respImageList.images);
+        
+        $('tbody > tr button').trigger('click');
+
+
+
     });
 });

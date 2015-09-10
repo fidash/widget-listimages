@@ -192,41 +192,17 @@ var UI = (function () {
         });
     }
 
-    function setLaunchInstanceEvents (launchInstanceCallback) {
-
-        // Launch button events
+    function setLaunchEvent (launchCallback) {
         $('#images_table tbody tr td').on('click', 'button', function () {
-            
-            // Undefined parameters
-            var key_name,
-                user_data,
-                security_groups,
-                min_count,
-                max_count,
-                availability_zone,
-                networks,
-                block_device_mapping,
-                metadata;
+            var rowElement = $(this).parent().parent();
+            var data = dataTable.api().row(rowElement).data();
+            var image = {
+                id: data[0],
+                name: data[1],
+                region: data[data.length - 2]
+            };
 
-            var row = $(this).parent().parent();
-            var data = dataTable.api().row(row).data();
-            var region = data[data.length - 2];
-            
-            JSTACK.Nova.createserver(data[1] + '__instance',
-                data[0],
-                1,
-                key_name,
-                user_data,
-                security_groups,
-                min_count,
-                max_count,
-                availability_zone,
-                networks,
-                block_device_mapping,
-                metadata,
-                launchInstanceCallback,
-                onerror,
-                region);
+            launchCallback(image);
         });
     }
 
@@ -374,7 +350,7 @@ var UI = (function () {
         var page = dataTable.api().page();
 
         buildTableBody(imageList);
-        setLaunchInstanceEvents(callbacks.launchInstanceCallback);
+        setLaunchEvent(callbacks.launch);
         setSelectImageEvents();
 
         // Restore previous scroll and page
