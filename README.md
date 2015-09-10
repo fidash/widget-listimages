@@ -7,26 +7,26 @@ The widget displays a list of images availables to the user in FIWARE's Cloud in
 
 ## Wiring endpoints
 
-The List Images widget has the following wiring endpoints:
+The List Images widget has the following wiring output endpoints:
 
-|Way|Name|Type|Description|Label|Friendcode|
-|:--:|:--:|:--:|:--:|:--:|:--:|
-|output|image_id|text|Sends the image ID and OpenStack access.|Image ID|image_id|
+|Label|Name|Friendcode|Type|Description|
+|:--:|:--:|:--:|:--:|:--:|
+|Image ID|image_id|image_id|text|Sends the image ID and OpenStack access.|
 
 
 ## User preferences
 
 List Images has the following preferences:
 
-|Name|Type|Description|Label|Default|
+|Label|Name|Type|Default|Description|
 |:--:|:--:|:--:|:--:|:--:|
-|disk_format|boolean|Activate to display the disk format column|Disk format|false|
-|container_format|boolean|Activate to display the container format column|Container format|false|
-|size|boolean|Activate to display the size column|Size|false|
-|updated|boolean|Activate to display the updated column|Updated|false|
-|created|boolean|Activate to display the created column|Created|true|
-|checksum|boolean|Activate to display the checksum column|Checksum|false|
-|visibility|boolean|Activate to display the visibility column|Visibility|true|
-|status|boolean|Activate to display the status column|Status|true|
-|name|boolean|Activate to display the name column|Name|true|
-|id|boolean|Activate to display the id column|ID|false|
+|Disk format|disk_format|boolean|false|Activate to display the disk format column|
+|Container format|container_format|boolean|false|Activate to display the container format column|
+|Size|size|boolean|false|Activate to display the size column|
+|Updated|updated|boolean|false|Activate to display the updated column|
+|Created|created|boolean|true|Activate to display the created column|
+|Checksum|checksum|boolean|false|Activate to display the checksum column|
+|Visibility|visibility|boolean|true|Activate to display the visibility column|
+|Status|status|boolean|true|Activate to display the status column|
+|Name|name|boolean|true|Activate to display the name column|
+|ID|id|boolean|false|Activate to display the id column|
