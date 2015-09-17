@@ -258,8 +258,8 @@ describe('User Interface', function () {
             image.status,
             'Public',
             image.checksum,
-            image.created_at,
-            image.updated_at,
+            (new Date(image.created_at)).toUTCString(),
+            (new Date(image.updated_at)).toUTCString(),
             parseFloat(image.size/1024/1024/1024).toFixed(2) + " GiB",
             image.container_format,
             image.disk_format
