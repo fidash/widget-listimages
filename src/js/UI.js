@@ -234,11 +234,13 @@ var UI = (function () {
 
         UI.fixedHeader = new $.fn.dataTable.FixedHeader(dataTable);
 
-        $(window).resize(function () {
-            UI.fixedHeader._fnUpdateClones(true); // force redraw
-            UI.fixedHeader._fnUpdatePositions();
-        });
+        $(window).resize(redrawFixedHeaders);
         
+    }
+
+    function redrawFixedHeaders () {
+        UI.fixedHeader._fnUpdateClones(true); // force redraw
+        UI.fixedHeader._fnUpdatePositions();
     }
 
     function initFileChooserEvents () {
@@ -359,6 +361,10 @@ var UI = (function () {
         // Restore previous scroll and page
         $(window).scrollTop(scroll);
         dataTable.api().page(page).draw(false);
+
+        // Adjust columns and headers
+        dataTable.api().columns.adjust();
+        redrawFixedHeaders();
 
         if (autoRefresh) {
             setTimeout(function () {
