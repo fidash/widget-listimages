@@ -420,7 +420,7 @@ describe('User Interface', function () {
         
         $('tbody > tr button').trigger('click');
 
-
-
+    it('should select Spain2 by default when loading the widget', function () {
+        expect('input[value=Spain2]').toHaveProp('checked', true);
     });
 });

@@ -144,6 +144,9 @@ var UI = (function () {
                 })
                 .appendTo(regionSelector);
         });
+
+        $("div>input[type=checkbox][value=Spain2]").prop("checked", true);
+        Region.setCurrentRegions(regionSelector);
     }
 
     function toggleRegionSelector () {
@@ -393,7 +396,13 @@ var UI = (function () {
 
     }
 
+    function clearTable () {
+        dataTable.api().clear();
+        dataTable.api().draw();
+    }
+
     return {
+        clearTable: clearTable,
         createTable: createTable,
         updateHiddenColumns: updateHiddenColumns,
         drawImages: drawImages,

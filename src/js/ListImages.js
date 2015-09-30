@@ -247,11 +247,23 @@ var ListImages = (function (JSTACK) {
     function getImageList (autoRefresh) {
 
         var regions = Region.getCurrentRegions();
-        var joinRegions = createJoinRegions(regions.length, autoRefresh);
 
-        regions.forEach(function (region) {
-            JSTACK.Nova.getimagelist(true, joinRegions.success.bind(null, region), joinRegions.error.bind(null, region), region);
-        });
+        if (regions.length === 0) {
+            UI.clearTable();
+
+            // Keep refreshing even if there are no regions selected
+            if (autoRefresh) {
+                setTimeout(function () {
+                    getImageList(autoRefresh);
+                }, 4000);
+            }
+        }
+        else {
+            var joinRegions = createJoinRegions(regions.length, autoRefresh);
+            regions.forEach(function (region) {
+                JSTACK.Nova.getimagelist(true, joinRegions.success.bind(null, region), joinRegions.error.bind(null, region), region);
+            });
+        }
     }
 
     function launchImage (image) {
