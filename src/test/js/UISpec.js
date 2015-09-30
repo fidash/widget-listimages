@@ -389,36 +389,36 @@ describe('User Interface', function () {
     });
 
     it('should select a region after clicking on its selector', function () {
-        var regionSelector = $('input[value=Spain2]').parent();
+        var regionSelector = $('input[value=Crete]').parent();
 
         regionSelector.click();
 
-        expect('input[value=Spain2]').toHaveClass('selected');
-        expect('input[value=Spain2]').toHaveProp('checked', true);
+        expect('input[value=Crete]').toHaveClass('selected');
+        expect('input[value=Crete]').toHaveProp('checked', true);
 
         // Return to original state
         regionSelector.click();
     });
 
-    it('should select a region after clicking on its selector', function () {
-        var regionSelector = $('input[value=Spain2]').parent();
+    it('should deselect a region after clicking twice on its selector', function () {
+        var regionSelector = $('input[value=Crete]').parent();
 
         regionSelector.click();
         regionSelector.click();
 
-        expect('input[value=Spain2]').not.toHaveClass('selected');
-        expect('input[value=Spain2]').toHaveProp('checked', false);
+        expect('input[value=Crete]').not.toHaveClass('selected');
+        expect('input[value=Crete]').toHaveProp('checked', false);
         
     });
 
     it('should call launchImage when a click event is triggered on a launch button', function () {
-
         var spyEvent = spyOnEvent('tbody > tr button', 'click');
         var imageId;
 
         UI.drawImages(drawCallbacks, false, respImageList.images);
         
         $('tbody > tr button').trigger('click');
+    });
 
     it('should select Spain2 by default when loading the widget', function () {
         expect('input[value=Spain2]').toHaveProp('checked', true);
