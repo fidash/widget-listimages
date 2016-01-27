@@ -11,6 +11,7 @@ var UI = (function () {
     /******************************************************************/
 
     function selectImage (id, region) {
+        // ?? Sending token through wiring?
         var data = {
             'id': id,
             'access': JSTACK.Keystone.params.access,
@@ -70,7 +71,7 @@ var UI = (function () {
 
         searchButton.on('click', function () {
             focusState = !focusState;
-            
+
             searchInput.toggleClass('slideRight');
             searchButton.parent()
                 .css('z-index', 20);
@@ -106,7 +107,7 @@ var UI = (function () {
             .click(refreshCallback.bind(null, false))
             .insertBefore(nextElement);
     }
-    
+
     function createRegionsButton (nextElement) {
         $('<button>')
             .html('<i class="fa fa-globe"></i>')
@@ -123,7 +124,6 @@ var UI = (function () {
                 .css('max-height', window.innerHeight - 50)
                 .appendTo($('body'));
 
-
         $(window).resize(function () {
             regionSelector.css('max-height', window.innerHeight - 50);
         });
@@ -135,7 +135,7 @@ var UI = (function () {
                 .addClass('region-container')
                 .click(function (e) {
                     var input = $('input', this);
-                    checked = !checked; 
+                    checked = !checked;
 
                     input.toggleClass('selected');
                     input.prop('checked', checked);
@@ -238,7 +238,7 @@ var UI = (function () {
         UI.fixedHeader = new $.fn.dataTable.FixedHeader(dataTable);
 
         $(window).resize(redrawFixedHeaders);
-        
+
     }
 
     function redrawFixedHeaders () {
@@ -264,7 +264,7 @@ var UI = (function () {
     }
 
     function createFormRegionSelector () {
-        
+
         var availableRegions = Region.getAvailableRegions();
         var currentRegions = Region.getCurrentRegions();
         var regionFormSelector = $('#id_region');
@@ -279,7 +279,6 @@ var UI = (function () {
         if (currentRegions.length === 1) {
             $('option[value=' + currentRegions[0] + ']').attr('default', true);
         }
-
     }
 
 
@@ -309,7 +308,7 @@ var UI = (function () {
         $('#create-image').on('click', modalSubmitCallback);
 
         initFixedHeader();
-        
+
     }
 
     function updateHiddenColumns () {
@@ -329,11 +328,11 @@ var UI = (function () {
         ];
 
         hiddenColumns = [];
-        
+
         preferenceList.forEach(function (preference, index) {
 
             display = MashupPlatform.prefs.get(preference);
-            
+
             if (!display) {
                 hiddenColumns.push(index);
             }

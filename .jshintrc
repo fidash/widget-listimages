@@ -1,5 +1,6 @@
 {
     "browser": true,
+    "esnext": true,
     "debug": false,
     "devel": false,
     "eqnull": true,

@@ -7,7 +7,7 @@ var Utils = (function () {
     /******************************************************************/
 
     function getDisplayableSize (size) {
-        
+
         var unitChangeLimit = 1024;
         var units = [
             "B",
@@ -34,13 +34,13 @@ var Utils = (function () {
         }
 
         return displayableSize.toFixed(2) + ' ' + units[unit];
-    
+
     }
 
     function createAlert (type, title, message, region, details) {
 
         // TODO buffer previous alerts and shown them on a list
- 
+
         var alert = $('<div>')
             .addClass('alert alert-dismissible alert-' + type + ' fade in')
             .attr('role', 'alert')

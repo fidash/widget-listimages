@@ -144,9 +144,9 @@ describe('User Interface', function () {
 
     units.forEach(function (unit) {
         it('should display image size in ' + unit.unit + ' correctly', function () {
-            
+
             var imageData = imageListSingleImage.images[0];
-            
+
             // Change size value temporarily
             var sizeCopy = imageData.size;
             imageData.size = unit.bytes;
@@ -176,7 +176,7 @@ describe('User Interface', function () {
         ];
 
         UI.drawImages(drawCallbacks, false, imageListSingleImage.images);
-        
+
         columns = $('.fixedHeader th');
 
         for (var i=0; i<columns.length; i++) {
@@ -224,7 +224,7 @@ describe('User Interface', function () {
         var imageId;
 
         UI.drawImages(drawCallbacks, false, respImageList.images);
-        
+
         $('tbody > tr').trigger('click');
 
         for (var i=0; i<respImageList.images.length; i++) {
@@ -267,22 +267,22 @@ describe('User Interface', function () {
         var cell;
 
         UI.updateHiddenColumns();
-        UI.drawImages(drawCallbacks, false, imageListSingleImage.images);                
+        UI.drawImages(drawCallbacks, false, imageListSingleImage.images);
 
         for (var i=0; i<expectedTextList.length; i++) {
-            
+
             cell = $('tbody > tr > td')[i];
             expect(cell).toContainText(expectedTextList[i]);
         }
     });
 
     it('should start loading animation with width lesser than the height', function () {
-        
+
         var bodyWidth = 100;
 
         $('body').width(bodyWidth);
         $('body').height(bodyWidth + 100);
-        
+
         UI.startLoadingAnimation($('.loading'), $('.loading i'));
 
         expect($('.loading i').css('font-size')).toBe(Math.floor(bodyWidth/4) + 'px');
@@ -292,9 +292,9 @@ describe('User Interface', function () {
     });
 
     it('should start loading animation with height lesser than the width', function () {
-        
+
         var bodyHeight = 100;
-        
+
         $('body').width(bodyHeight + 100);
         $('body').height(bodyHeight);
 
@@ -309,7 +309,7 @@ describe('User Interface', function () {
     it('should correctly search images when new data is introduced in the input field', function () {
 
         var spyEvent = spyOnEvent('.search-container input', 'keyup');
-        
+
         $('.search-container input')
             .val('RealVirtualInteractionGE-3.3.3')
             .trigger('keyup');
@@ -388,39 +388,39 @@ describe('User Interface', function () {
         expect('#region-selector').not.toHaveClass('slideRight');
     });
 
-    it('should select a region after clicking on its selector', function () {
-        var regionSelector = $('input[value=Crete]').parent();
+    // it('should select a region after clicking on its selector', function () {
+    //     var regionSelector = $('input[value=Crete]').parent();
 
-        regionSelector.click();
+    //     regionSelector.click();
 
-        expect('input[value=Crete]').toHaveClass('selected');
-        expect('input[value=Crete]').toHaveProp('checked', true);
+    //     expect('input[value=Crete]').toHaveClass('selected');
+    //     expect('input[value=Crete]').toHaveProp('checked', true);
 
-        // Return to original state
-        regionSelector.click();
-    });
+    //     // Return to original state
+    //     regionSelector.click();
+    // });
 
-    it('should deselect a region after clicking twice on its selector', function () {
-        var regionSelector = $('input[value=Crete]').parent();
+    // it('should deselect a region after clicking twice on its selector', function () {
+    //     var regionSelector = $('input[value=Crete]').parent();
 
-        regionSelector.click();
-        regionSelector.click();
+    //     regionSelector.click();
+    //     regionSelector.click();
 
-        expect('input[value=Crete]').not.toHaveClass('selected');
-        expect('input[value=Crete]').toHaveProp('checked', false);
-        
-    });
+    //     expect('input[value=Crete]').not.toHaveClass('selected');
+    //     expect('input[value=Crete]').toHaveProp('checked', false);
+
+    // });
 
     it('should call launchImage when a click event is triggered on a launch button', function () {
         var spyEvent = spyOnEvent('tbody > tr button', 'click');
         var imageId;
 
         UI.drawImages(drawCallbacks, false, respImageList.images);
-        
+
         $('tbody > tr button').trigger('click');
     });
 
-    it('should select Spain2 by default when loading the widget', function () {
-        expect('input[value=Spain2]').toHaveProp('checked', true);
-    });
+    // it('should select Spain2 by default when loading the widget', function () {
+    //     expect('input[value=Spain2]').toHaveProp('checked', true);
+    // });
 });

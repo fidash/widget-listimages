@@ -1,7 +1,7 @@
 /*
 The MIT License
 
-Copyright (c) 2012 Universidad Politecnica de Madrid
+ Copyright (c) 2012 Universidad Politecnica de Madrid
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -128,7 +128,7 @@ JSTACK.Comm = (function (JS, undefined) {
         // authenticate the request, and success and error callbacks.
         xhr = new XMLHttpRequest();
         xhr.open(method, url, true);
-        
+
         xhr.setRequestHeader("Accept", "application/json");
         if (token !== undefined) {
             xhr.setRequestHeader('X-Auth-Token', token);
@@ -639,13 +639,13 @@ JSTACK.Keystone = (function (JS, undefined) {
                 var resp = {
                     access:{
                         token: {
-                            id: token, 
-                            expires: result.token.expires_at, 
+                            id: token,
+                            expires: result.token.expires_at,
                             tenant: {
                                 id: result.token.project.id,
                                 name: result.token.project.name
                             }
-                        }, 
+                        },
                         serviceCatalog: result.token.catalog,
                         user: result.token.user
                     }
@@ -974,7 +974,7 @@ JSTACK.Nova = (function (JS, undefined) {
         attachvolume, detachvolume, getattachedvolume,getquotalist, updatequota,
         getdefaultquotalist, getsecuritygrouplist, createsecuritygroup, getsecuritygroupdetail,
         deletesecuritygroup, createsecuritygrouprule, deletesecuritygrouprule, getsecuritygroupforserver,
-        getfloatingIPpools, getfloatingIPs, getfloatingIPdetail, allocatefloatingIP, associatefloatingIP, 
+        getfloatingIPpools, getfloatingIPs, getfloatingIPdetail, allocatefloatingIP, associatefloatingIP,
         disassociatefloatingIP, releasefloatingIP;
 
     // This modules stores the `url`to which it will send every
@@ -1000,7 +1000,7 @@ JSTACK.Nova = (function (JS, undefined) {
                 params.url = "https://cloud.lab.fiware.org/" + region + "/image/v1";
                 return true;
             }
-            return false;            
+            return false;
         }
         return false;
     };
@@ -1206,7 +1206,7 @@ JSTACK.Nova = (function (JS, undefined) {
         if (!check(region)) {
             return;
         }
-        
+
         data = {
             "server" : {
                 "name" : name,
@@ -1221,7 +1221,7 @@ JSTACK.Nova = (function (JS, undefined) {
         }
 
         if (block_device_mapping !== undefined) {
-            urlPost = "/os-volumes_boot";      
+            urlPost = "/os-volumes_boot";
         } else {
             urlPost = "/servers";
         }
@@ -1934,23 +1934,23 @@ JSTACK.Nova = (function (JS, undefined) {
     // injected_file_content_bytes, injected_file_path_bytes, security_groups, security_group_rules,
     // key_pairs: New parameters for the creating quota
     // example to call API: JSTACK.Nova.updatequota("26b77c04cda6408c972244898f8a3925", 10, 30, 51200, 10, 1000, undefined, 128, 6, 10240, undefined, 10, 20, undefined, printAll);
-    
+
     updatequota = function (
-                            tenant_id, 
-                            instances, 
-                            cores, 
-                            ram, 
-                            volumes, 
-                            gigabytes, 
+                            tenant_id,
+                            instances,
+                            cores,
+                            ram,
+                            volumes,
+                            gigabytes,
                             floating_ips,
-                            metadata_items, 
-                            injected_files, 
-                            injected_file_content_bytes, 
+                            metadata_items,
+                            injected_files,
+                            injected_file_content_bytes,
                             injected_file_path_bytes,
-                            security_groups, 
-                            security_group_rules, 
-                            key_pairs, 
-                            callback, 
+                            security_groups,
+                            security_group_rules,
+                            key_pairs,
+                            callback,
                             error, region) {
 
         var url, data, onOK, onError;
@@ -1969,13 +1969,13 @@ JSTACK.Nova = (function (JS, undefined) {
         }
 
         data = {
-            'quota_set': {  'instances': instances, 
+            'quota_set': {  'instances': instances,
                             'cores': cores,
                             'ram': ram,
                             'volumes': volumes,
-                            'gigabytes': gigabytes, 
+                            'gigabytes': gigabytes,
                             'floating_ips': floating_ips,
-                            'metadata_items': metadata_items, 
+                            'metadata_items': metadata_items,
                             'injected_files': injected_files,
                             'injected_file_content_bytes': injected_file_content_bytes,
                             'injected_file_path_bytes': injected_file_path_bytes,
@@ -1990,7 +1990,7 @@ JSTACK.Nova = (function (JS, undefined) {
             if (data.quota_set[key] == undefined) {
                 delete data.quota_set[key];
             }
-        }   
+        }
 
         onOK = function (result) {
             if (callback !== undefined) {
@@ -2316,7 +2316,7 @@ JSTACK.Nova = (function (JS, undefined) {
 
                 "pool": pool
             };
-        }         
+        }
 
         onOK = function (result) {
             if (callback !== undefined) {
@@ -3086,7 +3086,7 @@ JSTACK.Neutron = (function(JS, undefined) {
     getrouterdetail, deleterouter, addinterfacetorouter, removeinterfacefromrouter;
 
     // This modules stores the `url`to which it will send every
-    // request. 
+    // request.
     params = {
         url: undefined,
         state: undefined,
@@ -3216,7 +3216,7 @@ JSTACK.Neutron = (function(JS, undefined) {
         if (!check(region)) {
             return;
         }
-        
+
         url = params.url + 'v2.0/networks/' + network_id;
 
         data = {
@@ -3272,7 +3272,7 @@ JSTACK.Neutron = (function(JS, undefined) {
         if (!check(region)) {
             return;
         }
-        
+
         url = params.url + 'v2.0/subnets';
 
         onOK = function(result) {
@@ -3293,7 +3293,7 @@ JSTACK.Neutron = (function(JS, undefined) {
         var url, onOK, onError, data;
         if (!check(region)) {
             return;
-        }        
+        }
         url = params.url + 'v2.0/subnets';
 
         data = {
@@ -3373,7 +3373,7 @@ JSTACK.Neutron = (function(JS, undefined) {
         if (!check(region)) {
             return;
         }
-        
+
         url = params.url + 'v2.0/subnets/' + subnet_id;
 
         data = {
@@ -3432,7 +3432,7 @@ JSTACK.Neutron = (function(JS, undefined) {
         if (!check(region)) {
             return;
         }
-        
+
         url = params.url + 'v2.0/subnets/' + subnet_id;
 
         onOK = function(result) {
@@ -3454,10 +3454,10 @@ JSTACK.Neutron = (function(JS, undefined) {
         if (!check(region)) {
             return;
         }
-        
+
         url = params.url + 'v2.0/ports';
 
-        onOK = function(result) {   
+        onOK = function(result) {
             if (callback !== undefined) {
                 callback(result);
             }
@@ -3549,7 +3549,7 @@ JSTACK.Neutron = (function(JS, undefined) {
 
         url = params.url + 'v2.0/ports/' + port_id;
 
-        onOK = function(result) {   
+        onOK = function(result) {
             if (callback !== undefined) {
                 callback(result);
             }
@@ -3568,7 +3568,7 @@ JSTACK.Neutron = (function(JS, undefined) {
         if (!check(region)) {
             return;
         }
-        
+
         url = params.url + 'v2.0/ports/' + port_id;
 
         data = {
@@ -3578,7 +3578,7 @@ JSTACK.Neutron = (function(JS, undefined) {
 
         if (status !== undefined) {
             data.port.status = status;
-        }   
+        }
 
         if (name !== undefined) {
             data.port.name = name;
@@ -3746,7 +3746,7 @@ JSTACK.Neutron = (function(JS, undefined) {
         if (!check(region)) {
             return;
         }
-        
+
         url = params.url + 'v2.0/routers/' + router_id;
 
         data = {
@@ -3811,7 +3811,7 @@ JSTACK.Neutron = (function(JS, undefined) {
         url = params.url + 'v2.0/routers/' + router_id + '/add_router_interface';
 
         data = {
-         
+
         };
 
         if (subnet_id !== undefined) {
@@ -3842,8 +3842,8 @@ JSTACK.Neutron = (function(JS, undefined) {
             return;
         }
 
-        data = {  
-             
+        data = {
+
         };
 
         url = params.url + 'v2.0/routers/' + router_id + '/remove_router_interface';
