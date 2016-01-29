@@ -281,6 +281,13 @@ var UI = (function () {
         }
     }
 
+    function joinArrays(a, b) {
+        return a.filter(function(i) {
+            return b.indexOf(i) >= 0;
+        });
+    }
+
+
 
     /******************************************************************/
     /*                 P U B L I C   F U N C T I O N S                */
@@ -400,12 +407,36 @@ var UI = (function () {
         dataTable.api().draw();
     }
 
+    function toggleManyRegions (regions) {
+        var otherregions = Region.getAvailableRegions();
+        var joinregions = joinArrays(regions, otherregions);
+        var i, region, input;
+
+        // First set everything to false
+        for(i=0;  i<otherregions.length; i++) {
+            region = otherregions[i];
+            input = $("input[value=" + region + "]");
+            input.removeClass('selected');
+            input.prop("checked", false);
+        }
+
+        // Then check only the received
+        for (i=0; i<joinregions.length; i++) {
+            region = joinregions[i];
+            input = $("input[value=" + region + "]");
+            input.toggleClass('selected');
+            input.prop("checked", !input.prop("checked"));
+        }
+        Region.setCurrentRegions($("#region-selector"));
+    }
+
     return {
         clearTable: clearTable,
         createTable: createTable,
         updateHiddenColumns: updateHiddenColumns,
         drawImages: drawImages,
         startLoadingAnimation: startLoadingAnimation,
-        stopLoadingAnimation: stopLoadingAnimation
+        stopLoadingAnimation: stopLoadingAnimation,
+        toggleManyRegions: toggleManyRegions
     };
 })();

@@ -174,7 +174,9 @@ var ListImages = (function (JSTACK) {
 
         // Preferences handler
         MashupPlatform.prefs.registerCallback(handlePreferences);
-
+        MashupPlatform.wiring.registerCallback("regions", function(regionsraw) {
+            UI.toggleManyRegions(JSON.parse(regionsraw));
+        });
     }
 
     function authenticate () {
