@@ -183,32 +183,30 @@ var ListImages = (function (JSTACK) {
         JSTACK.Keystone.init(authURL);
         UI.startLoadingAnimation($('.loading'), $('.loading i'));
 
-        OStackAuth.getTokenAndParams(OStackAuth.CLOUD_URL)
-            .then(function (params) {
-                var token = params.token;
-                var response = params.response;
-                var responseBody = JSON.parse(response.responseText);
-                // Temporal change to fix catalog name
-                responseBody.token.serviceCatalog = responseBody.token.catalog;
+        /* jshint validthis: true */
+        MashupPlatform.wiring.registerCallback("authentication", function(paramsraw) {
+            var params = JSON.parse(paramsraw);
+            var token = params.token;
+            var responseBody = params.body;
 
-                // Mimic JSTACK.Keystone.authenticate behavior on success
-                JSTACK.Keystone.params.token = token;
-                JSTACK.Keystone.params.access = responseBody.token;
-                JSTACK.Keystone.params.currentstate = 2;
+            if (token === this.token) {
+                // same token, ignore
+                return;
+            }
 
-                UI.stopLoadingAnimation($('.loading'));
-                UI.createTable(getImageList, createImage);
-                getImageList(true);
-            })
-            .catch(function(error) {
-                authError({
-                    error: {
-                        code: error.status,
-                        title: "Error",
-                        message: error.statusText
-                    }
-                });
-            });
+            // Mimic JSTACK.Keystone.authenticate behavior on success
+            JSTACK.Keystone.params.token = token;
+            JSTACK.Keystone.params.access = responseBody.token;
+            JSTACK.Keystone.params.currentstate = 2;
+
+            this.token = token;
+            this.body = responseBody;
+
+            // extra
+            UI.stopLoadingAnimation($('.loading'));
+            UI.createTable(getImageList, createImage);
+            getImageList(true);
+        }.bind(this));
     }
 
     function createImage (e) {

@@ -44,7 +44,6 @@ module.exports = function(grunt) {
                 files: [
                     {expand: true, src: ['**/*', '!test/**'], dest: 'build/wgt', cwd: 'src'},
                     {expand: true, src: ['jquery.min.map', 'jquery.min.js'], dest: 'build/wgt/lib/js', cwd: 'node_modules/jquery/dist'},
-                    {expand: true, src: ['polyfill.min.js'], dest: 'build/wgt/lib/js', cwd: 'node_modules/babel-polyfill/dist'},
                     {expand: true, src: ['bootstrap.min.css', 'bootstrap.css.map', 'bootstrap-theme.min.css', 'bootstrap-theme.css.map'], dest: 'build/wgt/lib/css', cwd: 'node_modules/bootstrap/dist/css'},
                     {expand: true, src: ['bootstrap.min.js'], dest: 'build/wgt/lib/js', cwd: 'node_modules/bootstrap/dist/js'},
                     {expand: true, src: ['*'], dest: 'build/wgt/lib/fonts', cwd: 'node_modules/bootstrap/dist/fonts'},
@@ -180,6 +179,7 @@ module.exports = function(grunt) {
     grunt.registerTask('package', ['gitinfo', 'manifest', 'copy', 'compress:widget']);
     grunt.registerTask('test', ['concat', 'karma:headless']);
     grunt.registerTask('default', [
+        'clean',
         'jshint',
         'test',
         'replace:version',
