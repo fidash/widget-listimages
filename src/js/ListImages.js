@@ -258,7 +258,7 @@ var ListImages = (function (JSTACK) {
         else {
             var joinRegions = createJoinRegions(regions.length, autoRefresh);
             regions.forEach(function (region) {
-                JSTACK.Nova.getimagelist(true, joinRegions.success.bind(null, region), joinRegions.error.bind(null, region), region);
+                JSTACK.Nova.getimagelist.call(this, true, joinRegions.success.bind(null, region), joinRegions.error.bind(null, region), region);
             });
         }
         if (autoRefresh) {
