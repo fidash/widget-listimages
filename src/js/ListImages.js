@@ -23,6 +23,8 @@ var ListImages = (function (JSTACK) {
         this.listImage = getImageList;
         this.createImage = createImage;
         this.launchImage = launchImage;
+        this.mintime = 2000;
+        this.maxtime = 30000;
 
     }
 
@@ -32,7 +34,9 @@ var ListImages = (function (JSTACK) {
     /******************************************************************/
 
     function handlePreferences () {
-
+        /* jshint validthis: true */
+        this.mintime = MashupPlatform.prefs.get("mintime") * 1000;
+        this.maxtime = MashupPlatform.prefs.get("maxtime") * 1000;
         UI.updateHiddenColumns();
 
     }
@@ -74,7 +78,7 @@ var ListImages = (function (JSTACK) {
     }
 
     function createWidgetUI (tokenResponse) {
-
+        /* jshint validthis: true */
         var token = tokenResponse.getHeader('x-subject-token');
         var responseBody = JSON.parse(tokenResponse.responseText);
 
@@ -87,8 +91,8 @@ var ListImages = (function (JSTACK) {
         JSTACK.Keystone.params.currentstate = 2;
 
         UI.stopLoadingAnimation($('.loading'));
-        UI.createTable(getImageList, createImage);
-        getImageList(true);
+        UI.createTable(getImageList.bind(this), createImage);
+        getImageList.call(this, true);
 
     }
 
@@ -110,6 +114,7 @@ var ListImages = (function (JSTACK) {
     }
 
     function createJoinRegions (regionsLimit, autoRefresh) {
+        /* jshint validthis: true */
 
         var currentImageList = [];
         var errorList = [];
@@ -121,8 +126,8 @@ var ListImages = (function (JSTACK) {
             if (regionsLimit === 0) {
 
                 var callbacks = {
-                    getImageList: getImageList,
-                    launch: launchImage
+                    getImageList: getImageList.bind(this),
+                    launch: launchImage.bind(this)
                 };
 
                 UI.drawImages(callbacks, autoRefresh, currentImageList);
@@ -145,7 +150,7 @@ var ListImages = (function (JSTACK) {
                 currentImageList.push(image);
             });
 
-            deductRegionLimit();
+            deductRegionLimit.call(this);
             UI.deactivateProgressBar();
         }
 
@@ -154,13 +159,13 @@ var ListImages = (function (JSTACK) {
             error.region = region;
             errorList.push(error);
 
-            deductRegionLimit();
+            deductRegionLimit.call(this);
             UI.deactivateProgressBar();
         }
 
         return {
-            success: joinRegionsSuccess,
-            error: joinRegionsErrors
+            success: joinRegionsSuccess.bind(this),
+            error: joinRegionsErrors.bind(this)
         };
     }
 
@@ -170,22 +175,23 @@ var ListImages = (function (JSTACK) {
     /******************************************************************/
 
     function init () {
-
+        /* jshint validthis: true */
         // Initialize preferences
-        handlePreferences();
+        handlePreferences.call(this);
 
         // Preferences handler
-        MashupPlatform.prefs.registerCallback(handlePreferences);
+        MashupPlatform.prefs.registerCallback(handlePreferences.bind(this));
         MashupPlatform.wiring.registerCallback("regions", function(regionsraw) {
             UI.toggleManyRegions(JSON.parse(regionsraw));
-        });
+            getImageList.call(this);
+        }.bind(this));
     }
 
     function authenticate () {
+        /* jshint validthis: true */
         JSTACK.Keystone.init(authURL);
         UI.startLoadingAnimation($('.loading'), $('.loading i'));
 
-        /* jshint validthis: true */
         MashupPlatform.wiring.registerCallback("authentication", function(paramsraw) {
             var params = JSON.parse(paramsraw);
             var token = params.token;
@@ -206,8 +212,8 @@ var ListImages = (function (JSTACK) {
 
             // extra
             UI.stopLoadingAnimation($('.loading'));
-            UI.createTable(getImageList, createImage);
-            getImageList(true);
+            UI.createTable(getImageList.bind(this), createImage);
+            getImageList.call(this, true);
         }.bind(this));
     }
 
@@ -242,24 +248,21 @@ var ListImages = (function (JSTACK) {
     }
 
     function getImageList (autoRefresh) {
+        /* jshint validthis: true */
         var regions = Region.getCurrentRegions();
 
         UI.activateProgressBar();
         if (regions.length === 0) {
             UI.clearTable();
-
-            // Keep refreshing even if there are no regions selected
-            if (autoRefresh) {
-                setTimeout(function () {
-                    getImageList(autoRefresh);
-                }, 4000);
-            }
         }
         else {
             var joinRegions = createJoinRegions(regions.length, autoRefresh);
             regions.forEach(function (region) {
                 JSTACK.Nova.getimagelist(true, joinRegions.success.bind(null, region), joinRegions.error.bind(null, region), region);
             });
+        }
+        if (autoRefresh) {
+            setTimeout(getImageList.bind(this, autoRefresh), this.maxtime);
         }
     }
 

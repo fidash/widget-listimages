@@ -137,7 +137,7 @@ var UI = (function () {
     }
 
 
-    function createRegionSelector () {
+    function createRegionSelector (refreshCallback) {
         var regions = Region.getAvailableRegions();
         var regionSelector = $('<div>')
                 .attr('id', 'region-selector')
@@ -162,12 +162,15 @@ var UI = (function () {
                     input.prop('checked', checked);
 
                     Region.setCurrentRegions(regionSelector);
+                    refreshCallback();
+
                 })
                 .appendTo(regionSelector);
         });
 
         $("div>input[type=checkbox][value=Spain2]").prop("checked", true);
         Region.setCurrentRegions(regionSelector);
+        refreshCallback();
     }
 
     function toggleRegionSelector () {
@@ -324,7 +327,7 @@ var UI = (function () {
         // Pagination style
         $('#images_table_paginate').addClass('pagination pull-right');
 
-        createRegionSelector();
+        createRegionSelector(refreshCallback);
         createFormRegionSelector();
         initFileChooserEvents();
         createRegionsButton($('#images_table_paginate'));
@@ -397,11 +400,11 @@ var UI = (function () {
         dataTable.api().columns.adjust();
         redrawFixedHeaders();
 
-        if (autoRefresh) {
-            setTimeout(function () {
-                callbacks.getImageList(true);
-            }, 4000);
-        }
+        // if (autoRefresh) {
+        //     setTimeout(function () {
+        //         callbacks.getImageList(true);
+        //     }, 4000);
+        // }
     }
 
     function startLoadingAnimation (element, icon) {
