@@ -157,3 +157,14 @@ input[name=x-image-meta-location] {
     width: 150px;
     left: 0px;
 }
+
+#loadprogressbar{
+    position: absolute;
+    max-width: 25%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    margin-top: 7px;
+    margin-left: 150px;
+    height: 25px;
+}

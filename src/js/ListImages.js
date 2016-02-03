@@ -99,7 +99,7 @@ var ListImages = (function (JSTACK) {
         else {
             Utils.createAlert('danger', error.message, error.body, error.region);
         }
-
+        UI.deactivateProgressBar();
         console.log('Error: ' + JSON.stringify(error));
     }
 
@@ -146,6 +146,7 @@ var ListImages = (function (JSTACK) {
             });
 
             deductRegionLimit();
+            UI.deactivateProgressBar();
         }
 
         function joinRegionsErrors (region, error) {
@@ -154,6 +155,7 @@ var ListImages = (function (JSTACK) {
             errorList.push(error);
 
             deductRegionLimit();
+            UI.deactivateProgressBar();
         }
 
         return {
@@ -242,6 +244,7 @@ var ListImages = (function (JSTACK) {
     function getImageList (autoRefresh) {
         var regions = Region.getCurrentRegions();
 
+        UI.activateProgressBar();
         if (regions.length === 0) {
             UI.clearTable();
 
@@ -271,6 +274,7 @@ var ListImages = (function (JSTACK) {
             block_device_mapping,
             metadata = {region: image.region};
 
+        UI.activateProgressBar();
         JSTACK.Nova.getflavorlist(true, function (flavorResponse) {
 
             var selectedFlavorId = getFittingFlavor(flavorResponse.flavors, image.size);
@@ -294,6 +298,7 @@ var ListImages = (function (JSTACK) {
                     metadata,
                     function () {
                         console.log("Instance launched successfully.");
+                        UI.deactivateProgressBar();
                     },
                     onError,
                     image.region

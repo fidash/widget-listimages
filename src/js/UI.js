@@ -116,6 +116,27 @@ var UI = (function () {
             .insertBefore(nextElement);
     }
 
+    function createProgressBar (nextElement) {
+        var pgb = $('<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>');
+        $("<div id=\"loadprogressbar\"></div>")
+            .addClass('progress')
+            .addClass('hidden') // Start hidden
+            .append(pgb)
+            .insertBefore(nextElement);
+    }
+
+    function activateProgressBar () {
+        $("#loadprogressbar")
+            .removeClass("hidden");
+    }
+
+    function deactivateProgressBar () {
+        $("#loadprogressbar")
+            .removeClass("hidden") // remove first
+            .addClass("hidden");
+    }
+
+
     function createRegionSelector () {
         var regions = Region.getAvailableRegions();
         var regionSelector = $('<div>')
@@ -310,6 +331,7 @@ var UI = (function () {
         createModalButton($('#images_table_paginate'));
         createSearchField($('#images_table_paginate'));
         createRefreshButton($('#images_table_paginate'), refreshCallback);
+        createProgressBar($('#images_table_paginate'));
 
         // Set modal create image button click
         $('#create-image').on('click', modalSubmitCallback);
@@ -437,6 +459,8 @@ var UI = (function () {
         drawImages: drawImages,
         startLoadingAnimation: startLoadingAnimation,
         stopLoadingAnimation: stopLoadingAnimation,
-        toggleManyRegions: toggleManyRegions
+        toggleManyRegions: toggleManyRegions,
+        activateProgressBar: activateProgressBar,
+        deactivateProgressBar: deactivateProgressBar
     };
 })();
